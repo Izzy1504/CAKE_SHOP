@@ -53,3 +53,11 @@ npm install
 ## 👩‍💻 Author
 
 - Github - [@sn-tin](https://github.com/sn-tin/)
+## How to run the app
+use this command to download the node module
+- npm i
+Then run this in terminal
+- cd store 
+then run this command 
+- npm start to run the server
+Enjoy :"3
