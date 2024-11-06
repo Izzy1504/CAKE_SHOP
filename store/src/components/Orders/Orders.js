@@ -1,12 +1,14 @@
 import React from 'react';
 import { useStateContext } from '../../context/StateContextProvider';
+import { useNavigate } from 'react-router-dom';
 import styles from './Orders.module.scss';
 import EmptyState from './EmptyState';
 
 export default function Orders() {
   const { cartItems, handleRemoveCart, handleCartClick, totalPrice, cartItemQty, totalQty, formatPrice } = useStateContext()
-
+  const navigate = useNavigate();
   const checkout = async () => {
+    navigate('/PaymentPage', { state: { cartItems, totalPrice } });
     await fetch('https://cakeit-shop.vercel.app/checkout', {
         method: "POST",
         headers: {

@@ -1,36 +1,54 @@
+import React, { useEffect } from 'react';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
 import Cta from './components/Cta/Cta';
 import Footer from './components/Footer/Footer';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import LandingPage from './components/LandingPage';
 import CakeDetails from './components/Cakes/CakeDetails';
-import { useStateContext } from './context/StateContextProvider';
 import About from './components/About/About';
 import Orders from './components/Orders/Orders';
-import { useEffect } from 'react';
 import Success from './pages/Success';
 import Cancel from './pages/Cancel';
+import UserAccountPage from './components/User/User';
+import { useStateContext } from './context/StateContextProvider';
+import PaymentPage from './components/Payment/PaymentPage';
+
 
 function App() {
-  const { showCart } = useStateContext()
+  const { showCart } = useStateContext();
+  const location = useLocation();
+
   useEffect(() => {
     document.querySelector("body").style.overflow = showCart ? "hidden" : "visible";
-  },[showCart])
+  }, [showCart]);
+
+  const hideLayout = location.pathname === '/UserAccountPage';
+  const hideCta = location.pathname === '/PaymentPage';
+  const hideOrders = location.pathname === '/PaymentPage';
+
   return (
-      <BrowserRouter>
-        <Navbar />
-        { showCart && <Orders />}
-        <Routes>
-          <Route path='/' element={<LandingPage />}></Route>
-          <Route path='/about' element={<About />}></Route>
-          <Route path='/cakes/:slug' element={<CakeDetails />}></Route>
-          <Route path='/success' element={<Success />}></Route>
-          <Route path='/cancel' element={<Cancel />}></Route>
-        </Routes>
-        <Cta />
-        <Footer />
-      </BrowserRouter>
+    <div className="min-h-screen bg-gray-100">
+      {!hideLayout&& !hideCta && <Navbar />}
+      {showCart && !hideOrders && <Orders />}
+      <Routes>
+        <Route path='/' element={<LandingPage />} />
+        <Route path='/about' element={<About />} />
+        <Route path='/cakes/:slug' element={<CakeDetails />} />
+        <Route path='/success' element={<Success />} />
+        <Route path='/cancel' element={<Cancel />} />
+        <Route path='/UserAccountPage' element={<UserAccountPage />} />
+        <Route path='/PaymentPage' element={<PaymentPage />} />
+      </Routes>
+      {!hideLayout && !hideCta && <Cta />}
+      {!hideLayout && !hideCta && <Footer />}
+    </div>
   );
 }
 
-export default App;
+export default function AppWrapper() {
+  return (
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  );
+}

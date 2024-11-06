@@ -1,0 +1,94 @@
+.paymentPage {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  margin: 80px auto 20px auto; /* Adjust margin to create space from Navbar */
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.orderInfo, .customerInfo {
+  flex: 1;
+  margin: 0 20px;
+}
+
+.qrCode
+{
+  width: 150px;
+  height: 150px;
+}
+.customerInfo {
+  margin-right: auto; /* Align to the right */
+}
+
+.orderInfo h2, .customerInfo h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.orderInfo ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.orderInfo li {
+  margin-bottom: 10px;
+}
+
+.paymentButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #66defc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.paymentButton:hover {
+  background-color: #01050a;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.formGroup {
+  margin-bottom: 15px;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.formGroup input {
+  width: 80%; /* Reduce the width of the input fields */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button[type="submit"] {
+  width: auto;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}

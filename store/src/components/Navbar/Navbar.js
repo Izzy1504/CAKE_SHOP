@@ -26,8 +26,8 @@ const Navbar = () => {
                     <NavLink to="/#cakes" onClick={handleNavLinks("cakes")}>Cakes</NavLink>
                     <NavLink to="/about" onClick={handleNavLinks("about")}>About</NavLink>
                     <a href="#contact" onClick={handleNavLinks("contact")}>Contact</a>
-                    <div>Login</div>
-                    <button>Register</button>
+                    <NavLink to="/UserAccountPage">Login</NavLink>
+                    <NavLink to="/UserAccountPage">Register</NavLink>
                 </div>
                 <Link to="/">
                     <div className={styles.logoWrapper}>
@@ -38,8 +38,8 @@ const Navbar = () => {
                     </div>
                 </Link>
                 <div className={styles.leftLinks}>
-                    <div className={styles.login}>Login</div>
-                    <div className={styles.register}>Register</div>
+                    <NavLink to="/UserAccountPage" className={styles.login}>Login</NavLink>
+                    <NavLink to="/UserAccountPage" className={styles.register}>Register</NavLink>
                     <div className={styles.cart}>
                         <i className="fa-solid fa-cart-shopping fa-xl" onClick={handleCartClick}></i>
                         <div className={styles.cartCounter}>{totalQty}</div>
