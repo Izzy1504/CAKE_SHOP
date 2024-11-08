@@ -1,8 +1,21 @@
 @import '../../styles/variable';
-
+a{
+    text-decoration: none;
+}
 .cakesMenu {
     width: 100%;
     margin: auto;
+}
+.listProducts{
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 1.5rem;
+}
+.namePriceProducts{
+    font-size: 20px;
+    padding-left: 20px;
+    padding-bottom: 10px;
+    color: #000;
 }
 .cakesWrapper {
     width: 100%;
@@ -219,6 +232,7 @@ span.activeCategory {
     width: 130px;
     @include buttons($red);
 }
+
 /* Cake Slide */
 .cakesSlide {
     width: 100%; 

@@ -6,57 +6,61 @@ import { useStateContext } from "../../context/StateContextProvider"
 import styles from "./Cakes.module.scss"
 import { AnimatePresence, motion } from "framer-motion"
 import { easeAnimate } from "../../animations/animation"
+import axios from "axios"
 
 const CakeList = () => {
     const { formatPrice, scrollToTop, cakeRef } = useStateContext();
-    const [cakes, setCakes] = useState(data);
-    const categoryList = ["All", "Wedding", "Vintage", "Monogram"]
-    const [cakeCategory, setcakeCategory] = useState("All");
-    const handleCakecCategory = (e) => {
-        setcakeCategory(e.target.innerText)
-    }
-    /* Filter Cakes */ 
-    const filterCake = () => {
-        if(cakeCategory === "All") {
-            setCakes(data)
-        } else {
-            setCakes(data.filter(cake => cake.category.includes(cakeCategory.toLowerCase())))
+    const [cakes, setCakes] = useState([]);
+    const backendURL = 'http://26.170.181.245:8080'
+
+    const fetchProducts = async() => {
+        try {
+            const response = await axios.get(`${backendURL}/api/products`)
+            if (response.status === 200){
+                setCakes(response.data.content)
+            }
+        } catch (error) {
+            
         }
     }
 
     useEffect(() => {
-        filterCake()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [cakeCategory])
+        fetchProducts()
+    },[])
+
     return (
-        <section ref={cakeRef} id="cakes-section" className={styles.cakesMenu}>
+        <div>
+                    <section ref={cakeRef} id="cakes-section" className={styles.cakesMenu}>
             <div className={styles.cakesWrapper}>
                 <h2>Our Cakes</h2>
-                <div className={styles.cakeCategory}>
+                {/* <div className={styles.cakeCategory}>
                     { categoryList.map((category, index) =>  <span key={index} className={cakeCategory === category ? `${styles.activeCategory}` : null } onClick={handleCakecCategory}>{category}</span> ) }
-                </div>
+                </div> */}
                 <div className={styles.dividerLine}></div>
-                <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 3 }}>
-                    <AnimatePresence>
-                    { cakes.map((cake, index) => (
-                        <Grid key={index} item xs={6} md={4} mb={5}>
-                            <motion.div key={index} variants={easeAnimate} initial="start" animate="end" exit="exit">
-                                <Link to={`/cakes/${cake.slug}`} className={styles.cardLink} onClick={scrollToTop}>
-                                    <div className={styles.cakeImage}>
-                                        <img src={cake.images[0]} alt={`${cake.cakeName} display`}/>
-                                    </div>
-                                    <div className={styles.cakeDetails}>
-                                        <p className={styles.cakeName}>{cake.cakeName}</p>
-                                        <p className={styles.cakePrice}>${formatPrice(cake.details.price)}</p>
-                                    </div>
-                                </Link>
-                            </motion.div>
-                        </Grid>
-                    )) }
-                    </AnimatePresence>
-                </Grid>
+                
             </div>
+
+            
+               
         </section>
+        <div className={styles.listProducts}>
+
+        {
+            cakes.map((item) => (
+                <Link to={`/cake/${item.id}`}>
+                <div key={item.id}>
+                    <img src={item.images} alt="" />
+                        <p className={styles.namePriceProducts}>{item.name}</p>
+                        <p className={styles.namePriceProducts}>{item.price} vnđ</p>
+                </div>
+                
+                </Link>
+            ))
+        }
+        </div>
+        </div>
+
+        
     )
 }
 
