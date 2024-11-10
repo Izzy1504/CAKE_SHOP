@@ -30,7 +30,7 @@ const CakeList = () => {
 
     return (
         <div>
-                    <section ref={cakeRef} id="cakes-section" className={styles.cakesMenu}>
+        <section ref={cakeRef} id="cakes-section" className={styles.cakesMenu}>
             <div className={styles.cakesWrapper}>
                 <h2>Our Cakes</h2>
                 {/* <div className={styles.cakeCategory}>
@@ -44,19 +44,18 @@ const CakeList = () => {
                
         </section>
         <div className={styles.listProducts}>
-
-        {
-            cakes.map((item) => (
-                <Link to={`/cake/${item.id}`}>
-                <div key={item.id}>
-                    <img className={styles.cakeImage} src={item.images} alt="" />
-                        <p className={styles.namePriceProducts}>{item.name}</p>
-                        <p className={styles.namePriceProducts}>{item.price} vnđ</p>
-                </div>
-                
-                </Link>
-            ))
-        }
+            {
+                cakes.map((item) => (
+                    <Link to={`/cake/${item.id}`}>
+                    <div key={item.id}>
+                        <img className={styles.cakeImage} src={item.images} alt="" />
+                            <p className={styles.namePriceProducts}>{item.name}</p>
+                            <p className={styles.namePriceProducts}>{item.price} vnđ</p>
+                    </div>
+                    
+                    </Link>
+                ))
+            }
         </div>
         </div>
 
