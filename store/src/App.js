@@ -10,6 +10,7 @@ import Orders from './components/Orders/Orders';
 import Success from './pages/Success';
 import Cancel from './pages/Cancel';
 import UserAccountPage from './components/User/User';
+import Login from './components/User/User2';
 import { useStateContext } from './context/StateContextProvider';
 import PaymentPage from './components/Payment/PaymentPage';
 
@@ -28,6 +29,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-100">
+      {/* {!hideCta && <Navbar />} */}
       {!hideLayout&& !hideCta && <Navbar />}
       {showCart && !hideOrders && <Orders />}
       <Routes>
@@ -37,10 +39,13 @@ function App() {
         <Route path='/success' element={<Success />} />
         <Route path='/cancel' element={<Cancel />} />
         <Route path='/UserAccountPage' element={<UserAccountPage />} />
+        <Route path='/Login' element={<Login />} />
         <Route path='/PaymentPage' element={<PaymentPage />} />
       </Routes>
+      {/* {!hideCta && <Cta />} */}
       {!hideLayout && !hideCta && <Cta />}
       {!hideLayout && !hideCta && <Footer />}
+      {/* {!hideCta && <Footer />} */}
     </div>
   );
 }
