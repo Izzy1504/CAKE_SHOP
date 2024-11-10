@@ -46,14 +46,16 @@ const CakeList = () => {
         <div className={styles.listProducts}>
             {
                 cakes.map((item) => (
-                    <Link to={`/cake/${item.id}`}>
-                    <div key={item.id}>
-                        <img className={styles.cakeImage} src={item.images} alt="" />
-                            <p className={styles.namePriceProducts}>{item.name}</p>
-                            <p className={styles.namePriceProducts}>{item.price} vnđ</p>
+                    <div key={item.id} className={styles.card}>
+                        <Link to={`/cake/${item.id}`}>
+                        <div key={item.id}>
+                            <img className={styles.cakeImage} src={item.images} alt="" />
+                                <p className={styles.namePriceProducts}>{item.name}</p>
+                                <p className={styles.namePriceProducts}>{item.price} vnđ</p>
+                        </div>
+                        
+                        </Link>
                     </div>
-                    
-                    </Link>
                 ))
             }
         </div>
