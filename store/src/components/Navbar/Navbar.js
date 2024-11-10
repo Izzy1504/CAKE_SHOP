@@ -26,7 +26,7 @@ const Navbar = () => {
                     <NavLink to="/#cakes" onClick={handleNavLinks("cakes")}>Cakes</NavLink>
                     <NavLink to="/about" onClick={handleNavLinks("about")}>About</NavLink>
                     <a href="#contact" onClick={handleNavLinks("contact")}>Contact</a>
-                    <NavLink to="/UserAccountPage">Login</NavLink>
+                    <NavLink to="/Login">Login</NavLink>
                     <NavLink to="/UserAccountPage">Register</NavLink>
                 </div>
                 <Link to="/">
@@ -38,7 +38,7 @@ const Navbar = () => {
                     </div>
                 </Link>
                 <div className={styles.leftLinks}>
-                    <NavLink to="/UserAccountPage" className={styles.login}>Login</NavLink>
+                    <NavLink to="/Login" className={styles.login}>Login</NavLink>
                     <NavLink to="/UserAccountPage" className={styles.register}>Register</NavLink>
                     <div className={styles.cart}>
                         <i className="fa-solid fa-cart-shopping fa-xl" onClick={handleCartClick}></i>
