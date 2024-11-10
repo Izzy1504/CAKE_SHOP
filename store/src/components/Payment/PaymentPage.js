@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import styles from './PaymentPage.module.scss';
 import Navbar from '../Navbar/Navbar'; // Đảm bảo đường dẫn đúng
@@ -20,94 +20,157 @@ const PaymentPage = () => {
 
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
   const [qrCodeUrl, setQrCodeUrl] = useState('');
+  const [cities, setCities] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [wards, setWards] = useState([]);
+
+  useEffect(() => {
+    // Fetch cities from API
+    fetch("https://vn-public-apis.fpo.vn/provinces/getAll?limit=-1")
+      .then((response) => response.json())
+      .then((data) => setCities(data.data.data))
+      .catch((error) => console.error("Error fetching cities:", error));
+  }, []);
+
+  const handleCityChange = (e) => {
+    const { name, value } = e.target;
+    setCustomerInfo((prevData) => ({
+      ...prevData,
+      [name]: value,
+      district: '',
+      ward: '',
+    }));
+
+    // Fetch districts based on selected city
+    fetch(`https://vn-public-apis.fpo.vn/districts/getByProvince?provinceCode=${value}&limit=-1`)
+      .then((response) => response.json())
+      .then((data) => setDistricts(data.data.data))
+      .catch((error) => console.error("Error fetching districts:", error));
+  };
+
+  const handleDistrictChange = (e) => {
+    const { name, value } = e.target;
+    setCustomerInfo((prevData) => ({
+      ...prevData,
+      [name]: value,
+      ward: '',
+    }));
+
+    // Fetch wards based on selected district
+    fetch(`https://vn-public-apis.fpo.vn/wards/getByDistrict?districtCode=${value}&limit=-1`)
+      .then((response) => response.json())
+      .then((data) => setWards(data.data.data))
+      .catch((error) => console.error("Error fetching wards:", error));
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setCustomerInfo({
-      ...customerInfo,
+    setCustomerInfo((prevData) => ({
+      ...prevData,
       [name]: value,
-    });
+    }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Xử lý thanh toán với Stripe ở đây
-  };
-
-  const handlePaymentMethod = (method) => {
-    setSelectedPaymentMethod(method);
-    if (method === 'MoMo') {
-      setQrCodeUrl('/QR_momo1.png'); // Đường dẫn đến mã QR MoMo trong thư mục public
-    } else if (method === 'ZaloPay') {
-      setQrCodeUrl('/zalopay-qr-code.png'); // Đường dẫn đến mã QR ZaloPay trong thư mục public
-    }
+    // Handle form submission
+    console.log("Form submitted:", customerInfo);
   };
 
   return (
-    <>
+    <div className={styles.paymentPage}>
       <Navbar />
-      <div className={styles.paymentPage}>
-        <div className={styles.orderInfo}>
-          <h2>Order Summary</h2>
-          <ul>
-            {cartItems.map((item, index) => (
-              <li key={index}>
-                {item.cakeName} - Quantity: {item.quantity} - ${item.details.price * item.quantity}
-              </li>
-            ))}
-          </ul>
-          <h3>Total: ${totalPrice}</h3>
-          <h2>Payment Methods</h2>
-          <button className={styles.paymentButton} onClick={() => handlePaymentMethod('MoMo')}>
-            <img src="/icons/momo.png" alt="MoMo" className={styles.icon} /> Pay with MoMo
-          </button>
-          <button className={styles.paymentButton} onClick={() => handlePaymentMethod('ZaloPay')}>
-            <img src="/icons/zalopay.png" alt="ZaloPay" className={styles.icon} /> Pay with ZaloPay
-          </button>
-          {selectedPaymentMethod && (
-            <div className={styles.qrCodeContainer}>
-              <h3>Scan the QR code to pay with {selectedPaymentMethod}</h3>
-              <img src={qrCodeUrl} alt={`${selectedPaymentMethod} QR Code`} className={styles.qrCode} />
-            </div>
-          )}
-        </div>
-        <div className={styles.customerInfo}>
-          <h2>Customer Information</h2>
-          <form onSubmit={handleSubmit}>
-            <div className={styles.formGroup}>
-              <label>Name</label>
-              <input type="text" name="name" value={customerInfo.name} onChange={handleChange} required />
-            </div>
-            <div className={styles.formGroup}>
-              <label>Phone</label>
-              <input type="text" name="phone" value={customerInfo.phone} onChange={handleChange} pattern="\d{10}" required />
-            </div>
-            <div className={styles.formGroup}>
-              <label>Email</label>
-              <input type="email" name="email" value={customerInfo.email} onChange={handleChange} required />
-            </div>
-            <div className={styles.formGroup}>
-              <label>Street</label>
-              <input type="text" name="street" value={customerInfo.street} onChange={handleChange} required />
-            </div>
-            <div className={styles.formGroup}>
-              <label>Ward</label>
-              <input type="text" name="ward" value={customerInfo.ward} onChange={handleChange} required />
-            </div>
-            <div className={styles.formGroup}>
-              <label>District</label>
-              <input type="text" name="district" value={customerInfo.district} onChange={handleChange} required />
-            </div>
-            <div className={styles.formGroup}>
-              <label>City</label>
-              <input type="text" name="city" value={customerInfo.city} onChange={handleChange} required />
-            </div>
-            <button type="submit">Save</button>
-          </form>
-        </div>
+      <div className={styles.container}>
+        <h1>Payment Page</h1>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>Name</label>
+            <input
+              type="text"
+              name="name"
+              value={customerInfo.name}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Phone</label>
+            <input
+              type="text"
+              name="phone"
+              value={customerInfo.phone}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>Email</label>
+            <input
+              type="email"
+              name="email"
+              value={customerInfo.email}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label>City</label>
+            <select
+              name="city"
+              value={customerInfo.city}
+              onChange={handleCityChange}
+            >
+              <option value="">Select City</option>
+              {cities.map((city) => (
+                <option key={city.code} value={city.code}>
+                  {city.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label>District</label>
+            <select
+              name="district"
+              value={customerInfo.district}
+              onChange={handleDistrictChange}
+              disabled={!customerInfo.city}
+            >
+              <option value="">Select District</option>
+              {districts.map((district) => (
+                <option key={district.code} value={district.code}>
+                  {district.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label>Ward</label>
+            <select
+              name="ward"
+              value={customerInfo.ward}
+              onChange={handleChange}
+              disabled={!customerInfo.district}
+            >
+              <option value="">Select Ward</option>
+              {wards.map((ward) => (
+                <option key={ward.code} value={ward.code}>
+                  {ward.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label>Street</label>
+            <input
+              type="text"
+              name="street"
+              value={customerInfo.street}
+              onChange={handleChange}
+            />
+          </div>
+          <button type="submit">Submit</button>
+        </form>
       </div>
       <Footer />
-    </>
+    </div>
   );
 };
 
