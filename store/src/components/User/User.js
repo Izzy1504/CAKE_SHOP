@@ -102,8 +102,32 @@ const UserAccountPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Perform final validation and submit data
-    console.log("Form submitted:", formData);
+    // Perform final validation
+    const isValid = Object.values(errors).every((error) => error === "") &&
+                    Object.values(formData).every((value) => value.trim() !== "");
+
+    if (isValid) {
+      // Send data to server
+      fetch("https://your-api-endpoint.com/saveUserData", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+          // Handle success (e.g., show a success message, redirect to another page, etc.)
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          // Handle error (e.g., show an error message)
+        });
+    } else {
+      console.error("Validation failed");
+      // Handle validation failure (e.g., show an error message)
+    }
   };
 
   const toggleShowPassword = () => {
