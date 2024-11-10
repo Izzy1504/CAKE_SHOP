@@ -5,6 +5,7 @@ import "./User.css";
 const UserAccountPage = () => {
   const [formData, setFormData] = useState({
     name: "",
+    username: "",
     email: "",
     phone: "",
     city: "",
@@ -23,7 +24,7 @@ const UserAccountPage = () => {
   const [wards, setWards] = useState([]);
 
   useEffect(() => {
-   // lay api cua thanh pho 
+    // Fetch cities from API
     fetch("https://vn-public-apis.fpo.vn/provinces/getAll?limit=-1")
       .then((response) => response.json())
       .then((data) => setCities(data.data.data))
@@ -40,7 +41,7 @@ const UserAccountPage = () => {
     }));
     validateField(name, value);
 
-    // fetch api cua quan huyen dua tren thanh pho da chon
+    // Fetch districts based on selected city
     fetch(`https://vn-public-apis.fpo.vn/districts/getByProvince?provinceCode=${value}&limit=-1`)
       .then((response) => response.json())
       .then((data) => setDistricts(data.data.data))
@@ -56,7 +57,7 @@ const UserAccountPage = () => {
     }));
     validateField(name, value);
 
-   //fetch api cua phuong xa dua tren quan huyen da chon
+    // Fetch wards based on selected district
     fetch(`https://vn-public-apis.fpo.vn/wards/getByDistrict?districtCode=${value}&limit=-1`)
       .then((response) => response.json())
       .then((data) => setWards(data.data.data))
@@ -101,7 +102,7 @@ const UserAccountPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+    // Perform final validation and submit data
     console.log("Form submitted:", formData);
   };
 
@@ -127,6 +128,18 @@ const UserAccountPage = () => {
             />
           </label>
           {errors.name && <p className="error">{errors.name}</p>}
+        </div>
+        <div>
+          <label>
+            <FaUser /> Username
+            <input
+              type="text"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+            />
+          </label>
+          {errors.username && <p className="error">{errors.username}</p>}
         </div>
         <div>
           <label>
