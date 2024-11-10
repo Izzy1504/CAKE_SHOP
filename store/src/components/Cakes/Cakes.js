@@ -49,7 +49,7 @@ const CakeList = () => {
             cakes.map((item) => (
                 <Link to={`/cake/${item.id}`}>
                 <div key={item.id}>
-                    <img src={item.images} alt="" />
+                    <img className={styles.cakeImage} src={item.images} alt="" />
                         <p className={styles.namePriceProducts}>{item.name}</p>
                         <p className={styles.namePriceProducts}>{item.price} vnđ</p>
                 </div>
