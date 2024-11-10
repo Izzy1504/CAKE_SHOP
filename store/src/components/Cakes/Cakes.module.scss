@@ -10,12 +10,24 @@ a{
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     row-gap: 1.5rem;
+    column-gap: 1rem; // khoảng cách giữa các cột
+    padding: 10px; // thêm padding cho container nếu muốn
 }
 .namePriceProducts{
     font-size: 20px;
+    font-weight: bold;
+    text-align: center;
     padding-left: 20px;
     padding-bottom: 10px;
     color: #000;
+    align-items: center;
+    background-color: #f9f9f9; // màu nền nhẹ cho từng mục
+    border-radius: 8px; // bo góc cho từng mục
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // thêm bóng đổ nhẹ
+}
+.namePriceProducts + .namePriceProducts {
+    color: #e74c3c; // màu cho giá sản phẩm
+    font-weight: 500;
 }
 .cakesWrapper {
     width: 100%;
@@ -74,18 +86,22 @@ span.activeCategory {
 }
 .cakeImage {
     width: 100%;
+    max-width: 200px; // Giới hạn chiều rộng tối đa của ảnh để căn đều giữa các ảnh
+    height: 200px;
     overflow: hidden;
+    position: relative;
     div {
         overflow: hidden;
     }
     img {
         width: 100%;
-        max-width: 460px;
         height: 100%;
+        object-fit: cover; // Đảm bảo ảnh được căn đều và giữ tỷ lệ bên trong khung
+        transition: transform 0.2s ease-in-out;
     }
+
     &:hover > img {
-        transform: scale(1.1);
-        transition: transform ease-in-out 0.2s;
+        transform: scale(1.8); // Hiệu ứng phóng to khi hover
     }
 }
 .cakeDetails {
