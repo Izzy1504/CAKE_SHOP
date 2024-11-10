@@ -23,7 +23,7 @@ const UserAccountPage = () => {
   const [wards, setWards] = useState([]);
 
   useEffect(() => {
-    // Fetch cities from API
+   // lay api cua thanh pho 
     fetch("https://vn-public-apis.fpo.vn/provinces/getAll?limit=-1")
       .then((response) => response.json())
       .then((data) => setCities(data.data.data))
@@ -40,7 +40,7 @@ const UserAccountPage = () => {
     }));
     validateField(name, value);
 
-    // Fetch districts based on selected city
+    // fetch api cua quan huyen dua tren thanh pho da chon
     fetch(`https://vn-public-apis.fpo.vn/districts/getByProvince?provinceCode=${value}&limit=-1`)
       .then((response) => response.json())
       .then((data) => setDistricts(data.data.data))
@@ -56,7 +56,7 @@ const UserAccountPage = () => {
     }));
     validateField(name, value);
 
-    // Fetch wards based on selected district
+   //fetch api cua phuong xa dua tren quan huyen da chon
     fetch(`https://vn-public-apis.fpo.vn/wards/getByDistrict?districtCode=${value}&limit=-1`)
       .then((response) => response.json())
       .then((data) => setWards(data.data.data))
@@ -101,7 +101,7 @@ const UserAccountPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Perform final validation and submit data
+  
     console.log("Form submitted:", formData);
   };
 
