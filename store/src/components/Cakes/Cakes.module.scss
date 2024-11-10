@@ -13,6 +13,27 @@ a{
     column-gap: 1rem; // khoảng cách giữa các cột
     padding: 10px; // thêm padding cho container nếu muốn
 }
+.card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.05); // Phóng to cả card khi hover
+    }
+}
+.cardContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
 .namePriceProducts{
     font-size: 20px;
     font-weight: bold;
@@ -28,6 +49,22 @@ a{
 .namePriceProducts + .namePriceProducts {
     color: #e74c3c; // màu cho giá sản phẩm
     font-weight: 500;
+}
+.price {
+    color: #e74c3c;
+    font-weight: 500;
+}
+.cakeImage {
+    width: 100%;
+    max-width: 200px;
+    height: 200px;
+    border-radius: 8px;
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;
+
+    &:hover {
+        transform: scale(1.1); // Phóng to ảnh nhẹ khi hover
+    }
 }
 .cakesWrapper {
     width: 100%;
@@ -83,26 +120,6 @@ span.activeCategory {
 }
 .cardLink {
     text-decoration: none;
-}
-.cakeImage {
-    width: 100%;
-    max-width: 200px; // Giới hạn chiều rộng tối đa của ảnh để căn đều giữa các ảnh
-    height: 200px;
-    overflow: hidden;
-    position: relative;
-    div {
-        overflow: hidden;
-    }
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover; // Đảm bảo ảnh được căn đều và giữ tỷ lệ bên trong khung
-        transition: transform 0.2s ease-in-out;
-    }
-
-    &:hover > img {
-        transform: scale(1.8); // Hiệu ứng phóng to khi hover
-    }
 }
 .cakeDetails {
     padding: 10px 0 0;
