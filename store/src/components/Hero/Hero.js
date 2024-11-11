@@ -15,7 +15,7 @@ const Hero = () => {
                     <button onClick={handleScrollToProducts}>Shop Now</button>
                 </div>
                 <div className={styles.imageWrapper}>
-                    <img src={slideImg1} alt="Cake for hero section"/>
+                    {/* <img src={slideImg1} alt="Cake for hero section"/> */}
                     <div className={styles.gradientOverlay}></div>
                 </div>
             </div>
