@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import styles from './PaymentPage.module.scss';
 import Navbar from '../Navbar/Navbar'; // Đảm bảo đường dẫn đúng
 import Footer from '../Footer/Footer'; // Đảm bảo đường dẫn đúng
+import axios from 'axios';
 
 const PaymentPage = () => {
   const location = useLocation();
@@ -19,6 +20,9 @@ const PaymentPage = () => {
   });
 
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
+
+  const [address, setAddress] = useState('')
+
   const [qrCodeUrl, setQrCodeUrl] = useState('');
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
@@ -71,10 +75,35 @@ const PaymentPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  console.log(cartItems);
+
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    // Handle form submission
-    console.log("Form submitted:", customerInfo);
+    try {
+      const data = {
+        "shippingAddress": address,
+        "status": "PROCESSING",
+        "orderDetails": cartItems.map(item => ({
+          "productId": item.id,
+          "quantity": item.quantity,
+          "price": item.price
+        }))
+      }
+      console.log(data);
+      const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0dWFuYW5oIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfVVNFUiJ9XSwiaWF0IjoxNzMxMzQzMDc1LCJleHAiOjE3MzEzNDMzNzV9.GzG9_txfz0ZHokWISU2fNHTkRebfd6nSCEhb9HAVUnQ" // token value is static, can change when make login function
+      const response = await axios.post(
+        `http://26.170.181.245:8080/api/orders`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      console.log(response); // address need fix  // add if response success can set state null // when success need move on page ORDERS
+    } catch (error) {
+      
+    }
   };
 
   const handlePaymentMethodChange = (e) => {
@@ -189,8 +218,8 @@ const PaymentPage = () => {
               <input
                 type="text"
                 name="street"
-                value={customerInfo.street}
-                onChange={handleChange}
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
                 autoComplete="street-address"
               />
             </div>
