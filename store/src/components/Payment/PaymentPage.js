@@ -82,7 +82,7 @@ const PaymentPage = () => {
     try {
       const data = {
         "shippingAddress": address,
-        "status": "PROCESSING",
+        // "status": "PROCESSING",
         "orderDetails": cartItems.map(item => ({
           "productId": item.id,
           "quantity": item.quantity,
@@ -90,7 +90,7 @@ const PaymentPage = () => {
         }))
       }
       console.log(data);
-      const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0dWFuYW5oIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfVVNFUiJ9XSwiaWF0IjoxNzMxMzQzMDc1LCJleHAiOjE3MzEzNDMzNzV9.GzG9_txfz0ZHokWISU2fNHTkRebfd6nSCEhb9HAVUnQ" // token value is static, can change when make login function
+      const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0dWFuYW5oIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfVVNFUiJ9XSwiaWF0IjoxNzMxMzQzODQyLCJleHAiOjE3MzEzNDQxNDJ9.g49L5rtvxl-fWjmbazsD8lNwdsxrWh1-Ij2kLRKgOJg" // token value is static, can change when make login function
       const response = await axios.post(
         `http://26.170.181.245:8080/api/orders`,
         data,
