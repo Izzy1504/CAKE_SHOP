@@ -1,71 +1,51 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './PaymentPage.module.scss';
-import Navbar from '../Navbar/Navbar'; // Đảm bảo đường dẫn đúng
-import Footer from '../Footer/Footer'; // Đảm bảo đường dẫn đúng
+import Navbar from '../Navbar/Navbar'; // Ensure the path is correct
+import Footer from '../Footer/Footer'; // Ensure the path is correct
 import axios from 'axios';
 
 const PaymentPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { cartItems, totalPrice } = location.state || { cartItems: [], totalPrice: 0 };
 
   const [customerInfo, setCustomerInfo] = useState({
     name: '',
     phone: '',
     email: '',
-    street: '',
-    ward: '',
-    district: '',
-    city: '',
+    address: '',
   });
 
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
-
-  const [address, setAddress] = useState('')
-
   const [qrCodeUrl, setQrCodeUrl] = useState('');
-  const [cities, setCities] = useState([]);
-  const [districts, setDistricts] = useState([]);
-  const [wards, setWards] = useState([]);
 
   useEffect(() => {
-    // Fetch cities from API
-    fetch("https://vn-public-apis.fpo.vn/provinces/getAll?limit=-1")
-      .then((response) => response.json())
-      .then((data) => setCities(data.data.data))
-      .catch((error) => console.error("Error fetching cities:", error));
+    // Fetch user information from API
+    const fetchUserInfo = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get('http://26.170.181.245:8080/api/users/info', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        if (response.status === 200) {
+          const userData = response.data;
+          setCustomerInfo({
+            name: userData.name,
+            phone: userData.phoneNumber,
+            email: userData.email,
+            address: userData.address,
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching user information:", error);
+      }
+    };
+
+    fetchUserInfo();
   }, []);
-
-  const handleCityChange = (e) => {
-    const { name, value } = e.target;
-    setCustomerInfo((prevData) => ({
-      ...prevData,
-      [name]: value,
-      district: '',
-      ward: '',
-    }));
-
-    // Fetch districts based on selected city
-    fetch(`https://vn-public-apis.fpo.vn/districts/getByProvince?provinceCode=${value}&limit=-1`)
-      .then((response) => response.json())
-      .then((data) => setDistricts(data.data.data))
-      .catch((error) => console.error("Error fetching districts:", error));
-  };
-
-  const handleDistrictChange = (e) => {
-    const { name, value } = e.target;
-    setCustomerInfo((prevData) => ({
-      ...prevData,
-      [name]: value,
-      ward: '',
-    }));
-
-    // Fetch wards based on selected district
-    fetch(`https://vn-public-apis.fpo.vn/wards/getByDistrict?districtCode=${value}&limit=-1`)
-      .then((response) => response.json())
-      .then((data) => setWards(data.data.data))
-      .catch((error) => console.error("Error fetching wards:", error));
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -75,22 +55,19 @@ const PaymentPage = () => {
     }));
   };
 
-  console.log(cartItems);
-
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const data = {
-        "shippingAddress": address,
-        // "status": "PROCESSING",
+        "shippingAddress": customerInfo.address,
         "orderDetails": cartItems.map(item => ({
           "productId": item.id,
           "quantity": item.quantity,
           "price": item.price
         }))
-      }
+      };
       console.log(data);
-      const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0dWFuYW5oIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfVVNFUiJ9XSwiaWF0IjoxNzMxMzQ2NTcxLCJleHAiOjE3MzE0MzI5NzF9.vIgM8fE_isVomSnYCi7iyP52QdEjTxmY7B1eCN711bo" // token value is static, can change when make login function
+      const token = localStorage.getItem('token');
       const response = await axios.post(
         `http://26.170.181.245:8080/api/orders`,
         data,
@@ -100,9 +77,10 @@ const PaymentPage = () => {
           }
         }
       );
-      console.log(response); // address need fix  // add if response success can set state null // when success need move on page ORDERS
+      console.log(response);
+      // Handle success (e.g., navigate to orders page)
     } catch (error) {
-      
+      console.error("Error submitting order:", error);
     }
   };
 
@@ -144,6 +122,7 @@ const PaymentPage = () => {
                 value={customerInfo.name}
                 onChange={handleChange}
                 autoComplete="name"
+                readOnly
               />
             </div>
             <div>
@@ -154,6 +133,7 @@ const PaymentPage = () => {
                 value={customerInfo.phone}
                 onChange={handleChange}
                 autoComplete="tel"
+                readOnly
               />
             </div>
             <div>
@@ -164,65 +144,21 @@ const PaymentPage = () => {
                 value={customerInfo.email}
                 onChange={handleChange}
                 autoComplete="email"
+                readOnly
               />
             </div>
             <div>
-              <label>City</label>
-              <select
-                name="city"
-                value={customerInfo.city}
-                onChange={handleCityChange}
-              >
-                <option value="">Select City</option>
-                {cities.map((city) => (
-                  <option key={city.code} value={city.code}>
-                    {city.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label>District</label>
-              <select
-                name="district"
-                value={customerInfo.district}
-                onChange={handleDistrictChange}
-                disabled={!customerInfo.city}
-              >
-                <option value="">Select District</option>
-                {districts.map((district) => (
-                  <option key={district.code} value={district.code}>
-                    {district.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label>Ward</label>
-              <select
-                name="ward"
-                value={customerInfo.ward}
-                onChange={handleChange}
-                disabled={!customerInfo.district}
-              >
-                <option value="">Select Ward</option>
-                {wards.map((ward) => (
-                  <option key={ward.code} value={ward.code}>
-                    {ward.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label>Street</label>
+              <label>Address</label>
               <input
                 type="text"
-                name="street"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
+                name="address"
+                value={customerInfo.address}
+                onChange={handleChange}
                 autoComplete="street-address"
+                readOnly
               />
             </div>
+            <button type="button" onClick={() => navigate('/profile')}>Edit</button>
             <div className={styles.paymentMethods}>
               <h2>Payment Methods</h2>
               <div>
