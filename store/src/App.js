@@ -13,7 +13,7 @@ import UserAccountPage from './components/User/User';
 import Login from './components/User/User2';
 import { useStateContext } from './context/StateContextProvider';
 import PaymentPage from './components/Payment/PaymentPage';
-
+import Admin from './pages/Admin';
 
 function App() {
   const { showCart } = useStateContext();
@@ -26,11 +26,13 @@ function App() {
   const hideLayout = location.pathname === '/UserAccountPage';
   const hideCta = location.pathname === '/PaymentPage';
   const hideOrders = location.pathname === '/PaymentPage';
+  const hideLayout2 = location.pathname === '/admin';
+  // const hide 
 
   return (
     <div className="min-h-screen bg-gray-100">
       {/* {!hideCta && <Navbar />} */}
-      {!hideLayout&& !hideCta && <Navbar />}
+      {!hideLayout && !hideCta && hideLayout2 && <Navbar />}
       {showCart && !hideOrders && <Orders />}
       <Routes>
         <Route path='/' element={<LandingPage />} />
@@ -42,10 +44,11 @@ function App() {
         <Route path='/Login' element={<Login />} />
         <Route path='/PaymentPage' element={<PaymentPage />} />
         <Route path="/cake-details/:id" element={<CakeDetails />} />
+        <Route path='/admin/' element={<Admin />} />
       </Routes>
       {/* {!hideCta && <Cta />} */}
-      {!hideLayout && !hideCta && <Cta />}
-      {!hideLayout && !hideCta && <Footer />}
+      {!hideLayout && !hideCta && hideLayout2 && <Cta />}
+      {!hideLayout && !hideCta && hideLayout2 && <Footer />}
       {/* {!hideCta && <Footer />} */}
     </div>
   );
