@@ -1,94 +1,112 @@
 .paymentPage {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  // align-items: center;
   padding: 20px;
   margin: 80px auto 20px auto; /* Adjust margin to create space from Navbar */
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 2500px;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .orderInfo, .customerInfo {
-  flex: 1;
-  margin: 0 20px;
+  width: 48%;
+  margin: 20px 0;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
 }
 
-.qrCode
-{
+.qrCode {
   width: 150px;
   height: 150px;
-}
-.customerInfo {
-  margin-right: auto; /* Align to the right */
+  margin: 20px auto;
 }
 
 .orderInfo h2, .customerInfo h2 {
   text-align: center;
   margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #333;
 }
 
 .orderInfo ul {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
 }
 
 .orderInfo li {
-  margin-bottom: 10px;
-}
-
-.paymentButton {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: auto;
-  padding: 10px;
-  margin-top: 10px;
-  background-color: #66defc;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  text-align: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
 }
 
-.paymentButton:hover {
-  background-color: #01050a;
+.orderInfo li:last-child {
+  border-bottom: none;
 }
 
-.icon {
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
+.orderInfo .total {
+  font-weight: bold;
+  font-size: 1.2rem;
 }
 
-.formGroup {
-  margin-bottom: 15px;
+.customerInfo form {
+  display: flex;
+  flex-direction: column;
 }
 
-.formGroup label {
-  display: block;
-  margin-bottom: 5px;
+.customerInfo label {
+  margin-bottom: 10px;
   font-weight: bold;
 }
 
-.formGroup input {
-  width: 80%; /* Reduce the width of the input fields */
+.customerInfo input, .customerInfo select {
   padding: 10px;
+  margin-bottom: 20px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  font-size: 1rem;
 }
 
-button[type="submit"] {
-  width: auto;
+.customerInfo button {
   padding: 10px;
   background-color: #007bff;
-  color: white;
+  color: #fff;
   border: none;
   border-radius: 4px;
+  font-size: 1rem;
   cursor: pointer;
-  font-size: 16px;
+  transition: background-color 0.3s ease;
 }
 
-button[type="submit"]:hover {
+.customerInfo button:hover {
   background-color: #0056b3;
+}
+
+.paymentMethods {
+  margin: 20px 0;
+}
+
+.paymentMethods h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.paymentMethods div {
+  margin-bottom: 10px;
+}
+
+.paymentMethods label {
+  margin-left: 10px;
 }

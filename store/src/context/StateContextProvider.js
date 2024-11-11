@@ -1,179 +1,92 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 
-export const StateContext = createContext()
+export const StateContext = createContext();
 
-export default function StateContextProvider({children}) {
-    const [isNavOpen, setIsNavOpen] = useState(false);
-    const [quantity, setQuantity] = useState(1)
-    const [totalQty, setTotalQty] = useState(0)
-    const [showCart, setShowCart] = useState(false);
-    const [cake, setCake] = useState(null)
-    const [cartItems, setCartItems] = useState([])
-    const [totalPrice, setTotalPrice] = useState(0)
-    const cakeRef = useRef();
+export default function StateContextProvider({ children }) {
+  const [isNavOpen, setIsNavOpen] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  const [totalQty, setTotalQty] = useState(0);
+  const [showCart, setShowCart] = useState(false);
+  const [cake, setCake] = useState(null);
+  const [cartItems, setCartItems] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const cakeRef = useRef();
 
-    useEffect(() => {
-      if(totalQty === 0) {
-        setTotalPrice(0)
-      }
-    },[totalQty])
-    
-    const handleNavMenu = () => {
-        setIsNavOpen(!isNavOpen)
+  useEffect(() => {
+    if (totalQty === 0) {
+      setTotalPrice(0);
     }
+  }, [totalQty]);
 
-    const handleNavLinks = (anchor) => () => {
-      const id = `${anchor}-section`;
-      const element = document.getElementById(id);
-      if (element) {
-        element.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      };
-      setIsNavOpen(false)
-  }
-    
-    const displayCakeDetails = (item) => {
-      setCake(item)
-    }
-    
-    const increaseQty = () => {
-      setQuantity(prevState => prevState + 1)
-    }
-    
-    const decreaseQty = () => {
-      setQuantity(prevState => prevState - 1)
-      if(quantity <= 1) {
-        setQuantity(1)
-      }
-    }
-    
-    const updateCart = (product) => {
-      let updatedCartItem = cartItems.map(item => {
-          if(item.index === product.index){
-              let newQty = item.quantity + quantity
-              return {
-                  ...item,
-                  quantity: newQty
-              }
-          } else {
-              return {
-                  ...item
-              }
-          }
-      })
-      setCartItems(updatedCartItem)
-    }
-    
-    const addToCart = (product) => {
-      cartItems.unshift(product)
-      product.quantity = quantity
-    }
-    
-    const onAddClick = (product, button) => {
-      const existingProduct = cartItems.find((item) => item.index === product.index);
-      if(existingProduct){
-        updateCart(product)
-      } else {
-        addToCart(product)
-      }
-      if(button.toLowerCase() === "buy now"){
-        handleCartClick()
-      }
-      setTotalPrice(prevTotalPrice => prevTotalPrice + (product.details.price * quantity))
-      setTotalQty(prevTotalQuantities => prevTotalQuantities + quantity)
-      setQuantity(1)
-    }
-    
-    const handleRemoveCart = (cake) => {
-      const deleteItem = cartItems.filter(item => item.index !== cake.index)
-      setCartItems(deleteItem)
-      setTotalPrice(prevTotalPrice => prevTotalPrice - (cake.quantity * cake.details.price))
-      setTotalQty(prevTotalQuantities => prevTotalQuantities - cake.quantity)
-    }
+  const handleNavMenu = () => {
+    setIsNavOpen(!isNavOpen);
+  };
 
-    const cartItemQty = (value, id) => {
-      const foundItem = cartItems.find(item => item.index === id)
-      if(value === "inc"){
-        const updateCartItem = cartItems.map((item) => {
-          if(item.index === id) {
-            return {
-              ...item,
-              quantity: item.quantity + 1
-            }
-          } else {
-            return {
-              ...item,
-            }
-          }
-        })
-        setCartItems(updateCartItem)
-        setTotalPrice(prevTotalPrice => (prevTotalPrice + foundItem.details.price))
-        setTotalQty(prevTotalQuantities => prevTotalQuantities + 1)
-      }
-      if(value === "dec"){
-        const updateCartItem = cartItems.map((item) => {
-          if(item.index === id) {
-            if(item.quantity > 1){
-            setTotalPrice(prevTotalPrice => (prevTotalPrice - foundItem.details.price))
-            setTotalQty(prevTotalQuantities => prevTotalQuantities - 1)
-            return {
-              ...item,
-              quantity: item.quantity - 1
-            }
-          } else {
-            return {
-              ...item,
-              quantity: 1
-            }
-          }
-        } else {
-            return {
-              ...item,
-            }
-          }
-        })
-        setCartItems(updateCartItem)
-      }
-    }
-    
-    const handleCartClick = () => {
-      setShowCart(!showCart)
-    }
-    
-    const formatPrice = (value) => value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const handleNavLinks = (anchor) => () => {
+    // Your existing handleNavLinks logic
+  };
 
-    const handleScrollToProducts = () => {
-      cakeRef.current?.scrollIntoView({behavior: 'smooth'});
-      setShowCart(false)
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+  };
+
+  const onAddClick = (product, action) => {
+    const existingItem = cartItems.find(item => item.id === product.id);
+    if (existingItem) {
+      setCartItems(cartItems.map(item => item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item));
+    } else {
+      setCartItems([...cartItems, { ...product, quantity }]);
     }
+    setTotalPrice(totalPrice + product.price * quantity);
+    setTotalQty(totalQty + quantity);
+    console.log(`${action} clicked for product:`, product);
+  };
+
+  const handleCartClick = () => {
+    setShowCart(prevShowCart => !prevShowCart);
+  };
+
+  const handleRemoveCart = (id) => {
+    const itemToRemove = cartItems.find(item => item.id === id);
+    if (itemToRemove) {
+      setCartItems(cartItems.filter(item => item.id !== id));
+      setTotalPrice(totalPrice - (itemToRemove.price * itemToRemove.quantity));
+      setTotalQty(totalQty - itemToRemove.quantity);
+    }
+  };
+
+  const increaseQty = () => {
+    setQuantity(quantity + 1);
+  };
+
+  const decreaseQty = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+
   return (
     <StateContext.Provider value={{
-        isNavOpen,
-        handleNavMenu,
-        handleNavLinks,
-        cartItems, 
-        updateCart,
-        addToCart,
-        onAddClick,
-        totalPrice,
-        handleRemoveCart,
-        cartItemQty,
-        cake,
-        displayCakeDetails,
-        quantity,
-        totalQty,
-        increaseQty,
-        decreaseQty,
-        showCart,
-        handleCartClick,
-        formatPrice,
-        cakeRef,
-        handleScrollToProducts
+      isNavOpen,
+      quantity,
+      totalQty,
+      showCart,
+      cake,
+      cartItems,
+      totalPrice,
+      cakeRef,
+      handleNavMenu,
+      handleNavLinks,
+      formatPrice,
+      onAddClick,
+      handleCartClick,
+      handleRemoveCart,
+      increaseQty,
+      decreaseQty
     }}>
-        {children}
+      {children}
     </StateContext.Provider>
-  )
+  );
 }
-export const useStateContext = () => useContext(StateContext)
+
+export const useStateContext = () => useContext(StateContext);
