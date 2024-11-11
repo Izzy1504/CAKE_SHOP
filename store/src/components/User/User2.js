@@ -84,8 +84,9 @@ const Login = () => {
       // Store the token (e.g., in localStorage)
       localStorage.setItem("token", data.token);
       localStorage.setItem("token_type", data.token_type);
-      // Redirect to home page
-      navigate("/");
+      localStorage.setItem("username",emailOrPhone);
+      // Reload the page to update the navbar and then navigate to the home page
+      window.location.href = '/';
     } catch (error) {
       console.error("Error:", error);
       // Handle error (e.g., show an error message)
