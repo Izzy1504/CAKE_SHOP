@@ -18,8 +18,7 @@ a{
     align-items: center;
     justify-content: center;
     transition: transform 0.3s ease-in-out;
-    cursor: pointer;
-
+    
     &:hover {
         transform: scale(1.05); // Phóng to cả card khi hover
     }
@@ -57,6 +56,8 @@ a{
 .cakeImage {
     width: 100%;
     max-width: 200px;
+    margin: 0 auto;
+    display: block;
     height: 200px;
     border-radius: 8px;
     object-fit: cover;
