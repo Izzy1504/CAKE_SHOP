@@ -13,7 +13,7 @@ import UserAccountPage from './components/User/User';
 import Login from './components/User/User2';
 import { useStateContext } from './context/StateContextProvider';
 import PaymentPage from './components/Payment/PaymentPage';
-import Admin from './pages/Admin';
+// import Admin from './admin/AdminApp';
 
 function App() {
   const { showCart } = useStateContext();
@@ -44,7 +44,7 @@ function App() {
         <Route path='/Login' element={<Login />} />
         <Route path='/PaymentPage' element={<PaymentPage />} />
         <Route path="/cake-details/:id" element={<CakeDetails />} />
-        <Route path='/admin/' element={<Admin />} />
+        {/* <Route path='/admin/*' element={<Admin />} /> */}
       </Routes>
       {/* {!hideCta && <Cta />} */}
       {!hideLayout && !hideCta && hideLayout2 && <Cta />}
