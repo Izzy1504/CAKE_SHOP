@@ -58,7 +58,7 @@ const Navbar = () => {
                     ) : (
                         <>
                             <NavLink to="/login">Login</NavLink>
-                            <NavLink to="/register">Register</NavLink>
+                            <NavLink to="/UserAccountPage">Register</NavLink>
                         </>
                     )}
                 </div>
@@ -72,7 +72,7 @@ const Navbar = () => {
                     ) : (
                         <>
                             <NavLink to="/login" className={styles.login}>Login</NavLink>
-                            <NavLink to="/register" className={styles.register}>Register</NavLink>
+                            <NavLink to="/UserAccountPage" className={styles.register}>Register</NavLink>
                         </>
                     )}
                     <div className={styles.cart}>

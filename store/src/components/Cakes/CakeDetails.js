@@ -21,7 +21,7 @@ const CakeDetails = () => {
       try {
         const response = await axios.get(`http://26.170.181.245:8080/api/products/${id}`);
         if (response.status === 200) {
-          console.log("Cake details:", response.data); // Ghi log dữ liệu trả về từ API
+          console.log("Cake details:", response.data); // Log the data returned from the API
           setCakeDetails(response.data);
         }
       } catch (error) {
@@ -37,11 +37,26 @@ const CakeDetails = () => {
   };
 
   const handleBuyNow = (e) => {
-    console.log("Buy Now clicked");
-    console.log("Cake details:", cakeDetails);
-    onAddClick(cakeDetails, e.target.innerText);
-    handleCartClick(); // Hiển thị thanh giỏ hàng
-    navigate('/PaymentPage', { state: { cartItems: [cakeDetails], totalPrice: cakeDetails.price * quantity } });
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    } else {
+      console.log("Buy Now clicked");
+      console.log("Cake details:", cakeDetails);
+      onAddClick(cakeDetails, e.target.innerText);
+      handleCartClick(); // Show the cart bar
+      navigate('/PaymentPage', { state: { cartItems: [cakeDetails], totalPrice: cakeDetails.price * quantity } });
+    }
+  };
+
+  const handleAddToCart = (e) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    } else {
+      onAddClick(cakeDetails, e.target.innerText);
+      handleCartClick();
+    }
   };
 
   return (
@@ -77,7 +92,7 @@ const CakeDetails = () => {
                   <i className="fa-solid fa-plus fa-xs" onClick={increaseQty}></i>
                 </div>
               </div>
-              <button className={styles.addToCart} onClick={(e) => { onAddClick(cakeDetails, e.target.innerText); handleCartClick(); }}>Add to Cart</button>
+              <button className={styles.addToCart} onClick={handleAddToCart}>Add to Cart</button>
               <button className={styles.buyNow} onClick={handleBuyNow}>Buy Now</button>
               <h3>Details</h3>
               <ul>

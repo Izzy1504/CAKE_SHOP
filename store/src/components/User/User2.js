@@ -9,6 +9,7 @@ const Login = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [loginError, setLoginError] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -71,7 +72,8 @@ const Login = () => {
           console.error("Bad Request:", errorData);
           throw new Error("Bad Request: " + (errorData.message || "Invalid input"));
         } else if (response.status === 401) {
-          throw new Error("Invalid username or password");
+          setLoginError("Invalid username or password");
+          return;
         } else if (response.status === 403) {
           throw new Error("Access denied: Invalid token type or token expired");
         } else {
@@ -84,7 +86,7 @@ const Login = () => {
       // Store the token (e.g., in localStorage)
       localStorage.setItem("token", data.token);
       localStorage.setItem("token_type", data.token_type);
-      localStorage.setItem("username",emailOrPhone);
+      localStorage.setItem("username", emailOrPhone);
       // Reload the page to update the navbar and then navigate to the home page
       window.location.href = '/';
     } catch (error) {
@@ -132,6 +134,7 @@ const Login = () => {
             />
             {errors.password && <p className="mt-2 text-sm text-red-600">{errors.password}</p>}
           </div>
+          {loginError && <p className="mt-2 text-sm text-red-600">{loginError}</p>}
           <div className="mt-4">
             <button
               type="submit"

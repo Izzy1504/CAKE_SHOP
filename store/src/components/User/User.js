@@ -22,6 +22,11 @@ const UserAccountPage = () => {
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
+  const [cityName, setCityName] = useState("");
+  const [districtName, setDistrictName] = useState("");
+  const [wardName, setWardName] = useState("");
+  const [registrationError, setRegistrationError] = useState("");
+  const [registrationSuccess, setRegistrationSuccess] = useState("");
 
   useEffect(() => {
     // Fetch cities from API
@@ -33,6 +38,8 @@ const UserAccountPage = () => {
 
   const handleCityChange = (e) => {
     const { name, value } = e.target;
+    const selectedCity = cities.find(city => city.code === value);
+    setCityName(selectedCity ? selectedCity.name : "");
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -50,6 +57,8 @@ const UserAccountPage = () => {
 
   const handleDistrictChange = (e) => {
     const { name, value } = e.target;
+    const selectedDistrict = districts.find(district => district.code === value);
+    setDistrictName(selectedDistrict ? selectedDistrict.name : "");
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -62,6 +71,17 @@ const UserAccountPage = () => {
       .then((response) => response.json())
       .then((data) => setWards(data.data.data))
       .catch((error) => console.error("Error fetching wards:", error));
+  };
+
+  const handleWardChange = (e) => {
+    const { name, value } = e.target;
+    const selectedWard = wards.find(ward => ward.code === value);
+    setWardName(selectedWard ? selectedWard.name : "");
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+    validateField(name, value);
   };
 
   const handleChange = (e) => {
@@ -100,33 +120,83 @@ const UserAccountPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    // Perform final validation
-    const isValid = Object.values(errors).every((error) => error === "") &&
-                    Object.values(formData).every((value) => value.trim() !== "");
 
-    if (isValid) {
-      // Send data to server
-      fetch("https://your-api-endpoint.com/saveUserData", {
+    // Perform final validation
+    const { name, username, email, phone, city, district, ward, address, password, confirmPassword } = formData;
+    if (
+      name.trim() === "" ||
+      username.trim() === "" ||
+      email.trim() === "" ||
+      phone.trim() === "" ||
+      city.trim() === "" ||
+      district.trim() === "" ||
+      ward.trim() === "" ||
+      address.trim() === "" ||
+      password.trim() === "" ||
+      confirmPassword.trim() === "" ||
+      password !== confirmPassword
+    ) {
+      setErrors({
+        name: name.trim() === "" ? "Name is required" : "",
+        username: username.trim() === "" ? "Username is required" : "",
+        email: email.trim() === "" ? "Email is required" : "",
+        phone: phone.trim() === "" ? "Phone number is required" : "",
+        city: city.trim() === "" ? "City is required" : "",
+        district: district.trim() === "" ? "District is required" : "",
+        ward: ward.trim() === "" ? "Ward is required" : "",
+        address: address.trim() === "" ? "Address is required" : "",
+        password: password.trim() === "" ? "Password is required" : "",
+        confirmPassword: confirmPassword.trim() === "" ? "Confirm Password is required" : "",
+      });
+      return;
+    }
+
+    try {
+      // Combine address fields
+      const fullAddress = `${address}, ${wardName}, ${districtName}, ${cityName}`;
+
+      // Send registration request to server
+      const response = await fetch("http://26.170.181.245:8080/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Success:", data);
-          // Handle success (e.g., show a success message, redirect to another page, etc.)
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-          // Handle error (e.g., show an error message)
-        });
-    } else {
-      console.error("Validation failed");
-      // Handle validation failure (e.g., show an error message)
+        body: JSON.stringify({ name, username, email, phoneNumber: phone, address: fullAddress, password }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Registration Error:", errorData);
+        if (errorData.status === 400) {
+          setRegistrationError("Validation error: " + errorData.description);
+        } else if (errorData.status === 500) {
+          setRegistrationError("Server error: " + errorData.description);
+        } else {
+          setRegistrationError(errorData.message || "Registration failed");
+        }
+        return;
+      }
+
+      const data = await response.json();
+      console.log("Registration successful:", data);
+      setRegistrationSuccess("Registration successful! Please log in.");
+      setFormData({
+        name: "",
+        username: "",
+        email: "",
+        phone: "",
+        city: "",
+        district: "",
+        ward: "",
+        address: "",
+        password: "",
+        confirmPassword: "",
+      });
+    } catch (error) {
+      console.error("Error:", error);
+      setRegistrationError("An unknown error occurred");
     }
   };
 
@@ -140,7 +210,7 @@ const UserAccountPage = () => {
 
   return (
     <div className="user-account-page">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleRegister}>
         <div>
           <label>
             <FaUser /> Name
@@ -232,7 +302,7 @@ const UserAccountPage = () => {
             <select
               name="ward"
               value={formData.ward}
-              onChange={handleChange}
+              onChange={handleWardChange}
               disabled={!formData.district}
             >
               <option value="">Select Ward</option>
@@ -291,7 +361,9 @@ const UserAccountPage = () => {
           </label>
           {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
         </div>
-        <button type="submit">Submit</button>
+        {registrationError && <p className="error">{registrationError}</p>}
+        {registrationSuccess && <p className="success">{registrationSuccess}</p>}
+        <button type="submit">Register</button>
       </form>
     </div>
   );
