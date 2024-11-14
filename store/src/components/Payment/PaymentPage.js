@@ -25,7 +25,7 @@ const PaymentPage = () => {
     const fetchUserInfo = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://26.170.181.245:8080/api/users/info', {
+        const response = await axios.get('http://26.214.87.26:8080/api/users/info', {
           headers: {
             Authorization: `Bearer ${token}`
           }
