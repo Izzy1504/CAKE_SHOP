@@ -46,7 +46,7 @@ const Footer = () => {
             </div>
         </section>
         <section className={styles.footerCredit}>
-            <small>Designed and Developed by <a href="https://kristinedejesus.vercel.app" target="_blank" rel="noreferrer noopener">Kristine de Jesus</a></small>
+            <small>Designed UX/UI by <a href="https://kristinedejesus.vercel.app" target="_blank" rel="noreferrer noopener">Kristine de Jesus</a> and developed by DNTN</small>
         </section>
     </footer>
   )
