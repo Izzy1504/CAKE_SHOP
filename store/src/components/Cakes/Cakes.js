@@ -10,7 +10,7 @@ import axios from "axios";
 const CakeList = () => {
   const { formatPrice, scrollToTop, cakeRef } = useStateContext();
   const [cakes, setCakes] = useState([]);
-  const backendURL = 'http://26.170.181.245:8080';
+  const backendURL = 'http://26.214.87.26:8080';
 
   const fetchProducts = async () => {
     try {

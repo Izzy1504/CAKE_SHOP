@@ -19,7 +19,7 @@ const CakeDetails = () => {
   useEffect(() => {
     const fetchCakeDetails = async () => {
       try {
-        const response = await axios.get(`http://26.170.181.245:8080/api/products/${id}`);
+        const response = await axios.get(`http://26.214.87.26:8080/api/products/${id}`);
         if (response.status === 200) {
           console.log("Cake details:", response.data); // Log the data returned from the API
           setCakeDetails(response.data);

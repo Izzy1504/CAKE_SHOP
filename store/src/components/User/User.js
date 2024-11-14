@@ -158,7 +158,7 @@ const UserAccountPage = () => {
       const fullAddress = `${address}, ${wardName}, ${districtName}, ${cityName}`;
 
       // Send registration request to server
-      const response = await fetch("http://26.170.181.245:8080/api/auth/register", {
+      const response = await fetch("http://26.214.87.26:8080/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,9 +1,9 @@
-import React from 'react';
+// import React from 'react';
 import { useStateContext } from '../../context/StateContextProvider';
 import { useNavigate } from 'react-router-dom';
 import styles from './Orders.module.scss';
 import EmptyState from './EmptyState';
-
+import React, { useEffect } from 'react';
 export default function Orders() {
   const { cartItems, handleRemoveCart, handleCartClick, totalPrice, totalQty, formatPrice } = useStateContext();
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ export default function Orders() {
       navigate('/PaymentPage', { state: { cartItems, totalPrice } });
     }, 500); // Chờ 0.5 giây trước khi chuyển đến trang thanh toán
   };
-
+ 
   return (
     <div className={styles.ordersPage}>
       {cartItems.length === 0 ? (

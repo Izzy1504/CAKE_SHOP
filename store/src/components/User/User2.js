@@ -57,7 +57,7 @@ const Login = () => {
       console.log("Sending data:", { username: emailOrPhone, password });
 
       // Send login request to server
-      const response = await fetch("http://26.170.181.245:8080/api/auth/login", {
+      const response = await fetch("http://26.214.87.26:8080/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
