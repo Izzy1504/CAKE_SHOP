@@ -64,6 +64,13 @@ export default function StateContextProvider({ children }) {
       setQuantity(quantity - 1);
     }
   };
+  const handleScrollToProducts = () => {
+    if (cakeRef.current) {
+      cakeRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+    setShowCart(false); // Ẩn giỏ hàng
+  };
+
 
   return (
     <StateContext.Provider value={{
@@ -78,11 +85,13 @@ export default function StateContextProvider({ children }) {
       handleNavMenu,
       handleNavLinks,
       formatPrice,
+      handleScrollToProducts,
       onAddClick,
       handleCartClick,
       handleRemoveCart,
       increaseQty,
       decreaseQty
+      
     }}>
       {children}
     </StateContext.Provider>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+
 import styles from './PaymentPage.module.scss';
 import Navbar from '../Navbar/Navbar'; // Ensure the path is correct
 import Footer from '../Footer/Footer'; // Ensure the path is correct
@@ -91,6 +92,10 @@ const PaymentPage = () => {
   const formatPrice = (price) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
   };
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
 
   return (
     <div className={styles.paymentPage}>
@@ -110,6 +115,7 @@ const PaymentPage = () => {
               <span>{formatPrice(totalPrice)} vnđ</span>
             </li>
           </ul>
+          <button onClick={handleGoBack} style={{ marginTop: '10px' }}>Go Back</button>
         </div>
         <div className={styles.customerInfo}>
           <h2>Customer Information</h2>

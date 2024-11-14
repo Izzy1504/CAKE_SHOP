@@ -6,11 +6,12 @@ import CakesSlide from './CakesSlide';
 import { useStateContext } from '../../context/StateContextProvider';
 
 const CakeDetails = () => {
-  const { quantity, increaseQty, decreaseQty, formatPrice, onAddClick, handleCartClick } = useStateContext();
+  const { quantity, increaseQty, decreaseQty, formatPrice, onAddClick, handleCartClick,totalPrice, setTotalPrice,cartItems } = useStateContext();
   const { id } = useParams();
   const navigate = useNavigate();
   const [cakeImage, setCakeImage] = useState(0);
   const [cakeDetails, setCakeDetails] = useState(null);
+  const [navigateToPayment, setNavigateToPayment] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -31,11 +32,16 @@ const CakeDetails = () => {
 
     fetchCakeDetails();
   }, [id]);
+  
+  useEffect(() => {
+    if (navigateToPayment) {
+      navigate('/PaymentPage', { state: { cartItems, totalPrice } });
+    }
+  }, [navigateToPayment, navigate, cartItems, cakeDetails, totalPrice, quantity]);
 
   const handleClickImage = (index) => {
     setCakeImage(index);
   };
-
   const handleBuyNow = (e) => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -43,9 +49,14 @@ const CakeDetails = () => {
     } else {
       console.log("Buy Now clicked");
       console.log("Cake details:", cakeDetails);
+      // const updatedTotalPrice = totalPrice + cakeDetails.price * quantity;
       onAddClick(cakeDetails, e.target.innerText);
-      handleCartClick(); // Show the cart bar
-      navigate('/PaymentPage', { state: { cartItems: [cakeDetails], totalPrice: cakeDetails.price * quantity } });
+      //test
+      // handleCartClick(); // Show the cart bar
+      // setTotalPrice(updatedTotalPrice);
+      // localStorage.setItem('quantity', quantity);
+      // localStorage.setItem('totalPrice', updatedTotalPrice);
+      setNavigateToPayment(true);
     }
   };
 
