@@ -69,7 +69,7 @@ const PaymentPage = () => {
       console.log(data);
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        `http://26.170.181.245:8080/api/orders`,
+        `http://26.214.87.26:8080/api/orders`,
         data,
         {
           headers: {
