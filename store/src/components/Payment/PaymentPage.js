@@ -175,13 +175,13 @@ const PaymentPage = () => {
               <div>
                 <input
                   type="radio"
-                  id="paypal"
+                  id="cod"
                   name="paymentMethod"
-                  value="paypal"
-                  checked={selectedPaymentMethod === 'paypal'}
+                  value="cod"
+                  checked={selectedPaymentMethod === 'cod'}
                   onChange={handlePaymentMethodChange}
                 />
-                <label htmlFor="paypal">PayPal</label>
+                <label htmlFor="cod">cod</label>
               </div>
               <div>
                 <input
