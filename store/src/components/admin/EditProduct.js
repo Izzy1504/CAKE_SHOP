@@ -1,13 +1,18 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import styles from "./EditProduct.module.scss";
 
 const EditProduct = () => {
   const { id } = useParams();
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+  const [category, setCategory] = useState("");
   const [image, setImage] = useState("");
+  const [imagePreview, setImagePreview] = useState(null);
+  const [initialProduct, setInitialProduct] = useState({});
   const backendURL = 'http://26.214.87.26:8080';
   const navigate = useNavigate();
 
@@ -19,7 +24,10 @@ const EditProduct = () => {
           const product = response.data;
           setName(product.name);
           setPrice(product.price);
-          setImage(product.image);
+          setCategory(product.category);
+          setImage(product.images[0]);
+          setImagePreview(product.images[0]);
+          setInitialProduct(product);
         }
       } catch (error) {
         console.error("Error fetching product:", error);
@@ -29,13 +37,41 @@ const EditProduct = () => {
     fetchProduct();
   }, [id]);
 
+  const handleImageChange = (e) => {
+    const url = e.target.value;
+    setImage(url);
+    setImagePreview(url);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const updatedFields = {
+      name: initialProduct.name,
+      price: initialProduct.price,
+      category: initialProduct.category,
+      images: initialProduct.images
+    };
+
+    if (name !== initialProduct.name) updatedFields.name = name;
+    if (price !== initialProduct.price) updatedFields.price = parseFloat(price);
+    if (category !== initialProduct.category) updatedFields.category = category;
+    if (image !== initialProduct.images[0]) updatedFields.images = [image];
+
+    console.log("Updated fields:", updatedFields); // Thêm console.log để kiểm tra dữ liệu gửi đi
+
     try {
-      await axios.put(`${backendURL}/api/products/${id}`, { name, price, image });
+      await axios.put(`${backendURL}/api/products/${id}`, updatedFields, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       navigate('/admin/products');
     } catch (error) {
       console.error("Error updating product:", error);
+      if (error.response) {
+        console.error("Response data:", error.response.data);
+      }
+      toast.error("Cập nhật sản phẩm thất bại!");
     }
   };
 
@@ -52,11 +88,17 @@ const EditProduct = () => {
           <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} required />
         </div>
         <div>
-          <label>Hình ảnh</label>
-          <input type="text" value={image} onChange={(e) => setImage(e.target.value)} required />
+          <label>Danh mục</label>
+          <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} required />
+        </div>
+        <div>
+          <label>URL hình ảnh</label>
+          <input type="text" value={image} onChange={handleImageChange} required />
+          {imagePreview && <img src={imagePreview} alt="Preview" className={styles.imagePreview} />}
         </div>
         <button type="submit">Cập nhật</button>
       </form>
+      <ToastContainer />
     </div>
   );
 };

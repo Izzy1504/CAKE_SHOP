@@ -65,7 +65,7 @@ const Navbar = () => {
                 <div className={styles.leftLinks}>
                     {isLoggedIn ? (
                         <>
-                            <NavLink to="/userdetail">
+                            <NavLink to="/userDetail">
                                 <FaUserCircle className={styles.userIcon} />
                             </NavLink>
                             <span className={styles.username}>{username}</span>
