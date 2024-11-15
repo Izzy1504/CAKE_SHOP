@@ -37,6 +37,7 @@ function App() {
   const hideLayout3 = matchPath('/admin/edit-product/:id', location.pathname);
   const hideLayout4 = location.pathname === '/admin/orders';;
   const hideLayout5 = location.pathname === '/admin';
+  const hideLayout6 = location.pathname === '/Login';
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -60,8 +61,8 @@ function App() {
         <Route path='/admin/accounts' element={<AccountManagement />} />
         <Route path='/user/:id' element={<UserDetail />} />
       </Routes>
-      {!hideLayout && !hideCta && !hideLayout1 && !hideLayout2 && !hideLayout3 && !hideLayout4 && <Cta />}
-      {!hideLayout && !hideCta  && !hideLayout4 && !hideLayout5 && <Footer />}
+      {!hideLayout && !hideCta && !hideLayout1 && !hideLayout2 && !hideLayout3 && !hideLayout4 && hideLayout6 && <Cta />}
+      {!hideLayout && !hideCta  && !hideLayout4 && !hideLayout5  && <Footer />}
     </div>
   );
 }
