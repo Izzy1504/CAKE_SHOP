@@ -10,6 +10,7 @@ import Orders from './components/Orders/Orders';
 import Success from './pages/Success';
 import Cancel from './pages/Cancel';
 import UserAccountPage from './components/User/User';
+import UserDetail from './components/User/UserDetail'
 import Login from './components/User/User2';
 import { useStateContext } from './context/StateContextProvider';
 import PaymentPage from './components/Payment/PaymentPage';
