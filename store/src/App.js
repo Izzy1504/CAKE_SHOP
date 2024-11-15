@@ -10,6 +10,7 @@ import Orders from './components/Orders/Orders';
 import Success from './pages/Success';
 import Cancel from './pages/Cancel';
 import UserAccountPage from './components/User/User';
+import UserDetail from './components/User/UserDetail'
 import Login from './components/User/User2';
 import { useStateContext } from './context/StateContextProvider';
 import PaymentPage from './components/Payment/PaymentPage';
@@ -26,15 +27,16 @@ function App() {
   const hideLayout = location.pathname === '/UserAccountPage';
   const hideCta = location.pathname === '/PaymentPage';
   const hideOrders = location.pathname === '/PaymentPage';
+  const hideUserDetail = location.pathname === '/userdetail';
   // const hideLayout2 = location.pathname === '/admin';
   // const hide 
 
   return (
     <div className="min-h-screen bg-gray-100">
       {/* {!hideCta && <Navbar />} */}
-      {!hideCta && !hideLayout   && <Navbar />}
+      {!hideCta && !hideLayout && <Navbar />}
       {/* {!hideCta && !hideLayout2 && <Navbar />} */}
-      {showCart && !hideOrders && <Orders />}
+      {showCart && !hideOrders && !hideUserDetail && <Orders />}
       <Routes>
         <Route path='/' element={<LandingPage />} />
         <Route path='/about' element={<About />} />
@@ -45,11 +47,12 @@ function App() {
         <Route path='/Login' element={<Login />} />
         <Route path='/PaymentPage' element={<PaymentPage />} />
         <Route path="/cake-details/:id" element={<CakeDetails />} />
+        <Route path="/userdetail" element={<UserDetail />} />
         {/* <Route path='/admin/*' element={<Admin />} /> */}
       </Routes>
       {/* {!hideCta && <Cta />} */}
-      {!hideLayout && !hideCta && <Cta />}
-      {!hideLayout && !hideCta && <Footer />}
+      {!hideLayout && !hideCta && !hideUserDetail && <Cta />}
+      {!hideLayout && !hideCta && !hideUserDetail && <Footer />}
       {/* {!hideLayout && !hideCta && !hideLayout2 && <Cta />}
       {!hideLayout && !hideCta && !hideLayout2 && <Footer />} */}
       {/* {!hideCta && <Footer />} */}

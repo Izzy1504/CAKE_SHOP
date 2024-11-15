@@ -49,7 +49,7 @@ const Navbar = () => {
                     <NavLink to="/#cakes" onClick={handleNavLinks("cakes")}>Cakes</NavLink>
                     <NavLink to="/about" onClick={handleNavLinks("about")}>About</NavLink>
                     <a href="#contact" onClick={handleNavLinks("contact")}>Contact</a>
-                    {isLoggedIn ? (
+                    {/* {isLoggedIn ? (
                         <>
                             <FaUserCircle className={styles.userIcon} />
                             <span className={styles.username}>{username}</span>
@@ -60,12 +60,14 @@ const Navbar = () => {
                             <NavLink to="/login">Login</NavLink>
                             <NavLink to="/UserAccountPage">Register</NavLink>
                         </>
-                    )}
+                    )} */}
                 </div>
                 <div className={styles.leftLinks}>
                     {isLoggedIn ? (
                         <>
-                            <FaUserCircle className={styles.userIcon} />
+                            <NavLink to="/userdetail">
+                                <FaUserCircle className={styles.userIcon} />
+                            </NavLink>
                             <span className={styles.username}>{username}</span>
                             <NavLink to="/" onClick={handleLogout}>Log Out</NavLink>
                         </>
