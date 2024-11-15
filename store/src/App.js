@@ -34,6 +34,7 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* {!hideCta && <Navbar />} */}
+      {/* {!hideCta && !hideLayout && !hideUserDetail && <Navbar />} */}
       {!hideCta && !hideLayout && <Navbar />}
       {/* {!hideCta && !hideLayout2 && <Navbar />} */}
       {showCart && !hideOrders && !hideUserDetail && <Orders />}
