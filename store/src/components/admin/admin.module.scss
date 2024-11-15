@@ -1,0 +1,67 @@
+.adminPage {
+  display: flex;
+  flex-direction: row; /* Thay đổi từ column sang row */
+  align-items: flex-start;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  max-width: 2000px;
+  // margin: 80px auto 20px auto;
+  min-height: 100vh;
+}
+
+.adminNav {
+  width: 175px;
+  background-color: #0a0a0a;
+  padding: 10px;
+  border-radius: 8px;
+  margin-right: 20px;
+  height: 100%; /* Chiếm toàn bộ chiều cao */
+  display: flex;
+  flex-direction: column;
+}
+
+.adminNav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1; /* Đẩy các mục xuống dưới */
+}
+
+.adminNav li {
+  margin-bottom: 10px;
+  border-bottom: 1px solid #fff; /* Ngăn cách các mục */
+  padding-bottom: 10px;
+}
+
+.adminNav a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+.adminContent {
+  flex-grow: 1;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .adminPage {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .adminNav {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+
+  .adminContent {
+    width: 100%;
+  }
+}

@@ -1,0 +1,20 @@
+.accountManagement {
+  h2 {
+    margin-bottom: 20px;
+  }
+
+  .tableContainer {
+    margin-top: 20px;
+  }
+
+  .actionButton {
+    margin-right: 10px; /* Thêm khoảng cách giữa các nút */
+  }
+
+  .noAccounts {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.2rem;
+    color: #666;
+  }
+}
