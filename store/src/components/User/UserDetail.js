@@ -3,31 +3,6 @@ import axios from 'axios';
 import "./UserDetail.css"
 // import axios from 'axios';
 
-
-// vconst UserDetail = () => {
-//     const [user, setUser] = useState({
-//         name: '',
-//         email: '',
-//         phone: '',
-//         address: '',
-//     });
-//     const [isEditing, setIsEditing] = useState(false);
-
-    
-
-//     return (
-//         <div className="user-detail-wrapper">
-//             <h1>Thông tin người dùng</h1>
-//             <div className="user-card">
-//                 <p><strong>Tên:</strong> {user.name}</p>
-//                 <p><strong>Địa chỉ:</strong> {user.address}</p>
-//                 <p><strong>Email:</strong> {user.email}</p>
-//                 <p><strong>Số điện thoại:</strong> {user.phoneNumber}</p>
-//             </div>
-//         </div>
-//     )
-// }
-
 const UserDetail = () => {
   const [user, setUser] = useState(null); // Dữ liệu từ API
   const [editedUser, setEditedUser] = useState(null); // Dữ liệu đang chỉnh sửa
@@ -53,7 +28,7 @@ const UserDetail = () => {
         setError("Không thể tải thông tin người dùng.");
       }
     };
-
+    console.log(localStorage.getItem('token'));v
     fetchUser();
   }, []);
 

@@ -38,6 +38,7 @@ function App() {
   const hideLayout4 = location.pathname === '/admin/orders';;
   const hideLayout5 = location.pathname === '/admin';
   const hideLayout6 = location.pathname === '/Login';
+  const userDetailHide = location.pathname === '/userdetail';
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -59,10 +60,11 @@ function App() {
         <Route path="/cake-details/:id" element={<CakeDetails />} />
         <Route path='/admin/orders' element={<OrderManagement />} />
         <Route path='/admin/accounts' element={<AccountManagement />} />
-        <Route path='/user/:id' element={<UserDetail />} />
+        {/* <Route path='/user/:id' element={<UserDetail />} /> */}
+        <Route path='/userDetail' element={<UserDetail />}></Route>
       </Routes>
       {!hideLayout && !hideCta && !hideLayout1 && !hideLayout2 && !hideLayout3 && !hideLayout4 && hideLayout6 && <Cta />}
-      {!hideLayout && !hideCta  && !hideLayout4 && !hideLayout5  && <Footer />}
+      {!hideLayout && !hideCta  && !hideLayout4 && !hideLayout5 && !userDetailHide && <Footer />}
     </div>
   );
 }
