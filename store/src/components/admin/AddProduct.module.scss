@@ -42,10 +42,16 @@
     }
   }
 
-  .imagePreview {
+  .imagePreviews {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
     margin-top: 10px;
-    max-width: 100%;
-    height: auto;
+  }
+
+  .imagePreview {
+    max-width: 100px;
+    max-height: 100px;
     border-radius: 8px;
   }
 }
