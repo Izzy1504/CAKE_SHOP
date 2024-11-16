@@ -28,7 +28,7 @@ const AddProduct = () => {
     formData.append('price', parseFloat(price));
     formData.append('category', category);
     imageFiles.forEach((file, index) => {
-      formData.append(`images[${index}]`, file);
+      formData.append(`images`, file);
     });
 
     try {

@@ -1,14 +1,18 @@
   /* Wrapper tổng thể */
   .wrapper {
       height: 100vh;
+      /* width: 100vh; */
       padding-top: 5vh;
       /* font-family: 'Playfair Display', serif; */
       font-family: 'Inter', sans-serif;
+      display: grid;
+      grid-template-columns: 0.75fr 1fr;
   }
 
   .user-detail-wrapper {
     max-width: 700px;
-    max-height: 100vh;
+    /* max-height: 100vh; */
+    max-height: 320px;
     margin: 50px;
     background-color: #fdf8f5;
     padding: 30px;
@@ -129,3 +133,21 @@
     margin: 0;
   }
   
+
+  /* Lịch sử đơn hàng */
+  .user-order-wrapper{
+    max-height: 100vh;
+    margin: 50px;
+    background-color: #fdf8f5;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: "Georgia", serif; /* Phông chữ thanh lịch */
+    color: #333;
+  }
+  .user-order-wrapper h1 {
+    font-size: 28px;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
