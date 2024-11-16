@@ -1,12 +1,12 @@
-/* Wrapper tổng thể */
-.wrapper {
-    height: 100vh;
-    padding-top: 5vh;
-    /* font-family: 'Playfair Display', serif; */
-    font-family: 'Inter', sans-serif;
-}
+  /* Wrapper tổng thể */
+  .wrapper {
+      height: 100vh;
+      padding-top: 5vh;
+      /* font-family: 'Playfair Display', serif; */
+      font-family: 'Inter', sans-serif;
+  }
 
-.user-detail-wrapper {
+  .user-detail-wrapper {
     max-width: 700px;
     max-height: 100vh;
     margin: 50px;

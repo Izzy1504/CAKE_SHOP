@@ -38,7 +38,7 @@ function App() {
   const hideLayout4 = location.pathname === '/admin/orders';;
   const hideLayout5 = location.pathname === '/admin';
   const hideLayout6 = location.pathname === '/Login';
-  const userDetailHide = location.pathname === '/userdetail';
+  const userDetailHide = location.pathname === '/userDetail';
 
   return (
     <div className="min-h-screen bg-gray-100">
