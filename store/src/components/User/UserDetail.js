@@ -8,7 +8,7 @@ const UserDetail = () => {
   const [editedUser, setEditedUser] = useState(null); // Dữ liệu đang chỉnh sửa
   const [isEditing, setIsEditing] = useState(false); // Trạng thái chỉnh sửa
   const [showConfirm, setShowConfirm] = useState(false); // Hiển thị hộp thoại xác nhận
-  const [orders, setOrders] = useState(null); // Dữ liệu lịch sử đơn hàng
+  const [orders, setOrders] = useState([]); // Dữ liệu lịch sử đơn hàng
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -40,16 +40,16 @@ const UserDetail = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-
-        setOrders(response.data); // Lưu lịch sử đơn hàng vào state
+        console.log("Dữ liệu API trả về:", response.data);
+        setOrders(response.data.content); // Lưu lịch sử đơn hàng vào state
       } catch (err) {
         setError("Không thể tải lịch sử đơn hàng."); // Xử lý lỗi nếu API thất bại
       }
     };
-    fetchOrderHistory();
     fetchUser();
-    // console.log(localStorage.getItem('token'));
-    console.log(orders);
+    fetchOrderHistory();
+    console.log(localStorage.getItem('token'));
+    console.log("âcsc: ", orders);
   }, []);
 
   const handleInputChange = (e) => {
@@ -181,32 +181,43 @@ const UserDetail = () => {
           </div>
         )}
       </div>
+
       {/* Lịch sử đơn hàng */}
       <div className="user-order-wrapper">
         <h1>Lịch sử đơn hàng</h1>
-        {orders.length > 0 ? (
-          orders.map((order) => (
-            <div
-              className="order-item"
-              key={order.orderId}
-              onClick={() => handleOrderClick(order.orderId)} // Chuyển đến trang chi tiết
-            >
-              <p>Đơn hàng #{order.orderId}</p>
-              <p>Địa chỉ: {order.shippingAddress}</p>
-              <p>Trạng thái: {order.status}</p>
-              <p>
-                Sản phẩm:
-                {order.orderDetails.map((detail, index) => (
-                  <span key={index}>
-                    {detail.quantity} x {Number(detail.price).toLocaleString()} VNĐ
-                  </span>
-                ))}
-              </p>
-            </div>
-          ))
-        ) : (
-          <p>Không có lịch sử đơn hàng.</p>
-        )}
+        <div className="order-table">
+          {/* Tiêu đề của bảng */}
+          <div className="order-header">
+            <span>Mã đơn hàng</span>
+            <span>Trạng thái</span>
+            <span>Số lượng sản phẩm</span>
+            <span>Giá tiền</span>
+          </div>
+          {/* Dữ liệu của từng đơn hàng */}
+          {orders.length > 0 ? (
+            orders.map((order) => (
+              <div
+                className="order-card"
+                key={order.orderId}
+                // onClick={() => handleOrderClick(order.orderId)} // Nếu cần chuyển đến trang chi tiết
+              >
+                <span>#{order.orderId}</span>
+                <span>{order.status}</span>
+                <span>
+                  {order.orderDetails.reduce((sum, detail) => sum + detail.quantity, 0)} {/* Tổng số lượng sản phẩm */}
+                </span>
+                <span>
+                  {order.orderDetails
+                    .reduce((sum, detail) => sum + detail.price * detail.quantity, 0)
+                    .toLocaleString()}{" "}
+                  VNĐ
+                </span>
+              </div>
+            ))
+          ) : (
+            <p>Không có lịch sử đơn hàng.</p>
+          )}
+        </div>
       </div>
     </div>
   );
