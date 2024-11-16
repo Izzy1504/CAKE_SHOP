@@ -20,13 +20,15 @@ const PaymentPage = () => {
 
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
   const [qrCodeUrl, setQrCodeUrl] = useState('');
+  // const backendURL = 'http://26.170.181.245:8080';
+  const backendURL = 'http://26.214.87.26:8080';
 
   useEffect(() => {
     // Fetch user information from API
     const fetchUserInfo = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://26.214.87.26:8080/api/users/info', {
+        const response = await axios.get(`${backendURL}/api/users/info`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -61,6 +63,7 @@ const PaymentPage = () => {
     try {
       const data = {
         "shippingAddress": customerInfo.address,
+        "paymentMethod": selectedPaymentMethod,
         "orderDetails": cartItems.map(item => ({
           "productId": item.id,
           "quantity": item.quantity,
@@ -70,7 +73,7 @@ const PaymentPage = () => {
       console.log(data);
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        `http://26.214.87.26:8080/api/orders`,
+        `${backendURL}/api/orders`,
         data,
         {
           headers: {
