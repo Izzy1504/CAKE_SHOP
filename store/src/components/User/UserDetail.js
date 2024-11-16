@@ -28,7 +28,7 @@ const UserDetail = () => {
         setError("Không thể tải thông tin người dùng.");
       }
     };
-    console.log(localStorage.getItem('token'));v
+    console.log(localStorage.getItem('token'));
     fetchUser();
   }, []);
 
