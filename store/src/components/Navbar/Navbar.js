@@ -1,14 +1,14 @@
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useStateContext } from '../../context/StateContextProvider';
 import styles from '../Navbar/Navbar.module.scss';
 import { FaUserCircle } from 'react-icons/fa';
-
+ 
 const Navbar = () => {
     const { handleCartClick, isNavOpen, handleNavLinks, handleNavMenu, totalQty } = useStateContext();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState("");
-
+    const location = useLocation();
     useEffect(() => {
         // Check if the user is logged in by checking the presence of a token
         const token = localStorage.getItem('token');
