@@ -29,6 +29,8 @@ const Navbar = () => {
         window.location.href = '/';
     };
 
+    const hideIcon = location.pathname === '/userdetail';
+
     return (
         <nav className={styles.navbar}>
             <section className={styles.navWrapper}>
@@ -63,7 +65,12 @@ const Navbar = () => {
                     )} */}
                 </div>
                 <div className={styles.leftLinks}>
-                    {isLoggedIn ? (
+                {isLoggedIn ? (
+                    hideIcon ? (
+                        <div className="greeting-container">
+                            <p className="greeting-text">Hello <span className="username">{username}</span></p>
+                        </div>
+                    ) : (
                         <>
                             <NavLink to="/userdetail">
                                 <FaUserCircle className={styles.userIcon} />
@@ -71,12 +78,13 @@ const Navbar = () => {
                             <span className={styles.username}>{username}</span>
                             <NavLink to="/" onClick={handleLogout}>Log Out</NavLink>
                         </>
-                    ) : (
-                        <>
-                            <NavLink to="/login" className={styles.login}>Login</NavLink>
-                            <NavLink to="/UserAccountPage" className={styles.register}>Register</NavLink>
-                        </>
-                    )}
+                    )
+                ) : (
+                    <>
+                        <NavLink to="/login" className={styles.login}>Login</NavLink>
+                        <NavLink to="/UserAccountPage" className={styles.register}>Register</NavLink>
+                    </>
+                )}
                     <div className={styles.cart}>
                         <i className="fa-solid fa-cart-shopping fa-xl" onClick={handleCartClick}></i>
                         <div className={styles.cartCounter}>{totalQty}</div>
