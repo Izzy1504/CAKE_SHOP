@@ -9,15 +9,16 @@ const AddProduct = () => {
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('');
-  const [imageFile, setImageFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imageFiles, setImageFiles] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
   const backendURL = 'http://26.214.87.26:8080';
   const navigate = useNavigate();
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setImageFile(file);
-    setImagePreview(URL.createObjectURL(file));
+    const files = Array.from(e.target.files);
+    setImageFiles(prevFiles => [...prevFiles, ...files]);
+    const previews = files.map(file => URL.createObjectURL(file));
+    setImagePreviews(prevPreviews => [...prevPreviews, ...previews]);
   };
 
   const handleSubmit = async (e) => {
@@ -26,7 +27,9 @@ const AddProduct = () => {
     formData.append('name', name);
     formData.append('price', parseFloat(price));
     formData.append('category', category);
-    formData.append('image', imageFile);
+    imageFiles.forEach((file, index) => {
+      formData.append(`images[${index}]`, file);
+    });
 
     try {
       await axios.post(`${backendURL}/api/products`, formData, {
@@ -76,10 +79,15 @@ const AddProduct = () => {
           <label>Hình ảnh</label>
           <input
             type="file"
+            multiple
             onChange={handleImageChange}
             required
           />
-          {imagePreview && <img src={imagePreview} alt="Preview" className={styles.imagePreview} />}
+          <div className={styles.imagePreviews}>
+            {imagePreviews.map((preview, index) => (
+              <img key={index} src={preview} alt={`Preview ${index}`} className={styles.imagePreview} />
+            ))}
+          </div>
         </div>
         <button type="submit">Thêm</button>
       </form>
