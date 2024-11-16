@@ -1,0 +1,100 @@
+.adminPage {
+  display: flex;
+  align-items: flex-start;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  max-width: 2000px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+.adminNav {
+  width: 200px;
+  background-color: #010408;
+  padding: 20px;
+  border-radius: 8px;
+  margin-right: 20px;
+  height: 100vh; /* Chiếm toàn bộ chiều cao */
+  position: fixed; /* Cố định thanh navbar */
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.adminNav .adminProfile {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.adminNav .adminProfile img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.adminNav .adminProfile .adminName {
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+.adminNav .navLinks {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1; /* Đẩy các mục xuống dưới */
+}
+
+.adminNav .navLinks li {
+  margin-bottom: 10px;
+  border-bottom: 1px solid #fff; /* Ngăn cách các mục */
+  padding-bottom: 10px;
+}
+
+.adminNav .navLinks a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.2rem;
+  display: block;
+  padding: 10px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+}
+
+.adminNav .authIcons {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.adminNav .authIcons button,
+.adminNav .authIcons a {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+  text-decoration: none;
+}
+
+.adminContent {
+  flex-grow: 1;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-left: 220px; /* Để tránh bị che bởi navbar */
+}

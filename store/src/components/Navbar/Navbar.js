@@ -72,7 +72,7 @@ const Navbar = () => {
                         </div>
                     ) : (
                         <>
-                            <NavLink to="/userdetail">
+                            <NavLink to="/userDetail">
                                 <FaUserCircle className={styles.userIcon} />
                             </NavLink>
                             <span className={styles.username}>{username}</span>

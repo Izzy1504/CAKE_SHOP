@@ -1,0 +1,44 @@
+.addProduct {
+  h2 {
+    margin-bottom: 20px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    max-width: 1000px;
+    margin: 100px;
+    padding: 5px;
+
+    div {
+      margin-bottom: 10px;
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      input {
+        width: 100%;
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+      }
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #01080f;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #ee2266;
+      }
+    }
+  }
+}
