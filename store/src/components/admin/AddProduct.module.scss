@@ -28,7 +28,7 @@
 
     button {
       padding: 10px 20px;
-      background-color: #01080f;
+      background-color: #007bff;
       color: #fff;
       border: none;
       border-radius: 4px;
@@ -37,8 +37,15 @@
       transition: background-color 0.3s ease;
 
       &:hover {
-        background-color: #ee2266;
+        background-color: #0056b3;
       }
     }
+  }
+
+  .imagePreview {
+    margin-top: 10px;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
   }
 }
