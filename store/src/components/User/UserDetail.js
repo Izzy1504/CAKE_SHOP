@@ -8,6 +8,7 @@ const UserDetail = () => {
   const [editedUser, setEditedUser] = useState(null); // Dữ liệu đang chỉnh sửa
   const [isEditing, setIsEditing] = useState(false); // Trạng thái chỉnh sửa
   const [showConfirm, setShowConfirm] = useState(false); // Hiển thị hộp thoại xác nhận
+  const [orders, setOrders] = useState([]); // Dữ liệu lịch sử đơn hàng
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -28,8 +29,27 @@ const UserDetail = () => {
         setError("Không thể tải thông tin người dùng.");
       }
     };
-    console.log(localStorage.getItem('token'));
+
+    const fetchOrderHistory = async () => {
+      const url = "http://26.214.87.26:8080/api/orders";
+      const token = localStorage.getItem("token"); // Lấy token từ localStorage
+
+      try {
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log("Dữ liệu API trả về:", response.data);
+        setOrders(response.data.content); // Lưu lịch sử đơn hàng vào state
+      } catch (err) {
+        setError("Không thể tải lịch sử đơn hàng."); // Xử lý lỗi nếu API thất bại
+      }
+    };
     fetchUser();
+    fetchOrderHistory();
+    console.log(localStorage.getItem('token'));
+    console.log("âcsc: ", orders);
   }, []);
 
   const handleInputChange = (e) => {
@@ -70,96 +90,135 @@ const UserDetail = () => {
 
   return (
     <div className="wrapper">
-    <div className="user-detail-wrapper">
-      <h1>Thông tin người dùng</h1>
-      <div className="user-card">
-        {isEditing ? (
-          <>
-            <p>
-              <strong>Tên:</strong>
-              <input
-                type="text"
-                name="name"
-                value={editedUser.name}
-                onChange={handleInputChange}
-              />
-            </p>
-            <p>
-              <strong>Địa chỉ:</strong>
-              <input
-                type="text"
-                name="address"
-                value={editedUser.address}
-                onChange={handleInputChange}
-              />
-            </p>
-            <p>
-              <strong>Email:</strong>
-              <input
-                type="email"
-                name="email"
-                value={editedUser.email}
-                onChange={handleInputChange}
-              />
-            </p>
-            <p>
-              <strong>Số điện thoại:</strong>
-              <input
-                type="text"
-                name="phoneNumber"
-                value={editedUser.phoneNumber}
-                onChange={handleInputChange}
-              />
-            </p>
-          </>
-        ) : (
-          <>
-            <p><strong>Tên:</strong> {user.name}</p>
-            <p><strong>Địa chỉ:</strong> {user.address}</p>
-            <p><strong>Email:</strong> {user.email}</p>
-            <p><strong>Số điện thoại:</strong> {user.phoneNumber}</p>
-          </>
-        )}
-      </div>
+      {/* Thông tin người dùng */}
+      <div className="user-detail-wrapper">
+        <h1>Thông tin người dùng</h1>
+        <div className="user-card">
+          {isEditing ? (
+            <>
+              <p>
+                <strong>Tên:</strong>
+                <input
+                  type="text"
+                  name="name"
+                  value={editedUser.name}
+                  onChange={handleInputChange}
+                />
+              </p>
+              <p>
+                <strong>Địa chỉ:</strong>
+                <input
+                  type="text"
+                  name="address"
+                  value={editedUser.address}
+                  onChange={handleInputChange}
+                />
+              </p>
+              <p>
+                <strong>Email:</strong>
+                <input
+                  type="email"
+                  name="email"
+                  value={editedUser.email}
+                  onChange={handleInputChange}
+                />
+              </p>
+              <p>
+                <strong>Số điện thoại:</strong>
+                <input
+                  type="text"
+                  name="phoneNumber"
+                  value={editedUser.phoneNumber}
+                  onChange={handleInputChange}
+                />
+              </p>
+            </>
+          ) : (
+            <>
+              <p><strong>Tên:</strong> {user.name}</p>
+              <p><strong>Địa chỉ:</strong> {user.address}</p>
+              <p><strong>Email:</strong> {user.email}</p>
+              <p><strong>Số điện thoại:</strong> {user.phoneNumber}</p>
+            </>
+          )}
+        </div>
 
-      <div className="buttons">
-        {isEditing ? (
-          <>
-            <button className="btn save" onClick={() => setShowConfirm(true)}>
-              Lưu
-            </button>
-            <button className="btn cancel" onClick={() => setIsEditing(false)}>
-              Hủy
-            </button>
-          </>
-        ) : (
-          <button className="btn edit" onClick={() => setIsEditing(true)}>
-            Chỉnh sửa
-          </button>
-        )}
-      </div>
-
-      {showConfirm && (
-        <div className="confirm-modal">
-          <div className="modal-content">
-            <h3>Xác nhận lưu thông tin</h3>
-            <p>Bạn có chắc chắn muốn lưu các thay đổi?</p>
-            <div className="modal-buttons">
-              {/* <button className="btn save" onClick={handleSave}> */}
-              <button className="btn save">
-                Đồng ý
+        <div className="buttons">
+          {isEditing ? (
+            <>
+              <button className="btn save" onClick={() => setShowConfirm(true)}>
+                Lưu
               </button>
-              <button
-                className="btn cancel"
-                onClick={() => setShowConfirm(false)}
-              >
+              <button className="btn cancel" onClick={() => setIsEditing(false)}>
                 Hủy
               </button>
+            </>
+          ) : (
+            <button className="btn edit" onClick={() => setIsEditing(true)}>
+              Chỉnh sửa
+            </button>
+          )}
+        </div>
+
+        {showConfirm && (
+          <div className="confirm-modal">
+            <div className="modal-content">
+              <h3>Xác nhận lưu thông tin</h3>
+              <p>Bạn có chắc chắn muốn lưu các thay đổi?</p>
+              <div className="modal-buttons">
+                {/* <button className="btn save" onClick={handleSave}> */}
+                <button className="btn save">
+                  Đồng ý
+                </button>
+                <button
+                  className="btn cancel"
+                  onClick={() => setShowConfirm(false)}
+                >
+                  Hủy
+                </button>
+              </div>
             </div>
           </div>
+        )}
+      </div>
+
+      {/* Lịch sử đơn hàng */}
+      <div className="user-order-wrapper">
+        <h1>Lịch sử đơn hàng</h1>
+        <div className="order-table">
+          {/* Tiêu đề của bảng */}
+          <div className="order-header">
+            <span>Mã đơn hàng</span>
+            <span>Trạng thái</span>
+            <span>Số lượng sản phẩm</span>
+            <span>Giá tiền</span>
+          </div>
+          {/* Dữ liệu của từng đơn hàng */}
+          {orders.length > 0 ? (
+            orders.map((order) => (
+              <div
+                className="order-card"
+                key={order.orderId}
+                // onClick={() => handleOrderClick(order.orderId)} // Nếu cần chuyển đến trang chi tiết
+              >
+                <span>#{order.orderId}</span>
+                <span>{order.status}</span>
+                <span>
+                  {order.orderDetails.reduce((sum, detail) => sum + detail.quantity, 0)} {/* Tổng số lượng sản phẩm */}
+                </span>
+                <span>
+                  {order.orderDetails
+                    .reduce((sum, detail) => sum + detail.price * detail.quantity, 0)
+                    .toLocaleString()}{" "}
+                  VNĐ
+                </span>
+              </div>
+            ))
+          ) : (
+            <p>Không có lịch sử đơn hàng.</p>
+          )}
         </div>
-      )}
-    </div>
+      </div>
     </div>
   );
 };

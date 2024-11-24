@@ -1,20 +1,26 @@
-/* Wrapper tổng thể */
-.wrapper {
-    height: 100vh;
-    padding-top: 5vh;
-    /* font-family: 'Playfair Display', serif; */
-    font-family: 'Inter', sans-serif;
-}
+  /* Wrapper tổng thể */
+  .wrapper {
+      height: 100vh;
+      /* width: 100vh; */
+      padding-top: 5vh;
+      /* font-family: 'Playfair Display', serif; */
+      font-family: 'Inter', sans-serif;
+      display: grid;
+      grid-template-columns: 0.75fr 1fr;
+  }
 
-.user-detail-wrapper {
+  .user-detail-wrapper {
     max-width: 700px;
-    max-height: 100vh;
+    /* max-height: 100vh; */
+    max-height: 320px;
     margin: 50px;
     background-color: #fdf8f5;
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    font-family: "Georgia", serif; /* Phông chữ thanh lịch */
+    /* font-family: "Georgia", serif; Phông chữ thanh lịch */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
     color: #333;
   }
   
@@ -129,3 +135,95 @@
     margin: 0;
   }
   
+
+  /* Lịch sử đơn hàng */
+  .user-order-wrapper{
+    max-height: 100vh;
+    margin: 50px;
+    background-color: #fdf8f5;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    color: #333;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  
+  
+/* Tiêu đề */
+.user-order-wrapper h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #3b3b3b;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+/* Header của bảng */
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 25px;
+  background-color: #fdf5e6;
+  border-bottom: 2px solid #e6e6e6;
+  font-weight: 600;
+  color: #555;
+  border-radius: 10px 10px 0 0;
+}
+
+/* Dữ liệu từng đơn hàng */
+.order-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 25px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  margin: 10px 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid #f0f0f0;
+}
+
+/* Hiệu ứng khi hover */
+.order-card:hover {
+  background-color: #ffedd5;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Kiểu chữ cho từng thông tin */
+.order-card span {
+  flex: 1;
+  color: #333;
+  font-size: 16px;
+  text-align: center;
+}
+
+/* Kiểu chữ cho trạng thái đơn hàng */
+.order-card span:nth-child(2) {
+  color: #007bff;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Nếu không có lịch sử đơn hàng */
+.user-order-wrapper p {
+  text-align: center;
+  font-size: 18px;
+  color: #888;
+  margin-top: 30px;
+}
+
+/* Responsive cho màn hình nhỏ */
+@media (max-width: 600px) {
+  .order-header,
+  .order-card {
+    flex-direction: column;
+    padding: 10px 15px;
+  }
+
+  .order-card span {
+    text-align: left;
+    margin: 5px 0;
+  }
+}
