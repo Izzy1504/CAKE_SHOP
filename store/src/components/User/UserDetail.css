@@ -137,6 +137,11 @@
   
 
   /* Lịch sử đơn hàng */
+.order-table {
+  max-height: 70vh;
+  overflow-y: scroll;
+}
+
   .user-order-wrapper{
     max-height: 100vh;
     margin: 50px;
@@ -161,14 +166,23 @@
 
 /* Header của bảng */
 .order-header {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  text-align: center;
+
+  /* display: flex; */
+  /* justify-content: space-between; */
+  align-items: center;
   padding: 15px 25px;
   background-color: #fdf5e6;
   border-bottom: 2px solid #e6e6e6;
   font-weight: 600;
   color: #555;
   border-radius: 10px 10px 0 0;
+
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 /* Dữ liệu từng đơn hàng */
