@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-
 import styles from './PaymentPage.module.scss';
 import Navbar from '../Navbar/Navbar'; // Ensure the path is correct
 import Footer from '../Footer/Footer'; // Ensure the path is correct
 import axios from 'axios';
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useStateContext } from '../../context/StateContextProvider'; // Import context nếu cần
 const PaymentPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { cartItems, totalPrice } = location.state || { cartItems: [], totalPrice: 0 };
+  const { setCartItems, setTotalPrice, setTotalQty } = useStateContext(); // Sử dụng context nếu cần
+  const [cartItems, setLocalCartItems] = useState(location.state?.cartItems || []);
+  const [totalPrice, setLocalTotalPrice] = useState(location.state?.totalPrice || 0);
 
   const [customerInfo, setCustomerInfo] = useState({
     name: '',
@@ -20,7 +23,6 @@ const PaymentPage = () => {
 
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
   const [qrCodeUrl, setQrCodeUrl] = useState('');
-  // const backendURL = 'http://26.170.181.245:8080';
   const backendURL = 'http://26.214.87.26:8080';
 
   useEffect(() => {
@@ -48,7 +50,14 @@ const PaymentPage = () => {
     };
 
     fetchUserInfo();
-  }, []);
+   // Kiểm tra xem có buyNowItem trong localStorage không
+   const buyNowItem = localStorage.getItem('buyNowItem');
+   if (buyNowItem) {
+     const parsedItem = JSON.parse(buyNowItem);
+     setLocalCartItems([parsedItem]);
+     setLocalTotalPrice(parsedItem.price * parsedItem.quantity);
+   }
+ }, [backendURL]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,6 +69,11 @@ const PaymentPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!selectedPaymentMethod) {
+      console.error("Payment method is required");
+      toast.error('Vui lòng chọn phương thức thanh toán!');
+      return;
+    }
     try {
       const data = {
         "shippingAddress": customerInfo.address,
@@ -82,9 +96,27 @@ const PaymentPage = () => {
         }
       );
       console.log(response);
-      // Handle success (e.g., navigate to orders page)
+      // Handle success
+      toast.success('Đơn hàng đã được gửi thành công!');
+      // Clear cart items
+      if (localStorage.getItem('buyNowItem')) {
+        localStorage.removeItem('buyNowItem');
+      } else {
+        localStorage.removeItem('cartItems');
+        setCartItems([]);
+        setTotalPrice(0);
+        setTotalQty(0);
+      }
+      // Navigate to user detail page
+      setTimeout(() => {
+        navigate('/userdetail');
+      }, 2000);
     } catch (error) {
       console.error("Error submitting order:", error);
+      if (error.response) {
+        console.error("Response data:", error.response.data);
+      }
+      toast.error('Gửi đơn hàng thất bại!');
     }
   };
 
@@ -95,10 +127,10 @@ const PaymentPage = () => {
   const formatPrice = (price) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
   };
+
   const handleGoBack = () => {
     navigate(-1);
   };
-
 
   return (
     <div className={styles.paymentPage}>
@@ -118,7 +150,7 @@ const PaymentPage = () => {
               <span>{formatPrice(totalPrice)} vnđ</span>
             </li>
           </ul>
-          <button onClick={handleGoBack} style={{ marginTop: '10px' }}>Go Back</button>
+          <button onClick={handleGoBack} style={{ marginTop: '50px' }}>Go Back</button>
         </div>
         <div className={styles.customerInfo}>
           <h2>Customer Information</h2>
@@ -209,10 +241,11 @@ const PaymentPage = () => {
                 <img src={qrCodeUrl} alt="QR Code" />
               </div>
             )}
-            <button type="submit">Submit</button>
+            <button type="submit">Submit Order</button>
           </form>
         </div>
       </div>
+      <ToastContainer />
       <Footer />
     </div>
   );

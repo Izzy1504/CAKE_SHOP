@@ -42,24 +42,32 @@ const CakeDetails = () => {
   const handleClickImage = (index) => {
     setCakeImage(index);
   };
-  const handleBuyNow = (e) => {
+  const handleBuyNow = () => {
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("/login");
     } else {
       console.log("Buy Now clicked");
       console.log("Cake details:", cakeDetails);
-      // const updatedTotalPrice = totalPrice + cakeDetails.price * quantity;
-      onAddClick(cakeDetails, e.target.innerText);
-      //test
-      // handleCartClick(); // Show the cart bar
-      // setTotalPrice(updatedTotalPrice);
-      // localStorage.setItem('quantity', quantity);
-      // localStorage.setItem('totalPrice', updatedTotalPrice);
-      setNavigateToPayment(true);
+
+      if (cakeDetails) {
+        const buyNowItem = {
+          id: cakeDetails.id,
+          name: cakeDetails.name,
+          price: cakeDetails.price,
+          quantity: quantity,
+          totalPrice: cakeDetails.price * quantity,
+          // Thêm các trường thông tin cần thiết khác nếu có
+        };
+
+        // Lưu thông tin sản phẩm vào localStorage
+        localStorage.setItem('buyNowItem', JSON.stringify(buyNowItem));
+
+        // Chuyển hướng đến trang thanh toán
+        setNavigateToPayment(true);
+      }
     }
   };
-
   const handleAddToCart = (e) => {
     const token = localStorage.getItem("token");
     if (!token) {
