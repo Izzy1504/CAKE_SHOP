@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./Order.css"
 
 const OrderUser = () => {
     const [orders, setOrders] = useState([]); // Dữ liệu lịch sử đơn hàng
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchOrderHistory = async () => {
@@ -19,11 +23,16 @@ const OrderUser = () => {
                 setOrders(response.data.content); // Lưu lịch sử đơn hàng vào state
             } catch (err) {
                 setError("Không thể tải lịch sử đơn hàng."); // Xử lý lỗi nếu API thất bại
+                console.log("Lỗi: ", err);
             }
         };
         fetchOrderHistory();
         console.log("âcsc: ", orders);
     }, []);
+
+    const handleOrderClick = (orderId) => {
+        navigate(`/order/${orderId}`); // Chuyển đến trang chi tiết đơn hàng
+    };
 
     return (
         <div className='order-wrapper'>
