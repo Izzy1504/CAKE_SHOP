@@ -10,7 +10,7 @@ const Footer = () => {
                     <div className={styles.footerLogoIcon}>
                         <i className="fa-solid fa-cake-candles"></i>
                     </div>
-                    Cake It
+                    Cake for life
                 </h1>
                 <div className={styles.socialLinks}>
                     <a href="https://www.instagram.com/" target="_blank" rel="noreferrer"><i className="fa-brands fa-square-instagram fa-2xl"></i></a>
@@ -21,9 +21,9 @@ const Footer = () => {
             <div className={styles.footerContent}>
                 <h3>Contact Us</h3>
                 <div>
-                    <p>	316 N Franklin St, Hempstead,<br/>North Dakota, 11550</p>
-                    <p>(888) 433-4780</p>
-                    <p>cakeit@gmail.com</p>
+                    <p>	273 An Dương Vương st , Ward 3, District 5,<br/> Ho Chi Minh 700000</p>
+                    <p>+84 943353094</p>
+                    <p>khoiminhdoan1504@gmail.com</p>
                     <p><strong>Operating Hours:</strong><br/>Mon - Sun 10:30am - 6pm<br/>Tuesday: Closed</p>
                 </div>
             </div>
