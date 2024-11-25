@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import "./UserDetail.css"
 // import axios from 'axios';
 
@@ -10,6 +11,7 @@ const UserDetail = () => {
   const [showConfirm, setShowConfirm] = useState(false); // Hiển thị hộp thoại xác nhận
   const [orders, setOrders] = useState([]); // Dữ liệu lịch sử đơn hàng
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -87,6 +89,10 @@ const UserDetail = () => {
   if (!user) {
     return <div className="loading">Đang tải...</div>;
   }
+
+  const handleOrderClick = (orderId) => {
+    navigate(`/order/${orderId}`); // Chuyển đến trang chi tiết đơn hàng
+  };
 
   return (
     <div className="wrapper">
@@ -199,7 +205,7 @@ const UserDetail = () => {
               <div
                 className="order-card"
                 key={order.orderId}
-                // onClick={() => handleOrderClick(order.orderId)} // Nếu cần chuyển đến trang chi tiết
+                onClick={() => handleOrderClick(order.orderId)} // Nếu cần chuyển đến trang chi tiết
               >
                 <span>#{order.orderId}</span>
                 <span>{order.status}</span>

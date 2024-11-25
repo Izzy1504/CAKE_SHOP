@@ -20,6 +20,7 @@ import OrderManagement from './components/admin/OrderManagement';
 import AccountManagement from './components/admin/AccountManagement';
 import AddProduct from './components/admin/AddProduct';
 import EditProduct from './components/admin/EditProduct';
+import OrderUser from './components/Orders/OrderUser';
 
 function App() {
   const { showCart } = useStateContext();
@@ -38,7 +39,7 @@ function App() {
   const hideLayout4 = location.pathname === '/admin/orders';;
   const hideLayout5 = location.pathname === '/admin';
   const hideLayout6 = location.pathname === '/Login';
-  const userDetailHide = location.pathname === '/userDetail';
+  const userDetailHide = location.pathname === '/userDetail' || location.pathname === '/order';
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -62,6 +63,7 @@ function App() {
         <Route path='/admin/accounts' element={<AccountManagement />} />
         {/* <Route path='/user/:id' element={<UserDetail />} /> */}
         <Route path='/userDetail' element={<UserDetail />}></Route>
+        <Route path='/order' element={<OrderUser />}></Route>
       </Routes>
       {!hideLayout && !hideCta && !hideLayout1 && !hideLayout2 && !hideLayout3 && !hideLayout4 && hideLayout6 && <Cta />}
       {!hideLayout && !hideCta  && !hideLayout4 && !hideLayout5 && !userDetailHide && <Footer />}
