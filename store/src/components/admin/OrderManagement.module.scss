@@ -6,7 +6,8 @@
   }
 
   .tableContainer {
-    margin-top: 20px;
+    margin-top: 50px;
+    text-align: center;
     
   }
 
@@ -20,4 +21,58 @@
     font-size: 1.2rem;
     color: #666;
   }
+    /* OrderManagement.module.scss */
+  
+  .tableHeaderCell,
+  .tableBodyCell {
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  .tableHeaderCell:nth-child(1),
+  .tableBodyCell:nth-child(1) {
+    width: 10%;
+  }
+  
+  .tableHeaderCell:nth-child(2),
+  .tableBodyCell:nth-child(2) {
+    width: 20%;
+  }
+  
+  .tableHeaderCell:nth-child(3),
+  .tableBodyCell:nth-child(3) {
+    width: 15%;
+  }
+  
+  .tableHeaderCell:nth-child(4),
+  .tableBodyCell:nth-child(4) {
+    width: 15%;
+  }
+  
+  .tableHeaderCell:nth-child(5),
+  .tableBodyCell:nth-child(5) {
+    width: 10%;
+  }
+  
+  .tableHeaderCell:nth-child(6),
+  .tableBodyCell:nth-child(6) {
+    width: 15%;
+  }
+  
+  .tableHeaderCell:nth-child(7),
+  .tableBodyCell:nth-child(7) {
+    width: 15%;
+  }
+  
+  .actionButtons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .actionButtons button {
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+
 }

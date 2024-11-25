@@ -3,19 +3,26 @@ import axios from 'axios';
 import { FaSignOutAlt } from 'react-icons/fa';
 import styles from './home.module.scss';
 
-const Home = ({ adminName, handleLogout }) => {
-  const [adminStatus, setAdminStatus] = useState('active');
+const Home = ({ handleLogout }) => {
+  const [adminInfo, setAdminInfo] = useState({});
   const backendURL = 'http://26.214.87.26:8080';
 
   useEffect(() => {
-    // Giả sử bạn có một API để lấy trạng thái admin
-    axios.get(`${backendURL}/api/admin/status`)
-      .then(response => {
-        setAdminStatus(response.data.status);
-      })
-      .catch(error => {
-        console.error('Error fetching admin status:', error);
-      });
+    const fetchAdminInfo = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`${backendURL}/api/users/info`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setAdminInfo(response.data);
+      } catch (error) {
+        console.error('Error fetching admin information:', error);
+      }
+    };
+
+    fetchAdminInfo();
   }, []);
 
   return (
@@ -25,21 +32,21 @@ const Home = ({ adminName, handleLogout }) => {
         <tbody>
           <tr>
             <td>Tên Admin:</td>
-            <td>{adminName}</td>
+            <td>{adminInfo.name}</td>
+          </tr>
+          <tr>
+            <td>Email:</td>
+            <td>{adminInfo.email}</td>
           </tr>
           <tr>
             <td>Trạng thái:</td>
-            <td>{adminStatus}</td>
-          </tr>
-          <tr>
-            <td colSpan="2">
-              <button onClick={handleLogout} className={styles.logoutButton}>
-                <FaSignOutAlt /> Đăng xuất
-              </button>
-            </td>
+            <td>{adminInfo.status}</td>
           </tr>
         </tbody>
       </table>
+      <button onClick={handleLogout}>
+        Đăng xuất <FaSignOutAlt />
+      </button>
     </div>
   );
 };
