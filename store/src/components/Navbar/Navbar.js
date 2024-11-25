@@ -30,6 +30,7 @@ const Navbar = () => {
     };
 
     const hideIcon = location.pathname === '/userdetail';
+    const hideCart = location.pathname === '/PaymentPage';
 
     return (
         <nav className={styles.navbar}>
@@ -51,18 +52,6 @@ const Navbar = () => {
                     <NavLink to="/#cakes" onClick={handleNavLinks("cakes")}>Cakes</NavLink>
                     <NavLink to="/about" onClick={handleNavLinks("about")}>About</NavLink>
                     <a href="#contact" onClick={handleNavLinks("contact")}>Contact</a>
-                    {/* {isLoggedIn ? (
-                        <>
-                            <FaUserCircle className={styles.userIcon} />
-                            <span className={styles.username}>{username}</span>
-                            <NavLink to="/" onClick={handleLogout}>Log Out</NavLink>
-                        </>
-                    ) : (
-                        <>
-                            <NavLink to="/login">Login</NavLink>
-                            <NavLink to="/UserAccountPage">Register</NavLink>
-                        </>
-                    )} */}
                 </div>
                 <div className={styles.leftLinks}>
                 {isLoggedIn ? (
@@ -85,10 +74,15 @@ const Navbar = () => {
                         <NavLink to="/UserAccountPage" className={styles.register}>Register</NavLink>
                     </>
                 )}
-                    <div className={styles.cart}>
-                        <i className="fa-solid fa-cart-shopping fa-xl" onClick={handleCartClick}></i>
-                        <div className={styles.cartCounter}>{totalQty}</div>
+                        {
+                            !hideCart &&(
+                                <div className={styles.cart}>
+
+                                <i className="fa-solid fa-cart-shopping fa-xl" onClick={handleCartClick}></i>
+                                <div className={styles.cartCounter}>{totalQty}</div>
                     </div>
+                            )
+                        }
                 </div>
             </section>
         </nav>

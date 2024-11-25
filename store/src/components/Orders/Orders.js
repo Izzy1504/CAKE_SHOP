@@ -1,20 +1,19 @@
-// import React from 'react';
-import { useStateContext } from '../../context/StateContextProvider';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Orders.module.scss';
-import EmptyState from './EmptyState';
-import React, { useEffect } from 'react';
-export default function Orders() {
-  const { cartItems, handleRemoveCart, handleCartClick, totalPrice, totalQty, formatPrice } = useStateContext();
+import EmptyState from './EmptyState'; // Ensure the path is correct
+import { useStateContext } from '../../context/StateContextProvider'; // Ensure the path is correct
+
+const Orders = () => {
+  const { cartItems, totalQty, totalPrice, handleRemoveCart, formatPrice } = useStateContext();
   const navigate = useNavigate();
 
   const checkout = () => {
-    handleCartClick(); // Hiển thị thanh giỏ hàng
-    setTimeout(() => {
-      navigate('/PaymentPage', { state: { cartItems, totalPrice } });
-    }, 500); // Chờ 0.5 giây trước khi chuyển đến trang thanh toán
+    // Xóa buyNowItem khỏi localStorage
+    localStorage.removeItem('buyNowItem');
+    navigate('/PaymentPage', { state: { cartItems, totalPrice } });
   };
- 
+
   return (
     <div className={styles.ordersPage}>
       {cartItems.length === 0 ? (
@@ -45,4 +44,6 @@ export default function Orders() {
       )}
     </div>
   );
-}
+};
+
+export default Orders;

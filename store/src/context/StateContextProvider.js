@@ -13,6 +13,7 @@ export default function StateContextProvider({ children }) {
   const cakeRef = useRef();
 
   useEffect(() => {
+    console.log('Initial cartItems:', cartItems);
     if (totalQty === 0) {
       setTotalPrice(0);
     }
@@ -30,7 +31,7 @@ export default function StateContextProvider({ children }) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
   };
 
-  const onAddClick = (product, action) => {
+  const AddToCart = (product) => {
     const existingItem = cartItems.find(item => item.id === product.id);
     if (existingItem) {
       setCartItems(cartItems.map(item => item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item));
@@ -39,7 +40,10 @@ export default function StateContextProvider({ children }) {
     }
     setTotalPrice(totalPrice + product.price * quantity);
     setTotalQty(totalQty + quantity);
-    console.log(`${action} clicked for product:`, product);
+    console.log('Product added to cart:', product);
+
+    // Xóa buyNowItem khỏi localStorage
+    localStorage.removeItem('buyNowItem');
   };
 
   const handleCartClick = () => {
@@ -64,6 +68,7 @@ export default function StateContextProvider({ children }) {
       setQuantity(quantity - 1);
     }
   };
+
   const handleScrollToProducts = () => {
     if (cakeRef.current) {
       cakeRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -71,6 +76,12 @@ export default function StateContextProvider({ children }) {
     setShowCart(false); // Ẩn giỏ hàng
   };
 
+  const clearCart = () => {
+    setCartItems([]);
+    setTotalPrice(0);
+    setTotalQty(0);
+    console.log('Cart cleared:', cartItems);
+  };
 
   return (
     <StateContext.Provider value={{
@@ -86,12 +97,13 @@ export default function StateContextProvider({ children }) {
       handleNavLinks,
       formatPrice,
       handleScrollToProducts,
-      onAddClick,
+      AddToCart,
       handleCartClick,
       handleRemoveCart,
       increaseQty,
-      decreaseQty
-      
+      decreaseQty,
+      clearCart,
+      setQuantity // Ensure setQuantity is included in the context value
     }}>
       {children}
     </StateContext.Provider>

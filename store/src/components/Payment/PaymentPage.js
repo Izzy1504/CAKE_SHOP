@@ -7,6 +7,7 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useStateContext } from '../../context/StateContextProvider'; // Import context nếu cần
+
 const PaymentPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -50,14 +51,10 @@ const PaymentPage = () => {
     };
 
     fetchUserInfo();
-   // Kiểm tra xem có buyNowItem trong localStorage không
-   const buyNowItem = localStorage.getItem('buyNowItem');
-   if (buyNowItem) {
-     const parsedItem = JSON.parse(buyNowItem);
-     setLocalCartItems([parsedItem]);
-     setLocalTotalPrice(parsedItem.price * parsedItem.quantity);
-   }
- }, [backendURL]);
+    console.log('Cart items length:', cartItems.length);
+    console.log('Cart items:', cartItems);
+    console.log('Total price:', totalPrice);
+  }, [backendURL]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -80,7 +77,7 @@ const PaymentPage = () => {
         "paymentMethod": selectedPaymentMethod,
         "orderDetails": cartItems.map(item => ({
           "productId": item.id,
-          "quantity": item.quantity,
+          "quantity": item.quantity || 1,
           "price": item.price
         }))
       };
@@ -99,17 +96,15 @@ const PaymentPage = () => {
       // Handle success
       toast.success('Đơn hàng đã được gửi thành công!');
       // Clear cart items
-      if (localStorage.getItem('buyNowItem')) {
-        localStorage.removeItem('buyNowItem');
-      } else {
-        localStorage.removeItem('cartItems');
-        setCartItems([]);
-        setTotalPrice(0);
-        setTotalQty(0);
-      }
-      // Navigate to user detail page
+      localStorage.removeItem('buyNowItem');
+      localStorage.removeItem('cartItems');
+      // setCartItems([]); // Ensure setCartItems is called correctly
+      // setTotalPrice(0);
+      // setTotalQty(0);
+      // Navigate to orders page and reload
       setTimeout(() => {
-        navigate('/userdetail');
+        navigate('/userDetail', { replace: true });
+        window.location.reload();
       }, 2000);
     } catch (error) {
       console.error("Error submitting order:", error);
@@ -138,18 +133,22 @@ const PaymentPage = () => {
       <div className={styles.container}>
         <div className={styles.orderInfo}>
           <h2>Order Summary</h2>
-          <ul>
-            {cartItems.map((item, index) => (
-              <li key={index}>
-                <span>{item.name} (x{item.quantity})</span>
-                <span>{formatPrice(item.price * item.quantity)} vnđ</span>
+          {cartItems.length === 0 ? (
+            <p>Your cart is empty.</p>
+          ) : (
+            <ul>
+              {cartItems.map((item, index) => (
+                <li key={index}>
+                  <span>{item.name} (x{item.quantity || 1})</span>
+                  <span>{formatPrice(item.price * (item.quantity || 1))} vnđ</span>
+                </li>
+              ))}
+              <li className={styles.total}>
+                <span>Total</span>
+                <span>{formatPrice(totalPrice)} vnđ</span>
               </li>
-            ))}
-            <li className={styles.total}>
-              <span>Total</span>
-              <span>{formatPrice(totalPrice)} vnđ</span>
-            </li>
-          </ul>
+            </ul>
+          )}
           <button onClick={handleGoBack} style={{ marginTop: '50px' }}>Go Back</button>
         </div>
         <div className={styles.customerInfo}>
@@ -202,17 +201,7 @@ const PaymentPage = () => {
             <button type="button" onClick={() => navigate('/profile')}>Edit</button>
             <div className={styles.paymentMethods}>
               <h2>Payment Methods</h2>
-              <div>
-                <input
-                  type="radio"
-                  id="creditCard"
-                  name="paymentMethod"
-                  value="creditCard"
-                  checked={selectedPaymentMethod === 'creditCard'}
-                  onChange={handlePaymentMethodChange}
-                />
-                <label htmlFor="creditCard">Credit Card</label>
-              </div>
+              {/*  */}
               <div>
                 <input
                   type="radio"
@@ -222,25 +211,11 @@ const PaymentPage = () => {
                   checked={selectedPaymentMethod === 'cod'}
                   onChange={handlePaymentMethodChange}
                 />
-                <label htmlFor="cod">cod</label>
+                <label htmlFor="cod">Cash on Delivery</label>
               </div>
-              <div>
-                <input
-                  type="radio"
-                  id="qrCode"
-                  name="paymentMethod"
-                  value="qrCode"
-                  checked={selectedPaymentMethod === 'qrCode'}
-                  onChange={handlePaymentMethodChange}
-                />
-                <label htmlFor="qrCode">QR Code</label>
-              </div>
+              {/*  */}
             </div>
-            {selectedPaymentMethod === 'qrCode' && (
-              <div className={styles.qrCode}>
-                <img src={qrCodeUrl} alt="QR Code" />
-              </div>
-            )}
+            {/*  */}
             <button type="submit">Submit Order</button>
           </form>
         </div>

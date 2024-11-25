@@ -6,13 +6,13 @@ import CakesSlide from './CakesSlide';
 import { useStateContext } from '../../context/StateContextProvider';
 
 const CakeDetails = () => {
-  const { quantity, increaseQty, decreaseQty, formatPrice, onAddClick, handleCartClick,totalPrice, setTotalPrice,cartItems } = useStateContext();
+  const { quantity, increaseQty, decreaseQty, formatPrice, AddToCart, handleCartClick,totalPrice, setTotalPrice,cartItems } = useStateContext();
   const { id } = useParams();
   const navigate = useNavigate();
   const [cakeImage, setCakeImage] = useState(0);
   const [cakeDetails, setCakeDetails] = useState(null);
   const [navigateToPayment, setNavigateToPayment] = useState(false);
-
+  const {  setQuantity} = useStateContext();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -42,6 +42,7 @@ const CakeDetails = () => {
   const handleClickImage = (index) => {
     setCakeImage(index);
   };
+ 
   const handleBuyNow = () => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -64,24 +65,28 @@ const CakeDetails = () => {
         localStorage.setItem('buyNowItem', JSON.stringify(buyNowItem));
 
         // Chuyển hướng đến trang thanh toán
-        setNavigateToPayment(true);
+        navigate('/PaymentPage', { state: { cartItems: [buyNowItem], totalPrice: buyNowItem.totalPrice } });
       }
     }
   };
+
   const handleAddToCart = (e) => {
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("/login");
     } else {
-      onAddClick(cakeDetails, e.target.innerText);
+      AddToCart(cakeDetails, e.target.innerText);
       handleCartClick();
     }
   };
-
+  const handleGoBack = () => {
+    setQuantity(1); // Reset quantity to 1
+    navigate(-1);
+  };
   return (
     <>
       <div className={styles.cakeDetailsPage}>
-        <button className={styles.goBackBtn} onClick={() => navigate(-1)}>Go Back</button>
+        <button className={styles.goBackBtn} onClick={handleGoBack}>Go Back</button>
         {cakeDetails && cakeDetails.images && Array.isArray(cakeDetails.images) && (
           <div className={styles.cakeDetailed}>
             <div>
