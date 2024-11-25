@@ -81,7 +81,7 @@ const CakeDetails = () => {
   };
   const handleGoBack = () => {
     setQuantity(1); // Reset quantity to 1
-    navigate(-1);
+    navigate('/');
   };
   return (
     <>

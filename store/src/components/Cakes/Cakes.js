@@ -1,14 +1,12 @@
-import { Grid } from "@mui/material";
+
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useStateContext } from "../../context/StateContextProvider";
 import styles from "./Cakes.module.scss";
-import { AnimatePresence, motion } from "framer-motion";
-import { easeAnimate } from "../../animations/animation";
 import axios from "axios";
 
 const CakeList = () => {
-  const { formatPrice, scrollToTop, cakeRef } = useStateContext();
+  const { scrollToTop, cakeRef } = useStateContext();
   const [cakes, setCakes] = useState([]);
   const backendURL = 'http://26.214.87.26:8080';
 
