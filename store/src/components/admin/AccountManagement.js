@@ -8,8 +8,18 @@ const AccountManagement = () => {
   const backendURL = 'http://26.214.87.26:8080';
 
   const fetchAccounts = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error("Authentication token is missing.");
+      // Optionally, redirect to login page
+      return;
+    }
     try {
-      const response = await axios.get(`${backendURL}/api/users/info`);
+      const response = await axios.get(`${backendURL}/api/users`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response.status === 200) {
         setAccounts(response.data.content);
       }
@@ -19,8 +29,18 @@ const AccountManagement = () => {
   };
 
   const deleteAccount = async (id) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error("Authentication token is missing.");
+      // Optionally, redirect to login page
+      return;
+    }
     try {
-      await axios.delete(`${backendURL}/api/accounts/${id}`);
+      await axios.delete(`${backendURL}/api/users/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setAccounts(accounts.filter(account => account.id !== id));
     } catch (error) {
       console.error("Error deleting account:", error);
@@ -30,7 +50,23 @@ const AccountManagement = () => {
   useEffect(() => {
     fetchAccounts();
   }, []);
-
+  const resetPassword = async (email) => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      console.error("Authentication token is missing.");
+      return;
+    }
+    try {
+      await axios.post(`${backendURL}/api/users/forgot`, { email }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("Password reset email sent.");
+    } catch (error) {
+      console.error("Error resetting password:", error);
+    }
+  };
   return (
     <div className={styles.accountManagement}>
       <h2>Quản lý tài khoản</h2>
@@ -50,8 +86,8 @@ const AccountManagement = () => {
             </TableHead>
             <TableBody>
               {accounts.map((account) => (
-                <TableRow key={account.id}>
-                  <TableCell>{account.id}</TableCell>
+                <TableRow key={account.userId}>
+                  <TableCell>{account.userId}</TableCell>
                   <TableCell>{account.username}</TableCell>
                   <TableCell>{account.email}</TableCell>
                   <TableCell>{new Date(account.createdAt).toLocaleDateString()}</TableCell>
@@ -59,6 +95,14 @@ const AccountManagement = () => {
                     <Button variant="contained" color="secondary" onClick={() => deleteAccount(account.id)}>
                       Xóa
                     </Button>
+                    <Button 
+                  variant="contained" 
+                  color="primary" 
+                  onClick={() => resetPassword(account.email)}
+                  style={{ marginLeft: '20px' }}
+                >
+                  tạo lại mật khẩu
+                </Button>
                   </TableCell>
                 </TableRow>
               ))}

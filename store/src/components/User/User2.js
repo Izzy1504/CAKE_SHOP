@@ -1,42 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { TextField, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
 import "./User2.css";
-
-const Login = () => {
-  const [formData, setFormData] = useState({
-    emailOrPhone: "",
-    password: "",
-  });
-
+import { useNavigate } from "react-router-dom";
+const User2 = () => {
+  const [formData, setFormData] = useState({ emailOrPhone: "", password: "" });
   const [errors, setErrors] = useState({});
   const [loginError, setLoginError] = useState("");
+  const [open, setOpen] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
   const navigate = useNavigate();
-
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-    validateField(name, value);
-  };
-
-  const validateField = (name, value) => {
-    let error = "";
-    switch (name) {
-      case "emailOrPhone":
-        error = value.trim() === "" ? "Email or Phone Number is required" : "";
-        break;
-      case "password":
-        error = value.trim() === "" ? "Password is required" : "";
-        break;
-      default:
-        break;
-    }
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [name]: error,
-    }));
+    setFormData({...formData, [e.target.name]: e.target.value});
   };
 
   const handleLogin = async (e) => {
@@ -95,8 +69,38 @@ const Login = () => {
     }
   };
 
+  const forgotPassword = async () => {
+    try {
+      const response = await fetch("http://26.214.87.26:8080/api/users/forgot", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username: formData.emailOrPhone }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error resetting password:", errorData);
+        alert("Error resetting password: " + (errorData.message || "Please try again."));
+        return;
+      }
+
+      const data = await response.json();
+      setNewPassword(data.newPassword);
+      setOpen(true);
+    } catch (error) {
+      console.error("Error resetting password:", error);
+      alert("An error occurred. Please try again.");
+    }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setNewPassword("");
+  };
+
   useEffect(() => {
-    // Create falling cakes
     const fallingCakesContainer = document.querySelector('.falling-cakes');
     for (let i = 0; i < 20; i++) {
       const cake = document.createElement('div');
@@ -113,41 +117,55 @@ const Login = () => {
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Login</h2>
         <form id="loginForm" className="space-y-6" onSubmit={handleLogin}>
           <div>
-            <input
+            <TextField
               type="text"
               name="emailOrPhone"
-              placeholder="Email or Phone Number"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              label="Email or Phone Number"
               value={formData.emailOrPhone}
               onChange={handleChange}
+              fullWidth
+              error={!!errors.emailOrPhone}
+              helperText={errors.emailOrPhone}
+              variant="outlined"
             />
-            {errors.emailOrPhone && <p className="mt-2 text-sm text-red-600">{errors.emailOrPhone}</p>}
           </div>
           <div className="mt-4">
-            <input
+            <TextField
               type="password"
               name="password"
-              placeholder="Password"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              label="Password"
               value={formData.password}
               onChange={handleChange}
+              fullWidth
+              variant="outlined"
             />
-            {errors.password && <p className="mt-2 text-sm text-red-600">{errors.password}</p>}
           </div>
           {loginError && <p className="mt-2 text-sm text-red-600">{loginError}</p>}
-          <div className="mt-4">
-            <button
-              type="submit"
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
-            >
+          <div className="flex justify-between items-center">
+            <Button variant="contained" color="primary" type="submit">
               Login
-            </button>
+            </Button>
+            <Button variant="contained" color="secondary"  style={{ marginLeft: '20px' }} onClick={forgotPassword}>
+              Forgot Password
+            </Button>
           </div>
         </form>
       </div>
       <div className="falling-cakes"></div>
+
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>New Password</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Your new password is: <strong>{newPassword}</strong>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">Close</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
 
-export default Login;
+export default User2;
