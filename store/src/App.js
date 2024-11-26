@@ -21,6 +21,7 @@ import AccountManagement from './components/admin/AccountManagement';
 import AddProduct from './components/admin/AddProduct';
 import EditProduct from './components/admin/EditProduct';
 import OrderUser from './components/Orders/OrderUser';
+import OrderDetail from './components/Orders/OrderDetail';
 
 function App() {
   const { showCart } = useStateContext();
@@ -64,6 +65,7 @@ function App() {
         {/* <Route path='/user/:id' element={<UserDetail />} /> */}
         <Route path='/userDetail' element={<UserDetail />}></Route>
         <Route path='/order' element={<OrderUser />}></Route>
+        <Route path='/order/:id' element={<OrderDetail />}></Route>
       </Routes>
       {!hideLayout && !hideCta && !hideLayout1 && !hideLayout2 && !hideLayout3 && !hideLayout4 && hideLayout6 && <Cta />}
       {!hideLayout && !hideCta  && !hideLayout4 && !hideLayout5 && !userDetailHide && <Footer />}

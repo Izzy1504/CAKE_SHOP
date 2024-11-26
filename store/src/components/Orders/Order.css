@@ -116,3 +116,93 @@ margin-top: 30px;
     margin: 5px 0;
 }
 }
+
+/* ------------------------------------------------------------------------------------ */
+/* Order Detail */
+.odDetail-wrapper {
+    height: 100%;
+    margin-top: 2vh;
+    padding-top: 10px;
+}
+
+.order-detail-container {
+    max-width: 800px;
+    margin: 70px auto;
+    background-color: #fdf8f5;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.order-detail-title {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+.order-info h3,
+.product-detail h3,
+.order-total h3 {
+    font-size: 20px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.order-info p,
+.order-total p {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.product-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.status {
+    color: #007bff;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.product-table th,
+.product-table td {
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.product-table th {
+    background-color: #fdf5e6;
+    color: #555;
+    font-weight: bold;
+}
+
+.product-table td {
+    background-color: #ffffff;
+}
+
+.order-total {
+    margin-top: 20px;
+    text-align: right;
+}
+  
+.order-total p {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
