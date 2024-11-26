@@ -142,16 +142,16 @@
   overflow-y: scroll;
 }
 
-  .user-order-wrapper{
-    max-height: 100vh;
-    margin: 50px;
-    background-color: #fdf8f5;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    color: #333;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
+.user-order-wrapper{
+  max-height: 100vh;
+  margin: 50px;
+  background-color: #fdf8f5;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  color: #333;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
   
   

@@ -1,0 +1,208 @@
+.order-wrapper {
+    margin-top: 7vh;
+    padding-top: 1px;
+    height: 93vh;
+    width: 100%;
+    /* justify-content: center; */
+    align-items: center;
+    /* background-color: aqua; */
+}
+
+
+.user-order-wrapper{
+    max-height: 100vh;
+    /* margin-top: vh; */
+    /* max-width: 100%; */
+    /* width: 100%; */
+    /* margin: 50px; */
+    background-color: #fdf8f5;
+    /* padding: 30px; */
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    color: #333;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+/* Lịch sử đơn hàng */
+.order-table {
+max-height: 70vh;
+overflow-y: scroll;
+}
+
+/* Tiêu đề */
+.user-order-wrapper h1 {
+font-size: 28px;
+font-weight: 700;
+color: #3b3b3b;
+text-align: center;
+margin-bottom: 25px;
+}
+
+/* Header của bảng */
+.order-header {
+display: grid;
+grid-template-columns: 1fr 1fr 1fr 1fr;
+text-align: center;
+
+/* display: flex; */
+/* justify-content: space-between; */
+align-items: center;
+padding: 15px 25px;
+background-color: #fdf5e6;
+border-bottom: 2px solid #e6e6e6;
+font-weight: 600;
+color: #555;
+border-radius: 10px 10px 0 0;
+
+position: sticky;
+top: 0;
+z-index: 1;
+}
+
+/* Dữ liệu từng đơn hàng */
+.order-card {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 15px 25px;
+background-color: #ffffff;
+border-radius: 10px;
+margin: 10px 0;
+transition: transform 0.2s ease, box-shadow 0.2s ease;
+border: 1px solid #f0f0f0;
+}
+
+/* Hiệu ứng khi hover */
+.order-card:hover {
+background-color: #ffedd5;
+transform: translateY(-3px);
+box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Kiểu chữ cho từng thông tin */
+.order-card span {
+flex: 1;
+color: #333;
+font-size: 16px;
+text-align: center;
+}
+
+/* Kiểu chữ cho trạng thái đơn hàng */
+.order-card span:nth-child(2) {
+color: #007bff;
+font-weight: 600;
+text-transform: uppercase;
+}
+
+/* Nếu không có lịch sử đơn hàng */
+.user-order-wrapper p {
+text-align: center;
+font-size: 18px;
+color: #888;
+margin-top: 30px;
+}
+
+/* Responsive cho màn hình nhỏ */
+@media (max-width: 600px) {
+.order-header,
+.order-card {
+    flex-direction: column;
+    padding: 10px 15px;
+}
+
+.order-card span {
+    text-align: left;
+    margin: 5px 0;
+}
+}
+
+/* ------------------------------------------------------------------------------------ */
+/* Order Detail */
+.odDetail-wrapper {
+    height: 100%;
+    margin-top: 2vh;
+    padding-top: 10px;
+}
+
+.order-detail-container {
+    max-width: 800px;
+    margin: 70px auto;
+    background-color: #fdf8f5;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.order-detail-title {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+.order-info h3,
+.product-detail h3,
+.order-total h3 {
+    font-size: 20px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.order-info p,
+.order-total p {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.product-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.status {
+    color: #007bff;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.product-table th,
+.product-table td {
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.product-table th {
+    background-color: #fdf5e6;
+    color: #555;
+    font-weight: bold;
+}
+
+.product-table td {
+    background-color: #ffffff;
+}
+
+.order-total {
+    margin-top: 20px;
+    text-align: right;
+}
+  
+.order-total p {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
