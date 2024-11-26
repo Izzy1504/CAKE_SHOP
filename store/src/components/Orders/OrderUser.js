@@ -22,7 +22,7 @@ const OrderUser = () => {
                 console.log("Dữ liệu API trả về:", response.data);
                 setOrders(response.data.content); // Lưu lịch sử đơn hàng vào state
             } catch (err) {
-                setError("Không thể tải lịch sử đơn hàng."); // Xử lý lỗi nếu API thất bại
+                // setError("Không thể tải lịch sử đơn hàng."); // Xử lý lỗi nếu API thất bại
                 console.log("Lỗi: ", err);
             }
         };

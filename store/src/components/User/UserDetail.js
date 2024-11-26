@@ -51,6 +51,7 @@ const UserDetail = () => {
     fetchUser();
     fetchOrderHistory();
     console.log(localStorage.getItem('token'));
+    // console.log("url: ", url);
     console.log("âcsc: ", orders);
   }, []);
 
