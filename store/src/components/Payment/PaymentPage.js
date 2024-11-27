@@ -39,10 +39,10 @@ const PaymentPage = () => {
         if (response.status === 200) {
           const userData = response.data;
           setCustomerInfo({
-            name: userData.name,
-            phone: userData.phoneNumber,
-            email: userData.email,
-            address: userData.address,
+            name: userData.info?.name || '',
+            phone: userData.info?.phoneNumber || '',
+            email: userData.info?.email || '',
+            address: userData.info?.address || '',
           });
         }
       } catch (error) {
