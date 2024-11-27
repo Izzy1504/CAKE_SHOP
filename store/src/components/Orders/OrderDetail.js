@@ -39,29 +39,32 @@ const Orderdetail = () => {
 
   useEffect(() => {
     const fetchOrderDetail = async () => {
-      const url = `http://26.214.87.26:8080/api/order/${id}`;
+      const url = `http://26.214.87.26:8080/api/orders/${id}`;
       const token = localStorage.getItem("token"); // Lấy token từ localStorage
-      console.log("token: ", token);
-      console.log("id: ", id);
-      console.log("url: ", url);
+      // console.log("token: ", token);
+      // console.log("id: ", id);
+      // console.log("url: ", url);
       try {
           const response = await axios.get(url, {
           headers: {
               Authorization: `Bearer ${token}`,
           },
           });
-          console.log("Dữ liệu API trả về:", response.data);
-          setOrderdetail(response.data.content); // Lưu lịch sử đơn hàng vào state
+          // console.log("Dữ liệu API trả về:", response.data);
+          setOrderdetail(response.data); // Lưu lịch sử đơn hàng vào state
       } catch (err) {
           setError("Không thể tải lịch sử đơn hàng."); // Xử lý lỗi nếu API thất bại
           console.log("Lỗi: ", err);
       }
     }
     fetchOrderDetail();
-    console.log("âcsc: ", orderdetail);
   }, [id]);
 
   return (
+    console.log("data back: ", orderdetail),
+    console.log("type: ", typeof orderdetail),
+    console.log("sample: ", order),
+    console.log("type: ", typeof order),
     <div className='odDetail-wrapper'>
       <div className="order-detail-container">
         {/* Tiêu đề */}
