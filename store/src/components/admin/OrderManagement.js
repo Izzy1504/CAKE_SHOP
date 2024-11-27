@@ -99,13 +99,13 @@ const OrderManagement = () => {
             <TableBody>
               {orders.map((order) => {
                 const customer = customers.find(c => c.id === order.customerId);
-                const customerName = customer ? customer.name : 'Unknown';
+                const customerName = order ? order.username : 'Unknown';
 
                 return (
                   <TableRow key={order.orderId}>
                     <TableCell align="center" className={styles.tableBodyCell}>{order.orderId}</TableCell>
                     <TableCell align="center" className={styles.tableBodyCell}>{customerName}</TableCell>
-                    <TableCell align="center" className={styles.tableBodyCell}>{new Date(order.orderDate).toLocaleDateString()}</TableCell>
+                    <TableCell align="center" className={styles.tableBodyCell}>{new Date(order.createDate).toLocaleDateString()}</TableCell>
                     <TableCell align="center" className={styles.tableBodyCell}> {order.orderDetails
                     .reduce((sum, detail) => sum + detail.price * detail.quantity, 0)
                     .toLocaleString()} VND</TableCell>
