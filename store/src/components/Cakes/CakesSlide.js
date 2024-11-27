@@ -88,7 +88,7 @@ const CakesSlide = () => {
                                         <div className={styles.cakeDetails}>
                                             <p className={styles.cakeName}>{cake.name || 'Tên bánh'}</p>
                                             <p className={styles.cakePrice}>
-                                                ${cake.price ? formatPrice(cake.price) : 'N/A'}
+                                                {cake.price ? formatPrice(cake.price) : 'N/A'} vnđ
                                             </p>
                                         </div>
                                     </div>

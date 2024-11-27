@@ -1,11 +1,21 @@
 @import '../../styles/variable';
 
+// Define the mint-green variable if not already defined
+$mint-green: #3eb489; // Mint green leaning towards blue
+
+// Define the jade-green variable if not already defined
+$jade-green: #00a86b; // Jade green color
+
+// Define the light jade-green variable if not already defined
+$light-jade-green: #2be4eb; // Light jade green color
+
 .heroWrapper {
     display: flex;
     flex-direction: column-reverse;
     justify-content: space-between;
     align-items: center;
     gap: 40px;
+    border-radius: 10px; // Added border-radius for rounded corners
     @media screen and (min-width: $tablet) {
         flex-direction: row;
         padding: 0 0 0 50px;
@@ -31,7 +41,7 @@
     button {
         width: 180px;
         text-transform: uppercase;
-        @include buttons($red);
+        @include buttons($light-jade-green); // Changed color to light jade green
     }
     @media screen and (min-wdith: $laptop) {
         padding: 0;
@@ -40,6 +50,14 @@
         button {
             padding: 20px 10px;
         }
+    }
+}
+.shopNowButton {
+    border-radius: 50px;
+    // ...existing styles...
+    transition: transform 0.3s ease;
+    &:hover {
+        transform: scale(1.02);
     }
 }
 // .imageWrapper {

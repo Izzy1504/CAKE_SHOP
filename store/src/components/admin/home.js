@@ -39,12 +39,16 @@ const Home = ({ handleLogout }) => {
             <td>{adminInfo.email}</td>
           </tr>
           <tr>
-            <td>Trạng thái:</td>
-            <td>{adminInfo.status}</td>
+            <td>Số điện thoại:</td>
+            <td>{adminInfo.phoneNumber}</td>
+          </tr>
+          <tr>
+            <td>Địa chỉ:</td>
+            <td>{adminInfo.address}</td>
           </tr>
         </tbody>
       </table>
-      <button onClick={handleLogout}>
+      <button onClick={handleLogout} style={{ fontSize: '1.2em' }}>
         Đăng xuất <FaSignOutAlt />
       </button>
     </div>

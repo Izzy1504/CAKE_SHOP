@@ -41,7 +41,7 @@ const AccountManagement = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setAccounts(accounts.filter(account => account.id !== id));
+      setAccounts(accounts.filter(account => account.info.id !== id));
     } catch (error) {
       console.error("Error deleting account:", error);
     }
@@ -89,16 +89,16 @@ const AccountManagement = () => {
                 <TableRow key={account.userId}>
                   <TableCell>{account.userId}</TableCell>
                   <TableCell>{account.username}</TableCell>
-                  <TableCell>{account.email}</TableCell>
-                  <TableCell>{new Date(account.createdAt).toLocaleDateString()}</TableCell>
+                  <TableCell>{account.info.email}</TableCell>
+                  <TableCell>{new Date(account.createdDate).toLocaleDateString()}</TableCell>
                   <TableCell>
-                    <Button variant="contained" color="secondary" onClick={() => deleteAccount(account.id)}>
+                    <Button variant="contained" color="secondary" onClick={() => deleteAccount(account.info.id)}>
                       Xóa
                     </Button>
                     <Button 
                   variant="contained" 
                   color="primary" 
-                  onClick={() => resetPassword(account.email)}
+                  onClick={() => resetPassword(account.info.email)}
                   style={{ marginLeft: '20px' }}
                 >
                   tạo lại mật khẩu

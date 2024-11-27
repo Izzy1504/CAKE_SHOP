@@ -146,6 +146,9 @@
         bottom: 10px;
     }
 }
+.cart i:hover {
+    transform: scale(1.3);
+}
 .userIcon {
     font-size: 1.5rem;
     color: #333;
@@ -157,4 +160,3 @@
     font-size: 1rem;
     color: #333;
 }
-  
