@@ -5,7 +5,7 @@ import styles from "./OrderManagement.module.scss";
 
 const OrderManagement = () => {
   const [orders, setOrders] = useState([]);
-  const [customers, setCustomers] = useState([]);
+  // const [customers, setCustomers] = useState([]);
   const backendURL = 'http://26.214.87.26:8080';
 
   const fetchOrders = async () => {
@@ -83,7 +83,6 @@ const OrderManagement = () => {
             </TableHead>
             <TableBody>
               {orders.map((order) => {
-                const customer = customers.find(c => c.id === order.customerId);
                 const customerName = order ? order.username : 'Unknown';
 
                 return (
@@ -98,13 +97,7 @@ const OrderManagement = () => {
                     <TableCell align="center" className={styles.tableBodyCell}>{order.status}</TableCell>
                     <TableCell align="center" className={styles.tableBodyCell}>
                       <div className={styles.actionButtons}>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={() => updateOrderStatus(order.orderId, 'Processed')}
-                        >
-                          Sửa
-                        </Button>
+                      
                         <Button
                           variant="contained"
                           color="secondary"
