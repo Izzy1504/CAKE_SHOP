@@ -51,7 +51,7 @@ const AccountManagement = () => {
     fetchAccounts();
   }, []);
   const resetPassword = async (email) => {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('token');
     if (!token) {
       console.error("Authentication token is missing.");
       return;
