@@ -18,87 +18,115 @@ const EditProduct = () => {
 
   useEffect(() => {
     const fetchProduct = async () => {
+      const token = localStorage.getItem('token'); // Retrieve the token from localStorage
       try {
-        const response = await axios.get(`${backendURL}/api/products/${id}`);
+        const response = await axios.get(`${backendURL}/api/products/${id}`, {
+          headers: {
+            'Authorization': `Bearer ${token}` // Include the token in the request headers
+          }
+        });
         if (response.status === 200) {
           const product = response.data;
           setName(product.name);
           setPrice(product.price);
           setCategory(product.category);
-          setImage(product.images[0]);
-          setImagePreview(product.images[0]);
+          setImagePreview(product.imageUrl); // Assuming the product has an imageUrl field
           setInitialProduct(product);
         }
       } catch (error) {
         console.error("Error fetching product:", error);
+        toast.error("An error occurred while fetching the product.");
       }
     };
 
     fetchProduct();
-  }, [id]);
+  }, [id, backendURL]);
 
   const handleImageChange = (e) => {
-    const url = e.target.value;
-    setImage(url);
-    setImagePreview(url);
+    const file = e.target.files[0];
+    if (file && (file.type === 'image/png' || file.type === 'image/jpeg')) {
+      setImage(file);
+      setImagePreview(URL.createObjectURL(file));
+    } else {
+      toast.error('Only PNG and JPG files are allowed.');
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const updatedFields = {
-      name: initialProduct.name,
-      price: initialProduct.price,
-      category: initialProduct.category,
-      images: initialProduct.images
-    };
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('price', parseFloat(price));
+    formData.append('category', category);
+    if (image) {
+      formData.append('image', image);
+    }
 
-    if (name !== initialProduct.name) updatedFields.name = name;
-    if (price !== initialProduct.price) updatedFields.price = parseFloat(price);
-    if (category !== initialProduct.category) updatedFields.category = category;
-    if (image !== initialProduct.images[0]) updatedFields.images = [image];
-
-    console.log("Updated fields:", updatedFields); // Thêm console.log để kiểm tra dữ liệu gửi đi
+    const token = localStorage.getItem('token'); // Retrieve the token from localStorage
 
     try {
-      await axios.put(`${backendURL}/api/products/${id}`, updatedFields, {
+      const response = await axios.put(`${backendURL}/api/products/${id}`, formData, {
         headers: {
-          "Content-Type": "application/json",
-        },
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}` // Include the token in the request headers
+        }
       });
-      navigate('/admin/products');
-    } catch (error) {
-      console.error("Error updating product:", error);
-      if (error.response) {
-        console.error("Response data:", error.response.data);
+
+      if (response.status === 200) {
+        toast.success('Product updated successfully!');
+        navigate('/admin/products'); // Redirect to the products page
+      } else {
+        toast.error('Failed to update product.');
       }
-      toast.error("Cập nhật sản phẩm thất bại!");
+    } catch (error) {
+      console.error('Error updating product:', error);
+      toast.error('An error occurred while updating the product.');
     }
   };
 
   return (
     <div className={styles.editProduct}>
-      <h2>Chỉnh sửa sản phẩm</h2>
+      <ToastContainer />
+      <h2>Edit Product</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Tên sản phẩm</label>
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+          <label>Name</label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
         </div>
         <div>
-          <label>Giá</label>
-          <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} required />
+          <label>Price</label>
+          <input
+            type="number"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            required
+          />
         </div>
         <div>
-          <label>Danh mục</label>
-          <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} required />
+          <label>Category</label>
+          <input
+            type="text"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            required
+          />
         </div>
         <div>
-          <label>URL hình ảnh</label>
-          <input type="text" value={image} onChange={handleImageChange} required />
+          <label>Image</label>
+          <input
+            type="file"
+            accept="image/png, image/jpeg"
+            onChange={handleImageChange}
+          />
           {imagePreview && <img src={imagePreview} alt="Preview" className={styles.imagePreview} />}
         </div>
-        <button type="submit">Cập nhật</button>
+        <button type="submit">Update Product</button>
       </form>
-      <ToastContainer />
     </div>
   );
 };

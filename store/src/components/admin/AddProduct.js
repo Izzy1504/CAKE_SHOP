@@ -27,25 +27,35 @@ const AddProduct = () => {
     formData.append('name', name);
     formData.append('price', parseFloat(price));
     formData.append('category', category);
-    imageFiles.forEach((file, index) => {
-      formData.append(`images`, file);
+    imageFiles.forEach((file) => {
+      formData.append('images', file);
     });
 
+    const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+
     try {
-      await axios.post(`${backendURL}/api/products`, formData, {
+      const response = await axios.post(`${backendURL}/api/products`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-        },
+          'Authorization': `Bearer ${token}` // Include the token in the request headers
+        }
       });
-      navigate('/admin/products');
+
+      if (response.status === 201) {
+        toast.success('Product added successfully!');
+        navigate('/admin/products'); // Redirect to the products page
+      } else {
+        toast.error('Failed to add product.');
+      }
     } catch (error) {
       console.error('Error adding product:', error);
-      toast.error('Thêm sản phẩm thất bại!');
+      toast.error('An error occurred while adding the product.');
     }
   };
 
   return (
     <div className={styles.addProduct}>
+      <ToastContainer />
       <h2>Thêm sản phẩm mới</h2>
       <form onSubmit={handleSubmit}>
         <div>
@@ -81,17 +91,15 @@ const AddProduct = () => {
             type="file"
             multiple
             onChange={handleImageChange}
-            required
           />
           <div className={styles.imagePreviews}>
             {imagePreviews.map((preview, index) => (
-              <img key={index} src={preview} alt={`Preview ${index}`} className={styles.imagePreview} />
+              <img key={index} src={preview} alt={`Preview ${index}`} />
             ))}
           </div>
         </div>
-        <button type="submit">Thêm</button>
+        <button type="submit">Thêm sản phẩm</button>
       </form>
-      <ToastContainer />
     </div>
   );
 };
