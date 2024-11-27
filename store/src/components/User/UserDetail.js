@@ -18,42 +18,77 @@ const UserDetail = () => {
       const url = "http://26.214.87.26:8080/api/users/info";
       const token = localStorage.getItem('token'); // Thay token của bạn
 
-      try {
-        const response = await axios.get(url, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+  //     try {
+  //       const response = await axios.get(url, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
 
-        setUser(response.data);
-        setEditedUser(response.data); // Ban đầu dữ liệu chỉnh sửa giống dữ liệu gốc
-      } catch (err) {
-        setError("Không thể tải thông tin người dùng.");
-      }
-    };
+  //       setUser(response.data);
+  //       setEditedUser(response.data); // Ban đầu dữ liệu chỉnh sửa giống dữ liệu gốc
+  //     } catch (err) {
+  //       setError("Không thể tải thông tin người dùng.");
+  //     }
+  //   };
 
-    const fetchOrderHistory = async () => {
-      const url = "http://26.214.87.26:8080/api/orders";
-      const token = localStorage.getItem("token"); // Lấy token từ localStorage
+  //   const fetchOrderHistory = async () => {
+  //     const url = "http://26.214.87.26:8080/api/orders";
+  //     const token = localStorage.getItem("token"); // Lấy token từ localStorage
 
-      try {
-        const response = await axios.get(url, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        console.log("Dữ liệu API trả về:", response.data);
-        setOrders(response.data.content); // Lưu lịch sử đơn hàng vào state
-      } catch (err) {
-        setError("Không thể tải lịch sử đơn hàng."); // Xử lý lỗi nếu API thất bại
-      }
-    };
-    fetchUser();
-    fetchOrderHistory();
-    console.log(localStorage.getItem('token'));
-    // console.log("url: ", url);
-    console.log("âcsc: ", orders);
-  }, []);
+  //     try {
+  //       const response = await axios.get(url, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+  //       console.log("Dữ liệu API trả về:", response.data);
+  //       setOrders(response.data.content); // Lưu lịch sử đơn hàng vào state
+  //     } catch (err) {
+  //       setError("Không thể tải lịch sử đơn hàng."); // Xử lý lỗi nếu API thất bại
+  //     }
+  //   };
+  //   fetchUser();
+  //   fetchOrderHistory();
+  //   console.log(localStorage.getItem('token'));
+  //   // console.log("url: ", url);
+  //   console.log("âcsc: ", orders);
+  // }, []);
+  //.................................................................................................................
+  // code này t chỉnh lại để show thông tin vì API thay đổi
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status === 200) {
+      const userData = response.data;
+      setUser({
+        name: userData.info?.name || '',
+        email: userData.info?.email || '',
+        address: userData.info?.address || '',
+        phoneNumber: userData.info?.phoneNumber || '',
+      });
+      setEditedUser({
+        name: userData.info?.name || '',
+        email: userData.info?.email || '',
+        address: userData.info?.address || '',
+        phoneNumber: userData.info?.phoneNumber || '',
+      });
+    } else {
+      setError("Lỗi fetch user.");
+    }
+  } catch (err) {
+    console.error("Lỗi vô cùng lỗi:", err);
+    setError("Lỗi fetch nha ae.");
+  }
+};
+
+fetchUser();
+}, []);
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
