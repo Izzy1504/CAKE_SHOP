@@ -5,7 +5,7 @@ import "./Order.css"
 
 const OrderUser = () => {
     const [orders, setOrders] = useState([]); // Dữ liệu lịch sử đơn hàng
-
+    const [setError, setErrorMessage] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
