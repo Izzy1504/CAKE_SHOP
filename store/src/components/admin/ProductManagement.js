@@ -12,8 +12,13 @@ const ProductManagement = () => {
   const navigate = useNavigate();
 
   const fetchProducts = async () => {
+    const token = localStorage.getItem('token'); // Retrieve the token from localStorage
     try {
-      const response = await axios.get(`${backendURL}/api/products`);
+      const response = await axios.get(`${backendURL}/api/products`, {
+        headers: {
+          'Authorization': `Bearer ${token}` // Include the token in the request headers
+        }
+      });
       if (response.status === 200) {
         setCakes(response.data.content);
       }
@@ -23,8 +28,13 @@ const ProductManagement = () => {
   };
 
   const deleteProduct = async (id) => {
+    const token = localStorage.getItem('token'); // Retrieve the token from localStorage
     try {
-      await axios.delete(`${backendURL}/api/products/${id}`);
+      await axios.delete(`${backendURL}/api/products/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}` // Include the token in the request headers
+        }
+      });
       setCakes(cakes.filter(cake => cake.id !== id));
     } catch (error) {
       console.error("Error deleting product:", error);
