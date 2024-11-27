@@ -24,21 +24,7 @@ const OrderManagement = () => {
     }
   };
 
-  const fetchCustomers = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${backendURL}/api/customers`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (response.status === 200) {
-        setCustomers(response.data.content); // Điều chỉnh theo cấu trúc dữ liệu trả về của API
-      }
-    } catch (error) {
-      console.error('Error fetching customers:', error);
-    }
-  };
+  
 
   const deleteOrder = async (id) => {
     try {
@@ -74,7 +60,6 @@ const OrderManagement = () => {
 
   useEffect(() => {
     fetchOrders();
-    fetchCustomers();
   }, []);
 
   return (
