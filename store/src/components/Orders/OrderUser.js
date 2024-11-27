@@ -19,8 +19,12 @@ const OrderUser = () => {
                     Authorization: `Bearer ${token}`,
                 },
                 });
-                console.log("Dữ liệu API trả về:", response.data);
-                setOrders(response.data.content); // Lưu lịch sử đơn hàng vào state
+                // Sắp xếp mảng content theo thứ tự tăng dần của orderId
+                const sortedData = response.data.content.sort(
+                    (a, b) => parseInt(a.orderId) - parseInt(b.orderId)
+                );
+                console.log("Dữ liệu API trả về, được sort:", sortedData);
+                setOrders(sortedData); // Lưu lịch sử đơn hàng vào state
             } catch (err) {
                 // setError("Không thể tải lịch sử đơn hàng."); // Xử lý lỗi nếu API thất bại
                 console.log("Lỗi: ", err);
