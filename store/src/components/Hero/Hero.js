@@ -12,7 +12,7 @@ const Hero = () => {
                 <div className={styles.heroContent}>
                     <h1>Where dedication<br/>& perfection meet.</h1>
                     <p>Make your day even more special! Same day delivery within Bacoor, Cavite.</p>
-                    <button onClick={handleScrollToProducts}>Shop Now</button>
+                    <button onClick={handleScrollToProducts} className={styles.shopNowButton}>Shop Now</button>
                 </div>
                 <div className={styles.imageWrapper}>
                     {/* <img src={slideImg1} alt="Cake for hero section"/> */}

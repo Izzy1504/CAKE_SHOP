@@ -42,7 +42,7 @@ const AccountManagement = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setAccounts(accounts.filter(account => account.userId !== id));
+      setAccounts(accounts.filter(account => account.id !== id));
     } catch (error) {
       console.error("Error deleting account:", error);
     }
@@ -91,29 +91,20 @@ const AccountManagement = () => {
                 <TableRow key={account.userId}>
                   <TableCell>{account.userId}</TableCell>
                   <TableCell>{account.username}</TableCell>
+                  <TableCell>{account.email}</TableCell>
+                  <TableCell>{new Date(account.createdAt).toLocaleDateString()}</TableCell>
                   <TableCell>
-                    {account.info && account.info.email ? account.info.email : 'N/A'}
-                  </TableCell>
-                  <TableCell>
-                    {account.createdDate ? new Date(account.createdDate).toLocaleDateString() : 'N/A'}
-                  </TableCell>
-                  <TableCell>
-                    <Button 
-                      variant="contained" 
-                      color="secondary" 
-                      onClick={() => deleteAccount(account.userId)}
-                    >
+                    <Button variant="contained" color="secondary" onClick={() => deleteAccount(account.id)}>
                       Xóa
                     </Button>
                     <Button 
-                      variant="contained" 
-                      color="primary" 
-                      onClick={() => resetPassword(account.info?.email)}
-                      style={{ marginLeft: '10px' }}
-                      // disabled={!account.info?.email} // Disable if email is not available
-                    >
-                      Cấp lại mật khẩu
-                    </Button>
+                  variant="contained" 
+                  color="primary" 
+                  onClick={() => resetPassword(account.email)}
+                  style={{ marginLeft: '20px' }}
+                >
+                  tạo lại mật khẩu
+                </Button>
                   </TableCell>
                 </TableRow>
               ))}

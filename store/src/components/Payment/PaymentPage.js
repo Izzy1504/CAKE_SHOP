@@ -149,59 +149,30 @@ const PaymentPage = () => {
               </li>
             </ul>
           )}
-          <button onClick={handleGoBack} style={{ marginTop: '50px' }}>Go Back</button>
+          <button onClick={handleGoBack} className={styles.goBackButton}>Go Back</button>
         </div>
         <div className={styles.customerInfo}>
           <h2>Customer Information</h2>
           <form onSubmit={handleSubmit}>
-            <div>
+            <div className={styles.formGroup}>
               <label>Name</label>
-              <input
-                type="text"
-                name="name"
-                value={customerInfo.name}
-                onChange={handleChange}
-                autoComplete="name"
-                readOnly
-              />
+              <p className={styles.infoText}>{customerInfo.name}</p>
             </div>
-            <div>
+            <div className={styles.formGroup}>
               <label>Phone</label>
-              <input
-                type="text"
-                name="phone"
-                value={customerInfo.phone}
-                onChange={handleChange}
-                autoComplete="tel"
-                readOnly
-              />
+              <p className={styles.infoText}>{customerInfo.phone}</p>
             </div>
-            <div>
+            <div className={styles.formGroup}>
               <label>Email</label>
-              <input
-                type="email"
-                name="email"
-                value={customerInfo.email}
-                onChange={handleChange}
-                autoComplete="email"
-                readOnly
-              />
+              <p className={styles.infoText}>{customerInfo.email}</p>
             </div>
-            <div>
+            <div className={styles.formGroup}>
               <label>Address</label>
-              <input
-                type="text"
-                name="address"
-                value={customerInfo.address}
-                onChange={handleChange}
-                autoComplete="street-address"
-                readOnly
-              />
+              <p className={styles.infoText}>{customerInfo.address}</p>
             </div>
-            <button type="button" onClick={() => navigate('/profile')}>Edit</button>
+            <button type="button" onClick={() => navigate('/userDetail')} className={styles.editButton}>Edit</button>
             <div className={styles.paymentMethods}>
               <h2>Payment Methods</h2>
-              {/*  */}
               <div>
                 <input
                   type="radio"
@@ -213,10 +184,8 @@ const PaymentPage = () => {
                 />
                 <label htmlFor="cod">Cash on Delivery</label>
               </div>
-              {/*  */}
             </div>
-            {/*  */}
-            <button type="submit">Submit Order</button>
+            <button type="submit" className={styles.submitButton}>Submit Order</button>
           </form>
         </div>
       </div>

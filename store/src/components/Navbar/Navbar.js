@@ -77,10 +77,9 @@ const Navbar = () => {
                         {
                             !hideCart &&(
                                 <div className={styles.cart}>
-
-                                <i className="fa-solid fa-cart-shopping fa-xl" onClick={handleCartClick}></i>
-                                <div className={styles.cartCounter}>{totalQty}</div>
-                    </div>
+                                    <i className="fa-solid fa-cart-shopping fa-xl" onClick={handleCartClick} style={{ transition: 'transform 0.2s', cursor: 'pointer' }}></i>
+                                    <div className={styles.cartCounter}>{totalQty}</div>
+                                </div>
                             )
                         }
                 </div>
