@@ -84,9 +84,27 @@ const UserDetail = () => {
     console.error("Lỗi vô cùng lỗi:", err);
     setError("Lỗi fetch nha ae.");
   }
+  
 };
+  
+    const fetchOrderHistory = async () => {
+      const url = "http://26.214.87.26:8080/api/orders";
+      const token = localStorage.getItem("token"); // Lấy token từ localStorage
 
+      try {
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log("Dữ liệu API trả về:", response.data);
+        setOrders(response.data.content); // Lưu lịch sử đơn hàng vào state
+      } catch (err) {
+        setError("Không thể tải lịch sử đơn hàng."); // Xử lý lỗi nếu API thất bại
+      }
+    };
 fetchUser();
+fetchOrderHistory();
 }, []);
 
 
