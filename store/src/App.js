@@ -34,11 +34,11 @@ function App() {
   const hideLayout = location.pathname === '/UserAccountPage';
   const hideCta = location.pathname === '/PaymentPage';
   const hideOrders = location.pathname === '/PaymentPage';
-  const hideLayout1 = location.pathname === '/admin';
+  const hideLayout1 = location.pathname === '/admin' || location.pathname === '/Admin';
   const hideLayout2 = location.pathname === '/admin/add-product';
   const hideLayout3 = matchPath('/admin/edit-product/:id', location.pathname);
   const hideLayout4 = location.pathname === '/admin/orders';;
-  const hideLayout5 = location.pathname === '/admin';
+  const hideLayout5 = location.pathname === '/admin' || location.pathname === '/Admin';
   const hideLayout6 = location.pathname === '/Login';
   const userDetailHide = location.pathname === '/userDetail' || location.pathname === '/order';
 
