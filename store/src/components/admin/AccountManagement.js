@@ -21,6 +21,7 @@ const AccountManagement = () => {
         },
       });
       if (response.status === 200) {
+        console.log("Fetched accounts:", response.data.content); // Debugging line
         setAccounts(response.data.content);
       }
     } catch (error) {
@@ -41,15 +42,12 @@ const AccountManagement = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setAccounts(accounts.filter(account => account.id !== id));
+      setAccounts(accounts.filter(account => account.userId !== id));
     } catch (error) {
       console.error("Error deleting account:", error);
     }
   };
 
-  useEffect(() => {
-    fetchAccounts();
-  }, []);
   const resetPassword = async (email) => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -67,9 +65,13 @@ const AccountManagement = () => {
       console.error("Error resetting password:", error);
     }
   };
+
+  useEffect(() => {
+    fetchAccounts();
+  }, []);
+
   return (
-    <div className={styles.accountManagement}>
-      <h2>Quản lý tài khoản</h2>
+    <div>
       {accounts.length === 0 ? (
         <p className={styles.noAccounts}>Chưa có tài khoản nào</p>
       ) : (
@@ -89,20 +91,29 @@ const AccountManagement = () => {
                 <TableRow key={account.userId}>
                   <TableCell>{account.userId}</TableCell>
                   <TableCell>{account.username}</TableCell>
-                  <TableCell>{account.email}</TableCell>
-                  <TableCell>{new Date(account.createdAt).toLocaleDateString()}</TableCell>
                   <TableCell>
-                    <Button variant="contained" color="secondary" onClick={() => deleteAccount(account.id)}>
+                    {account.info && account.info.email ? account.info.email : 'N/A'}
+                  </TableCell>
+                  <TableCell>
+                    {account.createdDate ? new Date(account.createdDate).toLocaleDateString() : 'N/A'}
+                  </TableCell>
+                  <TableCell>
+                    <Button 
+                      variant="contained" 
+                      color="secondary" 
+                      onClick={() => deleteAccount(account.userId)}
+                    >
                       Xóa
                     </Button>
                     <Button 
-                  variant="contained" 
-                  color="primary" 
-                  onClick={() => resetPassword(account.email)}
-                  style={{ marginLeft: '20px' }}
-                >
-                  tạo lại mật khẩu
-                </Button>
+                      variant="contained" 
+                      color="primary" 
+                      onClick={() => resetPassword(account.info?.email)}
+                      style={{ marginLeft: '10px' }}
+                      // disabled={!account.info?.email} // Disable if email is not available
+                    >
+                      Cấp lại mật khẩu
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
