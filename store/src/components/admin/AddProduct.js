@@ -8,7 +8,7 @@ import styles from './AddProduct.module.scss';
 const AddProduct = () => {
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState("BÁNH MÌ - BÁNH NGỌT");
   const [imageFiles, setImageFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   const backendURL = 'http://26.214.87.26:8080';
@@ -81,7 +81,6 @@ const AddProduct = () => {
           <input
             type="text"
             value={category}
-            defaultValue="BÁNH MÌ - BÁNH NGỌT"
             onChange={(e) => setCategory(e.target.value)}
             required
             hidden
