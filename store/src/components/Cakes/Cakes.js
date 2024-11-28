@@ -8,7 +8,7 @@ const Cakes = () => {
   const [cakes, setCakes] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const pageSize = 10; // Số lượng sản phẩm mỗi trang
+  const pageSize = 12; // Số lượng sản phẩm mỗi trang
   const { cakeRef } = useContext(StateContext);
 
   const backendURL = 'http://26.214.87.26:8080';
