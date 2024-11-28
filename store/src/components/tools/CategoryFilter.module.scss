@@ -1,0 +1,30 @@
+/* src/components/tools/CategoryFilter.module.scss */
+.filterButton {
+  margin-bottom: 20px;
+  color: #555555;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+ 
+}
+
+.filterIcon {
+  color: #33e9f0;
+  margin-left: 100px;
+}
+
+.dialog {
+  .MuiDialog-paper {
+    padding: 20px;
+    border-radius: 8px;
+  }
+}
+
+.formControl {
+  margin-top: 10px;
+  
+}

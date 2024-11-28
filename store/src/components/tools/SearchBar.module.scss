@@ -1,0 +1,24 @@
+/* src/components/tools/SearchBar.module.scss */
+.searchBarContainer {
+  margin-bottom: 10px;
+  width: 100%;
+  margin-left: 100px;
+}
+
+.searchField {
+  background-color: #ffffff;
+  border-radius: 8px;
+  
+
+  .MuiOutlinedInput-root {
+    border-radius: 8px;
+  }
+
+  input::placeholder {
+    color: #757575;
+  }
+}
+
+.searchIcon {
+  color: #757575;
+}

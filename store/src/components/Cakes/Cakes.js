@@ -1,18 +1,28 @@
-import React, { useState, useEffect,useContext } from 'react';
+// src/components/Cakes/Cakes.js
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import styles from './Cakes.module.scss';
 import { StateContext } from '../../context/StateContextProvider';
+import SearchBar from '../tools/SearchBar';
+import CategoryFilter from '../tools/CategoryFilter';
+import { Grid, Card, CardContent, CardMedia, Typography, Button } from '@mui/material';
 
 const Cakes = () => {
   const [cakes, setCakes] = useState([]);
+  const [filteredCakes, setFilteredCakes] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const pageSize = 10; // Số lượng sản phẩm mỗi trang
   const { cakeRef } = useContext(StateContext);
 
-  const backendURL = 'http://26.214.87.26:8080';
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
+  const backendURL = 'http://26.214.87.26:8080';
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
   const fetchProducts = async (page = 0, size = pageSize) => {
     try {
       const response = await axios.get(`${backendURL}/api/products?page=${page}&size=${size}`);
@@ -20,17 +30,44 @@ const Cakes = () => {
         setCakes(response.data.content);
         setCurrentPage(response.data.page.number);
         setTotalPages(response.data.page.totalPages);
-        scrollToTop(); // Cuộn lên đầu trang sau khi tải dữ liệu mới
+        // applyFilters(response.data.content);
       }
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error('Error fetching products:', error);
     }
   };
 
   useEffect(() => {
     fetchProducts();
+    // eslint-disable-next-line
   }, []);
 
+  useEffect(() => {
+    applyFilters(cakes);
+  }, [cakes, searchQuery, selectedCategories]);
+
+  
+  const applyFilters = (cakesList) => {
+    let updatedCakes = [...cakesList];
+  
+    // Filter by search query
+    if (searchQuery.trim() !== '') {
+      updatedCakes = updatedCakes.filter((cakes) =>
+        cakes.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+  
+    // Filter by selected categories
+    if (selectedCategories.length > 0) {
+      updatedCakes = updatedCakes.filter((cake) =>
+        selectedCategories.includes(cake.category.name)
+      );
+    }
+  
+    // Update the filteredCakes state
+    setFilteredCakes(updatedCakes);
+  };
+ 
   const handlePrevious = () => {
     if (currentPage > 0) {
       const newPage = currentPage - 1;
@@ -44,21 +81,18 @@ const Cakes = () => {
       fetchProducts(newPage);
     }
   };
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
+   // Inside the return statement of Cakes.js
   return (
-    <div>
-      <section ref={cakeRef} id="cakes-section" className={styles.cakesMenu}>
-        <div className={styles.cakesWrapper}>
-          <h2>Our Cakes</h2>
-          <div className={styles.dividerLine}></div>
-        </div>
-      </section>
+    <div ref={cakeRef} className={styles.cakesContainer}>
+      <div className={styles.controls}>
+        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        <CategoryFilter
+          selectedCategories={selectedCategories}
+          setSelectedCategories={setSelectedCategories}
+        />
+      </div>
       <div className={styles.listProducts}>
-        {cakes.map((item) => (
+        {filteredCakes.map((item) => (
           <div key={item.id} className={styles.card}>
             <Link to={`/cake-details/${item.id}`} onClick={scrollToTop}>
               <div>
@@ -70,12 +104,12 @@ const Cakes = () => {
           </div>
         ))}
       </div>
-      
+  
       {/* Phần điều hướng phân trang */}
       <div className={styles.pagination}>
-        <button 
+        <button
           type="button"
-          onClick={handlePrevious} 
+          onClick={handlePrevious}
           disabled={currentPage === 0}
           className={styles.paginationButton}
         >
@@ -84,9 +118,9 @@ const Cakes = () => {
         <span className={styles.pageInfo}>
           Trang {currentPage + 1} của {totalPages}
         </span>
-        <button 
+        <button
           type="button"
-          onClick={handleNext} 
+          onClick={handleNext}
           disabled={currentPage >= totalPages - 1}
           className={styles.paginationButton}
         >
@@ -96,5 +130,6 @@ const Cakes = () => {
     </div>
   );
 };
+
 
 export default Cakes;
