@@ -232,7 +232,7 @@ fetchOrderHistory();
               <p>Bạn có chắc chắn muốn lưu các thay đổi?</p>
               <div className="modal-buttons">
                 {/* <button className="btn save" onClick={handleSave}> */}
-                <button className="btn save">
+                <button className="btn save" onClick={handleSave}>
                   Đồng ý
                 </button>
                 <button
