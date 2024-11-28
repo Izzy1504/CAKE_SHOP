@@ -40,11 +40,12 @@ function App() {
   const hideLayout4 = location.pathname === '/admin/orders';;
   const hideLayout5 = location.pathname === '/admin' || location.pathname === '/Admin';
   const hideLayout6 = location.pathname === '/Login';
+  const hideLayout7 = location.pathname === '/admin/products';
   const userDetailHide = location.pathname === '/userDetail' || location.pathname === '/order';
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {!hideCta && !hideLayout && !hideLayout1 && !hideLayout2 && !hideLayout3 && !hideLayout4 && <Navbar />}
+      {!hideCta && !hideLayout7 && !hideLayout && !hideLayout1 && !hideLayout2 && !hideLayout3 && !hideLayout4 && <Navbar />}
       {showCart && !hideOrders && !hideLayout1 && !hideLayout2 && !hideLayout3 && <Orders />}
       <Routes>
         <Route path='/' element={<LandingPage />} />

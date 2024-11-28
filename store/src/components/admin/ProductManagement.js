@@ -1,6 +1,6 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useStateContext } from "../../context/StateContextProvider";
 import styles from "./ProductManagement.module.scss";
 import axios from "axios";
@@ -8,19 +8,29 @@ import axios from "axios";
 const ProductManagement = () => {
   const { formatPrice } = useStateContext();
   const [cakes, setCakes] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const pageSize = 10; // Số lượng sản phẩm mỗi trang
   const backendURL = 'http://26.214.87.26:8080';
   const navigate = useNavigate();
+  const location = useLocation(); // Get the current location
 
-  const fetchProducts = async () => {
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async (page = 0, size = pageSize) => {
     const token = localStorage.getItem('token'); // Retrieve the token from localStorage
     try {
-      const response = await axios.get(`${backendURL}/api/products`, {
+      const response = await axios.get(`${backendURL}/api/products?page=${page}&size=${size}`, {
         headers: {
           'Authorization': `Bearer ${token}` // Include the token in the request headers
         }
       });
       if (response.status === 200) {
         setCakes(response.data.content);
+        setCurrentPage(response.data.page.number);
+        setTotalPages(response.data.page.totalPages);
       }
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -41,9 +51,19 @@ const ProductManagement = () => {
     }
   };
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+  const handlePrevious = () => {
+    if (currentPage > 0) {
+      const newPage = currentPage - 1;
+      fetchProducts(newPage);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentPage < totalPages - 1) {
+      const newPage = currentPage + 1;
+      fetchProducts(newPage);
+    }
+  };
 
   return (
     <div className={styles.productManagement}>
@@ -51,25 +71,30 @@ const ProductManagement = () => {
       <Button variant="contained" color="primary" onClick={() => navigate('/admin/add-product')}>
         Thêm sản phẩm
       </Button>
+      {location.pathname !== '/admin' && (
+        <Button variant="contained" color="secondary" onClick={() => navigate('/admin')} style={{ marginLeft: '10px' }}>
+          Back
+        </Button>
+      )}
       <TableContainer component={Paper} className={styles.tableContainer}>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>Image</TableCell>
               <TableCell>Tên sản phẩm</TableCell>
-              <TableCell>Số lượng</TableCell>
+              {/* <TableCell>Số lượng</TableCell> */}
               <TableCell>Giá</TableCell>
               <TableCell>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {cakes.map((cake) => (
+            {cakes.map(cake => (
               <TableRow key={cake.id}>
                 <TableCell>
                   <img src={cake.images} alt={cake.name} className={styles.productImage} />
                 </TableCell>
                 <TableCell>{cake.name}</TableCell>
-                <TableCell>{cake.quantity}</TableCell>
+                {/* <TableCell>{cake.quantity}</TableCell> */}
                 <TableCell>{formatPrice(cake.price)}</TableCell>
                 <TableCell>
                   <Button variant="contained" color="secondary" className={styles.actionButton} onClick={() => deleteProduct(cake.id)}>
@@ -84,6 +109,29 @@ const ProductManagement = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Phần điều hướng phân trang */}
+      <div className={styles.pagination}>
+        <button 
+          type="button"
+          onClick={handlePrevious} 
+          disabled={currentPage === 0}
+          className={styles.paginationButton}
+        >
+          Trước
+        </button>
+        <span className={styles.pageInfo}>
+          Trang {currentPage + 1} của {totalPages}
+        </span>
+        <button 
+          type="button"
+          onClick={handleNext} 
+          disabled={currentPage >= totalPages - 1}
+          className={styles.paginationButton}
+        >
+          Sau
+        </button>
+      </div>
     </div>
   );
 };

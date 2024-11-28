@@ -309,3 +309,36 @@ span.activeCategory {
         }
     }
 }
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.paginationButton {
+  background-color: #31e1f8;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 0 10px;
+  border-radius: 20px; /* Tăng border-radius để bo tròn hơn */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; /* Thêm transition cho transform và box-shadow */
+}
+
+.paginationButton:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  border-radius: 20px; /* Đảm bảo trạng thái disabled cũng có bo tròn */
+}
+
+.paginationButton:hover:not(:disabled) {
+  background-color: #b61ff1;
+  transform: scale(1.05); /* Hiệu ứng phóng to nhẹ khi hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Thêm bóng đổ */
+}
+
+.pageInfo {
+  font-size: 16px;
+}

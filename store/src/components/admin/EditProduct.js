@@ -10,7 +10,7 @@ const EditProduct = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [initialProduct, setInitialProduct] = useState({});
   const backendURL = 'http://26.214.87.26:8080';
@@ -30,7 +30,7 @@ const EditProduct = () => {
           setName(product.name);
           setPrice(product.price);
           setCategory(product.category);
-          setImagePreview(product.imageUrl); // Assuming the product has an imageUrl field
+          setImagePreview(product.images[0]); // Assuming the product has an images array
           setInitialProduct(product);
         }
       } catch (error) {
@@ -58,8 +58,11 @@ const EditProduct = () => {
     formData.append('name', name);
     formData.append('price', parseFloat(price));
     formData.append('category', category);
+
     if (image) {
-      formData.append('image', image);
+      formData.append('images', image);
+    } else {
+      formData.append('images', initialProduct.images[0]); // Use the existing image URL if the image is not changed
     }
 
     const token = localStorage.getItem('token'); // Retrieve the token from localStorage
@@ -73,10 +76,13 @@ const EditProduct = () => {
       });
 
       if (response.status === 200) {
-        toast.success('Product updated successfully!');
-        navigate('/admin/products'); // Redirect to the products page
+        toast.success('Product updated successfully!', {
+          onClose: () => navigate('/admin/products') // Navigate to product management page after the toast is closed
+        });
+        console.log('Product updated successfully:', response.data); // Log the response data
       } else {
         toast.error('Failed to update product.');
+        console.error('Failed to update product:', response.data); // Log the response data
       }
     } catch (error) {
       console.error('Error updating product:', error);

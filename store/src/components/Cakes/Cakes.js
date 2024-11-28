@@ -1,20 +1,25 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import styles from './Cakes.module.scss';
 
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useStateContext } from "../../context/StateContextProvider";
-import styles from "./Cakes.module.scss";
-import axios from "axios";
-
-const CakeList = () => {
-  const { scrollToTop, cakeRef } = useStateContext();
+const Cakes = () => {
   const [cakes, setCakes] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const pageSize = 10; // Số lượng sản phẩm mỗi trang
+  const cakeRef = useRef(null);
+
   const backendURL = 'http://26.214.87.26:8080';
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (page = 0, size = pageSize) => {
     try {
-      const response = await axios.get(`${backendURL}/api/products`);
+      const response = await axios.get(`${backendURL}/api/products?page=${page}&size=${size}`);
       if (response.status === 200) {
         setCakes(response.data.content);
+        setCurrentPage(response.data.page.number);
+        setTotalPages(response.data.page.totalPages);
+        scrollToTop(); // Cuộn lên đầu trang sau khi tải dữ liệu mới
       }
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -24,6 +29,24 @@ const CakeList = () => {
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  const handlePrevious = () => {
+    if (currentPage > 0) {
+      const newPage = currentPage - 1;
+      fetchProducts(newPage);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentPage < totalPages - 1) {
+      const newPage = currentPage + 1;
+      fetchProducts(newPage);
+    }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <div>
@@ -37,8 +60,8 @@ const CakeList = () => {
         {cakes.map((item) => (
           <div key={item.id} className={styles.card}>
             <Link to={`/cake-details/${item.id}`} onClick={scrollToTop}>
-              <div key={item.id}>
-                <img className={styles.cakeImage} src={item.images} alt="" />
+              <div>
+                <img className={styles.cakeImage} src={item.images} alt={item.name} />
                 <p className={styles.namePriceProducts}>{item.name}</p>
                 <p className={styles.namePriceProducts}>{item.price} vnđ</p>
               </div>
@@ -46,8 +69,31 @@ const CakeList = () => {
           </div>
         ))}
       </div>
+      
+      {/* Phần điều hướng phân trang */}
+      <div className={styles.pagination}>
+        <button 
+          type="button"
+          onClick={handlePrevious} 
+          disabled={currentPage === 0}
+          className={styles.paginationButton}
+        >
+          Trước
+        </button>
+        <span className={styles.pageInfo}>
+          Trang {currentPage + 1} của {totalPages}
+        </span>
+        <button 
+          type="button"
+          onClick={handleNext} 
+          disabled={currentPage >= totalPages - 1}
+          className={styles.paginationButton}
+        >
+          Sau
+        </button>
+      </div>
     </div>
   );
 };
 
-export default CakeList;
+export default Cakes;
