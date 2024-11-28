@@ -16,9 +16,11 @@ const Navbar = () => {
         if (token) {
             setIsLoggedIn(true);
             setUsername(storedUsername);
+        } else {
+            setIsLoggedIn(false);
+            setUsername("");
         }
-    }, []);
-
+    }, [location]); 
     const handleLogout = () => {
         // Clear the token from localStorage
         localStorage.removeItem('token');
