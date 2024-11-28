@@ -13,7 +13,7 @@ const Cakes = () => {
   const [filteredCakes, setFilteredCakes] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const pageSize = 10; // Số lượng sản phẩm mỗi trang
+  const pageSize = 12; // Số lượng sản phẩm mỗi trang
   const { cakeRef } = useContext(StateContext);
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -30,7 +30,7 @@ const Cakes = () => {
         setCakes(response.data.content);
         setCurrentPage(response.data.page.number);
         setTotalPages(response.data.page.totalPages);
-        // applyFilters(response.data.content);
+        scrollToTop(); // Cuộn lên đầu trang sau khi tải dữ liệu mới
       }
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -81,7 +81,11 @@ const Cakes = () => {
       fetchProducts(newPage);
     }
   };
-   // Inside the return statement of Cakes.js
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div ref={cakeRef} className={styles.cakesContainer}>
       <div className={styles.controls}>
