@@ -1,10 +1,11 @@
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import {  NavLink, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useStateContext } from '../../context/StateContextProvider';
 import styles from '../Navbar/Navbar.module.scss';
 import { FaUserCircle } from 'react-icons/fa';
- 
+
 const Navbar = () => {
+    // const { handleScrollToProducts } = useContext(StateContext);
     const { handleCartClick, isNavOpen, handleNavLinks, handleNavMenu, totalQty } = useStateContext();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState("");

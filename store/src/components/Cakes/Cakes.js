@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import styles from './Cakes.module.scss';
+import { StateContext } from '../../context/StateContextProvider';
 
 const Cakes = () => {
   const [cakes, setCakes] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const pageSize = 10; // Số lượng sản phẩm mỗi trang
-  const cakeRef = useRef(null);
+  const { cakeRef } = useContext(StateContext);
 
   const backendURL = 'http://26.214.87.26:8080';
 
