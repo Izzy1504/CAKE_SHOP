@@ -20,7 +20,8 @@ const Cakes = () => {
         setCakes(response.data.content);
         setCurrentPage(response.data.page.number);
         setTotalPages(response.data.page.totalPages);
-        scrollToTop(); // Cuộn lên đầu trang sau khi tải dữ liệu mới
+        // scrollToTop(); // Cuộn lên đầu trang sau khi tải dữ liệu mới
+        scrollToCakes();
       }
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -47,6 +48,10 @@ const Cakes = () => {
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const scrollToCakes = () => {
+    window.scrollTo({ top: cakeRef.current.offsetTop - 55, behavior: 'smooth' });
   };
 
   return (
