@@ -77,12 +77,14 @@ const AddProduct = () => {
           />
         </div>
         <div>
-          <label>Danh mục</label>
+          {/* <label>Danh mục</label> */}
           <input
             type="text"
             value={category}
+            defaultValue="BÁNH MÌ - BÁNH NGỌT"
             onChange={(e) => setCategory(e.target.value)}
             required
+            hidden
           />
         </div>
         <div>
