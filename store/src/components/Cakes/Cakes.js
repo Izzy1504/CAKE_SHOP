@@ -82,9 +82,6 @@ const Cakes = () => {
     }
   };
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
   return (
     <div ref={cakeRef} className={styles.cakesContainer}>
