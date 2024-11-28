@@ -84,7 +84,7 @@ const UserDetail = () => {
     console.error("Lỗi vô cùng lỗi:", err);
     setError("Lỗi fetch nha ae.");
   }
-  
+  console.log(token);
 };
   
     const fetchOrderHistory = async () => {
@@ -118,8 +118,8 @@ fetchOrderHistory();
   };
 
   const handleSave = async () => {
-    const url = "http://26.214.87.26:8080/api/users/update"; // Thay đổi URL API nếu cần
-    const token = "YOUR_BEARER_TOKEN";
+    const url = "http://26.214.87.26:8080/api/users"; // Thay đổi URL API nếu cần
+    const token = localStorage.getItem("token"); // Lấy token từ localStorage
 
     try {
       await axios.put(
