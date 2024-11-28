@@ -7,10 +7,11 @@ export default function StateContextProvider({ children }) {
   const [quantity, setQuantity] = useState(1);
   const [totalQty, setTotalQty] = useState(0);
   const [showCart, setShowCart] = useState(false);
-  const [cake, setCake] = useState(null);
+  const [cake] = useState(null);
+  // const [cake, setCake] = useState(null);
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  const cakeRef = useRef();
+  const cakeRef = useRef(null);
 
   useEffect(() => {
     console.log('Initial cartItems:', cartItems);
@@ -71,11 +72,10 @@ export default function StateContextProvider({ children }) {
 
   const handleScrollToProducts = () => {
     if (cakeRef.current) {
-      cakeRef.current.scrollIntoView({ behavior: 'smooth' });
+      cakeRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
     setShowCart(false); // Ẩn giỏ hàng
   };
-
   const clearCart = () => {
     setCartItems([]);
     setTotalPrice(0);

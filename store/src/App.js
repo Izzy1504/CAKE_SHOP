@@ -22,7 +22,8 @@ import AddProduct from './components/admin/AddProduct';
 import EditProduct from './components/admin/EditProduct';
 import OrderUser from './components/Orders/OrderUser';
 import OrderDetail from './components/Orders/OrderDetail';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function App() {
   const { showCart } = useStateContext();
   const location = useLocation();
@@ -40,12 +41,24 @@ function App() {
   const hideLayout4 = location.pathname === '/admin/orders';;
   const hideLayout5 = location.pathname === '/admin' || location.pathname === '/Admin';
   const hideLayout6 = location.pathname === '/Login';
+  const hideLayout7 = location.pathname === '/admin/products';
   const userDetailHide = location.pathname === '/userDetail' || location.pathname === '/order';
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {!hideCta && !hideLayout && !hideLayout1 && !hideLayout2 && !hideLayout3 && !hideLayout4 && <Navbar />}
+      {!hideCta && !hideLayout7 && !hideLayout && !hideLayout1 && !hideLayout2 && !hideLayout3 && !hideLayout4 && <Navbar />}
       {showCart && !hideOrders && !hideLayout1 && !hideLayout2 && !hideLayout3 && <Orders />}
+      <ToastContainer 
+          position="top-right"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       <Routes>
         <Route path='/' element={<LandingPage />} />
         <Route path='/about' element={<About />} />

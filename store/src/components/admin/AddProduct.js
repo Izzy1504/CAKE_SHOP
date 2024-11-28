@@ -8,7 +8,7 @@ import styles from './AddProduct.module.scss';
 const AddProduct = () => {
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
-  const [category, setCategory] = useState("BÁNH MÌ - BÁNH NGỌT");
+  const [category, setCategory] = useState('BÁNH MÌ - BÁNH NGỌT');
   const [imageFiles, setImageFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   const backendURL = 'http://26.214.87.26:8080';
@@ -43,9 +43,11 @@ const AddProduct = () => {
 
       if (response.status === 201) {
         toast.success('Product added successfully!');
-        navigate('/admin/products'); // Redirect to the products page
+        navigate('/admin/products'); // Chuyển hướng ngay lập tức
+        console.log('Product added successfully:', response.data); // Log the response data
       } else {
         toast.error('Failed to add product.');
+        console.error('Failed to add product:', response.data); // Log the response data
       }
     } catch (error) {
       console.error('Error adding product:', error);
@@ -77,7 +79,6 @@ const AddProduct = () => {
           />
         </div>
         <div>
-          {/* <label>Danh mục</label> */}
           <input
             type="text"
             value={category}
