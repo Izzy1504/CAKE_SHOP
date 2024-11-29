@@ -73,7 +73,7 @@ const User2 = () => {
 
           // Lưu username vào localStorage
           localStorage.setItem('username', userInfo.username || '');
-
+          localStorage.setItem('roles', JSON.stringify(roles));
           if (roles.includes('ADMIN')) {
             // Thêm thông báo trước khi điều hướng
             toast.info("Bạn đang đăng nhập với tư cách quản trị.", { autoClose: 3000 });

@@ -24,6 +24,7 @@ import OrderUser from './components/Orders/OrderUser';
 import OrderDetail from './components/Orders/OrderDetail';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ProtectedRoute from './ProtectRoute';
 function App() {
   const { showCart } = useStateContext();
   const location = useLocation();
@@ -68,7 +69,14 @@ function App() {
         <Route path='/UserAccountPage' element={<UserAccountPage />} />
         <Route path='/Login' element={<Login />} />
         <Route path='/PaymentPage' element={<PaymentPage />} />
-        <Route path='/admin' element={<Admin />} />
+        <Route
+          path='/admin'
+          element={
+            <ProtectedRoute requiredRole="ADMIN">
+              <Admin />
+            </ProtectedRoute>
+          }
+        />
         <Route path='/admin/products' element={<ProductManagement />} />
         <Route path='/admin/add-product' element={<AddProduct />} />
         <Route path='/admin/edit-product/:id' element={<EditProduct />} />
