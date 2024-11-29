@@ -101,14 +101,6 @@ const CategoryFilter = ({
       <Dialog open={open} onClose={handleClose} className={styles.dialog}>
         <DialogTitle>Lọc Sản Phẩm</DialogTitle>
         <DialogContent>
-          <TextField
-            label="Tìm kiếm"
-            variant="outlined"
-            fullWidth
-            value={searchQuery}
-            onChange={handleSearchChange}
-            className={styles.searchField}
-          />
           <FormControl
             fullWidth
             variant="outlined"
