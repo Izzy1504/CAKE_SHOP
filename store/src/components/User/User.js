@@ -28,56 +28,57 @@ const UserAccountPage = () => {
   const [registrationError, setRegistrationError] = useState("");
   const [registrationSuccess, setRegistrationSuccess] = useState("");
 
+  
   useEffect(() => {
-    // Fetch cities from API
-    fetch("https://vn-public-apis.fpo.vn/provinces/getAll?limit=-1")
+    // Fetch cities from new API with depth=2
+    fetch("https://provinces.open-api.vn/api/?depth=2")
       .then((response) => response.json())
-      .then((data) => setCities(data.data.data))
+      .then((data) => {
+        setCities(data);
+      })
       .catch((error) => console.error("Error fetching cities:", error));
   }, []);
 
   const handleCityChange = (e) => {
     const { name, value } = e.target;
-    const selectedCity = cities.find(city => city.code === value);
-    setCityName(selectedCity ? selectedCity.name : "");
-    setFormData((prevData) => ({
+    const selectedCity = cities.find(city => String(city.code) === value);
+    setFormData(prevData => ({
       ...prevData,
       [name]: value,
       district: "",
       ward: "",
     }));
+    setDistricts(selectedCity ? selectedCity.districts : []);
+    setWards([]);
     validateField(name, value);
-
-    // Fetch districts based on selected city
-    fetch(`https://vn-public-apis.fpo.vn/districts/getByProvince?provinceCode=${value}&limit=-1`)
-      .then((response) => response.json())
-      .then((data) => setDistricts(data.data.data))
-      .catch((error) => console.error("Error fetching districts:", error));
   };
 
   const handleDistrictChange = (e) => {
     const { name, value } = e.target;
-    const selectedDistrict = districts.find(district => district.code === value);
-    setDistrictName(selectedDistrict ? selectedDistrict.name : "");
-    setFormData((prevData) => ({
+    const selectedDistrict = districts.find(district => String(district.code) === value);
+    setFormData(prevData => ({
       ...prevData,
       [name]: value,
       ward: "",
     }));
     validateField(name, value);
 
-    // Fetch wards based on selected district
-    fetch(`https://vn-public-apis.fpo.vn/wards/getByDistrict?districtCode=${value}&limit=-1`)
-      .then((response) => response.json())
-      .then((data) => setWards(data.data.data))
-      .catch((error) => console.error("Error fetching wards:", error));
+    if (selectedDistrict) {
+      // Fetch wards for selected district
+      fetch(`https://provinces.open-api.vn/api/d/${value}?depth=2`)
+        .then((response) => response.json())
+        .then((data) => {
+          setWards(data.wards);
+        })
+        .catch((error) => console.error("Error fetching wards:", error));
+    } else {
+      setWards([]);
+    }
   };
 
   const handleWardChange = (e) => {
     const { name, value } = e.target;
-    const selectedWard = wards.find(ward => ward.code === value);
-    setWardName(selectedWard ? selectedWard.name : "");
-    setFormData((prevData) => ({
+    setFormData(prevData => ({
       ...prevData,
       [name]: value,
     }));

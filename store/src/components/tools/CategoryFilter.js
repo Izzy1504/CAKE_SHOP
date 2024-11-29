@@ -1,5 +1,5 @@
 // src/components/tools/CategoryFilter.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   IconButton,
   Dialog,
@@ -14,16 +14,21 @@ import {
   OutlinedInput,
   DialogActions,
   Button,
-} from '@mui/material';
-import FilterListIcon from '@mui/icons-material/FilterList'; // Đảm bảo đã cài đặt và import đúng
-import axios from 'axios';
-import styles from './CategoryFilter.module.scss';
+} from "@mui/material";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import axios from "axios";
+import styles from "./CategoryFilter.module.scss";
 
-const CategoryFilter = ({ selectedCategories, setSelectedCategories }) => {
+const CategoryFilter = ({
+  selectedCategories,
+  setSelectedCategories,
+  sortOrder,
+  setSortOrder,
+}) => {
   const [categories, setCategories] = useState([]);
   const [open, setOpen] = useState(false);
 
-  const backendURL = 'http://26.214.87.26:8080';
+  const backendURL = "http://26.214.87.26:8080";
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -33,7 +38,7 @@ const CategoryFilter = ({ selectedCategories, setSelectedCategories }) => {
           setCategories(response.data);
         }
       } catch (error) {
-        console.error('Error fetching categories:', error);
+        console.error("Error fetching categories:", error);
       }
     };
 
@@ -44,7 +49,7 @@ const CategoryFilter = ({ selectedCategories, setSelectedCategories }) => {
     const {
       target: { value },
     } = event;
-    setSelectedCategories(typeof value === 'string' ? value.split(',') : value);
+    setSelectedCategories(typeof value === "string" ? value.split(",") : value);
   };
 
   const handleOpen = () => {
@@ -57,32 +62,54 @@ const CategoryFilter = ({ selectedCategories, setSelectedCategories }) => {
 
   return (
     <>
-      <IconButton
-        aria-label="filter categories"
-        onClick={handleOpen}
-        className={styles.filterButton}
-      >
-        <FilterListIcon className={styles.filterIcon} />
-      </IconButton>
+      
+        <FilterListIcon  onClick={handleOpen} className={styles.filterIcon} />
+     
 
       <Dialog open={open} onClose={handleClose} className={styles.dialog}>
-        <DialogTitle>Chọn Loại Bánh</DialogTitle>
+        <DialogTitle>Lọc Sản Phẩm</DialogTitle>
         <DialogContent>
-          <FormControl fullWidth variant="outlined" className={styles.formControl}>
+          <FormControl
+            fullWidth
+            variant="outlined"
+            className={styles.formControl}
+          >
             <InputLabel>Loại bánh</InputLabel>
             <Select
               multiple
               value={selectedCategories}
               onChange={handleChange}
               input={<OutlinedInput label="Loại bánh" />}
-              renderValue={(selected) => selected.join(', ')}
+              renderValue={(selected) => selected.join(", ")}
             >
               {categories.map((category) => (
                 <MenuItem key={category.id} value={category.name}>
-                  <Checkbox checked={selectedCategories.indexOf(category.name) > -1} />
+                  <Checkbox
+                    checked={selectedCategories.indexOf(category.name) > -1}
+                  />
                   <ListItemText primary={category.name} />
                 </MenuItem>
               ))}
+            </Select>
+          </FormControl>
+
+          <FormControl
+            fullWidth
+            variant="outlined"
+            className={styles.formControl}
+            margin="normal"
+          >
+            <InputLabel>Sắp xếp</InputLabel>
+            <Select
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value)}
+              label="Sắp xếp"
+            >
+              <MenuItem value="">
+                <em>GAY</em>
+              </MenuItem>
+              <MenuItem value="priceAsc">Giá: Thấp đến Cao</MenuItem>
+              <MenuItem value="priceDesc">Giá: Cao đến Thấp</MenuItem>
             </Select>
           </FormControl>
         </DialogContent>

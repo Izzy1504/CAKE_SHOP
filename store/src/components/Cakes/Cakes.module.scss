@@ -358,3 +358,10 @@ span.activeCategory {
     }
   }
 }
+
+.searchFilterContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px; // Adjust the gap to 3px
+}

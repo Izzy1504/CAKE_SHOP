@@ -1,20 +1,11 @@
 /* src/components/tools/CategoryFilter.module.scss */
-.filterButton {
-  margin-bottom: 20px;
-  color: #555555;
-  background-color: #ffffff;
-  border: 1px solid #cccccc;
-  border-radius: 8px;
-
-  &:hover {
-    background-color: #f0f0f0;
-  }
- 
-}
 
 .filterIcon {
   color: #33e9f0;
-  margin-left: 100px;
+  cursor: pointer; // Make the icon clickable
+  margin-right: 990px; // Adjust the spacing as needed
+  position: relative; // Adjust position as needed
+  margin-bottom: 20px;
 }
 
 .dialog {
@@ -26,5 +17,4 @@
 
 .formControl {
   margin-top: 10px;
-  
 }

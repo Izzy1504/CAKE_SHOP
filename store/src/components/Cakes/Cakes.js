@@ -6,7 +6,6 @@ import styles from './Cakes.module.scss';
 import { StateContext } from '../../context/StateContextProvider';
 import SearchBar from '../tools/SearchBar';
 import CategoryFilter from '../tools/CategoryFilter';
-import { Grid, Card, CardContent, CardMedia, Typography, Button } from '@mui/material';
 
 const Cakes = () => {
   const [cakes, setCakes] = useState([]);
@@ -18,19 +17,37 @@ const Cakes = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategories, setSelectedCategories] = useState([]);
-
+  const [sortOrder, setSortOrder] = useState('');
   const backendURL = 'http://26.214.87.26:8080';
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-  const fetchProducts = async (page = 0, size = pageSize) => {
+
+   const fetchProducts = async (page = 0, size = pageSize, fetchAll = false) => {
     try {
-      const response = await axios.get(`${backendURL}/api/products?page=${page}&size=${size}`);
+      let url = '';
+      let sortParam = '';
+  
+      // Thiết lập tham số sắp xếp
+      if (sortOrder === 'priceAsc') {
+        sortParam = '&sort=price,asc';
+      } else if (sortOrder === 'priceDesc') {
+        sortParam = '&sort=price,desc';
+      }
+  
+      if (fetchAll) {
+        url = `${backendURL}/api/products?size=10000${sortParam}`;
+      } else {
+        url = `${backendURL}/api/products?page=${page}&size=${size}${sortParam}`;
+      }
+  
+      const response = await axios.get(url);
       if (response.status === 200) {
         setCakes(response.data.content);
-        setCurrentPage(response.data.page.number);
-        setTotalPages(response.data.page.totalPages);
-        scrollToTop(); // Cuộn lên đầu trang sau khi tải dữ liệu mới
+        if (!fetchAll) {
+          setCurrentPage(response.data.page.number);
+          setTotalPages(response.data.page.totalPages);
+        } else {
+          setCurrentPage(0);
+          setTotalPages(1);
+        }
       }
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -38,59 +55,71 @@ const Cakes = () => {
   };
 
   useEffect(() => {
-    fetchProducts();
+    if (searchQuery.trim() !== '' || selectedCategories.length > 0) {
+      // Khi có tìm kiếm hoặc lọc, lấy tất cả sản phẩm
+      fetchProducts(0, pageSize, true);
+    } else {
+      // Ngược lại, lấy sản phẩm theo phân trang
+      fetchProducts(currentPage, pageSize, false);
+    }
     // eslint-disable-next-line
-  }, []);
-
+  }, [searchQuery, selectedCategories]);
+  // useEffect cho sắp xếp
+useEffect(() => {
+  // Khi `sortOrder` thay đổi, lấy sản phẩm theo trang hiện tại
+  fetchProducts(currentPage, pageSize, false);
+}, [sortOrder]);
   useEffect(() => {
     applyFilters(cakes);
-  }, [cakes, searchQuery, selectedCategories]);
+  }, [cakes]);
 
-  
   const applyFilters = (cakesList) => {
     let updatedCakes = [...cakesList];
   
-    // Filter by search query
+    // Lọc theo từ khóa tìm kiếm
     if (searchQuery.trim() !== '') {
-      updatedCakes = updatedCakes.filter((cakes) =>
-        cakes.name.toLowerCase().includes(searchQuery.toLowerCase())
+      updatedCakes = updatedCakes.filter((cake) =>
+        cake.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
   
-    // Filter by selected categories
+    // Lọc theo danh mục đã chọn
     if (selectedCategories.length > 0) {
       updatedCakes = updatedCakes.filter((cake) =>
         selectedCategories.includes(cake.category.name)
       );
     }
   
-    // Update the filteredCakes state
     setFilteredCakes(updatedCakes);
   };
- 
   const handlePrevious = () => {
     if (currentPage > 0) {
-      const newPage = currentPage - 1;
-      fetchProducts(newPage);
+      fetchProducts(currentPage - 1, pageSize);
     }
   };
 
   const handleNext = () => {
-    if (currentPage < totalPages - 1) {
-      const newPage = currentPage + 1;
-      fetchProducts(newPage);
+    if (currentPage + 1 < totalPages) {
+      fetchProducts(currentPage + 1, pageSize);
     }
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <div ref={cakeRef} className={styles.cakesContainer}>
       <div className={styles.controls}>
-        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-        <CategoryFilter
-          selectedCategories={selectedCategories}
-          setSelectedCategories={setSelectedCategories}
-        />
+        <div className={styles.searchFilterContainer}>
+          <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+          <CategoryFilter
+            selectedCategories={selectedCategories}
+            setSelectedCategories={setSelectedCategories}
+            sortOrder={sortOrder}
+            setSortOrder={setSortOrder}
+          />
+        </div>
       </div>
       <div className={styles.listProducts}>
         {filteredCakes.map((item) => (
@@ -105,32 +134,33 @@ const Cakes = () => {
           </div>
         ))}
       </div>
-  
+
       {/* Phần điều hướng phân trang */}
-      <div className={styles.pagination}>
-        <button
-          type="button"
-          onClick={handlePrevious}
-          disabled={currentPage === 0}
-          className={styles.paginationButton}
-        >
-          Trước
-        </button>
-        <span className={styles.pageInfo}>
-          Trang {currentPage + 1} của {totalPages}
-        </span>
-        <button
-          type="button"
-          onClick={handleNext}
-          disabled={currentPage >= totalPages - 1}
-          className={styles.paginationButton}
-        >
-          Sau
-        </button>
-      </div>
+      {searchQuery.trim() === '' && selectedCategories.length === 0 && (
+        <div className={styles.pagination}>
+          <button
+            type="button"
+            onClick={handlePrevious}
+            disabled={currentPage === 0}
+            className={styles.paginationButton}
+          >
+            Trước
+          </button>
+          <span className={styles.pageInfo}>
+            Trang {currentPage + 1} của {totalPages}
+          </span>
+          <button
+            type="button"
+            onClick={handleNext}
+            disabled={currentPage >= totalPages - 1}
+            className={styles.paginationButton}
+          >
+            Sau
+          </button>
+        </div>
+      )}
     </div>
   );
 };
-
 
 export default Cakes;
