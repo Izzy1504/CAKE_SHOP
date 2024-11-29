@@ -15,7 +15,7 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
-import FilterListIcon from "@mui/icons-material/FilterList";
+import TuneIcon from "@mui/icons-material/Tune";
 import axios from "axios";
 import styles from "./CategoryFilter.module.scss";
 
@@ -62,9 +62,7 @@ const CategoryFilter = ({
 
   return (
     <>
-      
-        <FilterListIcon  onClick={handleOpen} className={styles.filterIcon} />
-     
+      <TuneIcon onClick={handleOpen} className={styles.filterIcon} />
 
       <Dialog open={open} onClose={handleClose} className={styles.dialog}>
         <DialogTitle>Lọc Sản Phẩm</DialogTitle>
