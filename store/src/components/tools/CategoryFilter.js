@@ -18,22 +18,27 @@ import {
 import TuneIcon from "@mui/icons-material/Tune";
 import axios from "axios";
 import styles from "./CategoryFilter.module.scss";
+import CircularProgress from "@mui/material/CircularProgress";
+import TextField from "@mui/material/TextField";
 
 const CategoryFilter = ({
   selectedCategories,
   setSelectedCategories,
   sortOrder,
   setSortOrder,
+  updateProducts,
 }) => {
   const [categories, setCategories] = useState([]);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(""); // New state for search query
 
   const backendURL = "http://26.214.87.26:8080";
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get(`${backendURL}/api/categories`);
+        const response = await axios.get(`${backendURL}/api/products/categories`);
         if (response.status === 200) {
           setCategories(response.data);
         }
@@ -52,6 +57,14 @@ const CategoryFilter = ({
     setSelectedCategories(typeof value === "string" ? value.split(",") : value);
   };
 
+  const handleSortChange = (event) => {
+    setSortOrder(event.target.value);
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -60,17 +73,47 @@ const CategoryFilter = ({
     setOpen(false);
   };
 
+  const handleFilter = async () => {
+    setLoading(true);
+    const filterPayload = {
+      categories: selectedCategories,
+      sortOrder,
+      searchQuery, // Include search query in the filter payload
+    };
+    console.log("Filter Payload:", filterPayload);
+    try {
+      const response = await axios.post(`${backendURL}/api/products/filter`, filterPayload);
+      if (response.status === 200) {
+        updateProducts(response.data);
+        console.log("Filtered products:", response.data);
+      }
+    } catch (error) {
+      console.error("Error filtering products:", error);
+    } finally {
+      setLoading(false);
+      handleClose();
+    }
+  };
+
   return (
     <>
       <TuneIcon onClick={handleOpen} className={styles.filterIcon} />
-
       <Dialog open={open} onClose={handleClose} className={styles.dialog}>
         <DialogTitle>Lọc Sản Phẩm</DialogTitle>
         <DialogContent>
+          <TextField
+            label="Tìm kiếm"
+            variant="outlined"
+            fullWidth
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className={styles.searchField}
+          />
           <FormControl
             fullWidth
             variant="outlined"
             className={styles.formControl}
+            margin="normal"
           >
             <InputLabel>Loại bánh</InputLabel>
             <Select
@@ -100,7 +143,7 @@ const CategoryFilter = ({
             <InputLabel>Sắp xếp</InputLabel>
             <Select
               value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value)}
+              onChange={handleSortChange}
               label="Sắp xếp"
             >
               <MenuItem value="">
@@ -115,8 +158,16 @@ const CategoryFilter = ({
           <Button onClick={handleClose} color="primary">
             Đóng
           </Button>
+          <Button onClick={handleFilter} color="primary" variant="contained">
+            Lọc
+          </Button>
         </DialogActions>
       </Dialog>
+      {loading && (
+        <div className={styles.loadingOverlay}>
+          <CircularProgress />
+        </div>
+      )}
     </>
   );
 };

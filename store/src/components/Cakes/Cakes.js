@@ -65,10 +65,14 @@ const Cakes = () => {
     // eslint-disable-next-line
   }, [searchQuery, selectedCategories]);
   // useEffect cho sắp xếp
-useEffect(() => {
-  // Khi `sortOrder` thay đổi, lấy sản phẩm theo trang hiện tại
-  fetchProducts(currentPage, pageSize, false);
-}, [sortOrder]);
+  useEffect(() => {
+    // Khi `sortOrder` thay đổi, kiểm tra độ dài tìm kiếm
+    if (searchQuery.length > 0) {
+      fetchProducts(currentPage, pageSize, true); // Fetch tất cả sản phẩm
+    } else {
+      fetchProducts(currentPage, pageSize, false); // Fetch theo phân trang
+    }
+  }, [sortOrder, searchQuery]);
   useEffect(() => {
     applyFilters(cakes);
   }, [cakes]);
