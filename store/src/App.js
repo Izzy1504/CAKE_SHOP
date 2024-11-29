@@ -69,6 +69,7 @@ function App() {
         <Route path='/UserAccountPage' element={<UserAccountPage />} />
         <Route path='/Login' element={<Login />} />
         <Route path='/PaymentPage' element={<PaymentPage />} />
+
         <Route
           path='/admin'
           element={
@@ -77,16 +78,47 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path='/admin/products' element={<ProductManagement />} />
-        <Route path='/admin/add-product' element={<AddProduct />} />
-        <Route path='/admin/edit-product/:id' element={<EditProduct />} />
+        <Route
+          path='/admin/products'
+          element={
+            <ProtectedRoute requiredRole="ADMIN">
+              <ProductManagement />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/admin/add-product'
+          element={
+            <ProtectedRoute requiredRole="ADMIN">
+              <AddProduct />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/admin/edit-product/:id'
+          element={
+            <ProtectedRoute requiredRole="ADMIN">
+              <EditProduct />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/cake-details/:id" element={<CakeDetails />} />
-        <Route path='/admin/orders' element={<OrderManagement />} />
-        <Route path='/admin/accounts' element={<AccountManagement />} />
-        {/* <Route path='/user/:id' element={<UserDetail />} /> */}
-        <Route path='/userDetail' element={<UserDetail />}></Route>
-        <Route path='/order' element={<OrderUser />}></Route>
-        <Route path='/order/:id' element={<OrderDetail />}></Route>
+        <Route
+          path='/admin/orders'
+          element={
+            <ProtectedRoute requiredRole="ADMIN">
+              <OrderManagement />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/admin/accounts'
+          element={
+            <ProtectedRoute requiredRole="ADMIN">
+              <AccountManagement />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
       {!hideLayout && !hideCta && !hideLayout1 && !hideLayout2 && !hideLayout3 && !hideLayout4 && hideLayout6 && <Cta />}
       {!hideLayout && !hideCta  && !hideLayout4 && !hideLayout5 && !userDetailHide && <Footer />}
