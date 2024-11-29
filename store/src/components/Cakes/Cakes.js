@@ -6,10 +6,12 @@ import styles from './Cakes.module.scss';
 import { StateContext } from '../../context/StateContextProvider';
 import SearchBar from '../tools/SearchBar';
 import CategoryFilter from '../tools/CategoryFilter';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Cakes = () => {
-  const [cakes, setCakes] = useState([]);
+  const [allCakes, setAllCakes] = useState([]);
   const [filteredCakes, setFilteredCakes] = useState([]);
+  const [displayedCakes, setDisplayedCakes] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const pageSize = 12; // Số lượng sản phẩm mỗi trang
@@ -20,104 +22,106 @@ const Cakes = () => {
   const [sortOrder, setSortOrder] = useState('');
   const backendURL = 'http://26.214.87.26:8080';
 
-   const fetchProducts = async (page = 0, size = pageSize, fetchAll = false) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  // Hàm lấy tất cả sản phẩm từ API
+  const fetchAllProducts = async () => {
+    setLoading(true);
+    setError('');
     try {
-      let url = '';
-      let sortParam = '';
-      const params = {};
-      // Thiết lập tham số sắp xếp
+      const params = {
+        page: 0,
+        size: 1000, // Giả định số lượng lớn để lấy tất cả sản phẩm
+      };
+
+      // Thêm tham số tìm kiếm
+      if (searchQuery.trim() !== '') {
+        params.search = searchQuery.trim();
+      }
+
+      // Thêm tham số sắp xếp
       if (sortOrder === 'priceAsc') {
-        sortParam = '&sort=price,asc';
+        params.sort = 'price,asc';
       } else if (sortOrder === 'priceDesc') {
-        sortParam = '&sort=price,desc';
+        params.sort = 'price,desc';
       }
-  
-      if (fetchAll) {
-        url = `${backendURL}/api/products?size=10000${sortParam}`;
-      } else {
-        url = `${backendURL}/api/products?page=${page}&size=${size}${sortParam}`;
-      }
-         // Thêm danh mục đã chọn
-         if (selectedCategories.length > 0) {
-          params.categories = selectedCategories.join(',');
-        }
-      const response = await axios.get(url);
+
+      const response = await axios.get(`${backendURL}/api/products`, { params });
+
       if (response.status === 200) {
-        setCakes(response.data.content);
-        if (!fetchAll) {
-          setCurrentPage(response.data.page.number);
-          setTotalPages(response.data.page.totalPages);
-        } else {
-          setCurrentPage(0);
-          setTotalPages(1);
-        }
+        const data = response.data;
+        setAllCakes(data.content);
+        console.log('All products fetched successfully:', data.content);
+      } else {
+        setError('Không thể lấy sản phẩm.');
+        console.error('Unexpected response status:', response.status);
       }
-    } catch (error) {
-      console.error('Error fetching products:', error);
+    } catch (err) {
+      console.error('Lỗi khi lấy sản phẩm:', err.response?.data || err.message);
+      setError('Lỗi khi lấy sản phẩm.');
+    } finally {
+      setLoading(false);
     }
   };
-  
-  useEffect(() => {
-    if (searchQuery.trim() !== '' || selectedCategories.length > 0) {
-      // Khi có tìm kiếm hoặc lọc, lấy tất cả sản phẩm
-      fetchProducts(0, pageSize, true);
-    } else {
-      // Ngược lại, lấy sản phẩm theo phân trang
-      fetchProducts(currentPage, pageSize, false);
-    }
-    // eslint-disable-next-line
-  }, [searchQuery, selectedCategories]);
-  // useEffect cho sắp xếp
-  useEffect(() => {
-    // Khi `sortOrder` thay đổi, kiểm tra độ dài tìm kiếm
-    if (searchQuery.length > 0) {
-      fetchProducts(currentPage, pageSize, true); // Fetch tất cả sản phẩm
-    } else {
-      fetchProducts(currentPage, pageSize, false); // Fetch theo phân trang
-    }
-  }, [sortOrder, searchQuery]);
-  useEffect(() => {
-    applyFilters(cakes);
-  }, [cakes]);
+
+  // useEffect để lấy tất cả sản phẩm khi thay đổi tìm kiếm hoặc sắp xếp
   useEffect(() => {
     setCurrentPage(0);
-    fetchProducts(0, pageSize);
+    fetchAllProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchQuery, selectedCategories, sortOrder]);
-  const applyFilters = (cakesList) => {
-    let updatedCakes = [...cakesList];
-  
+  }, [searchQuery, sortOrder]);
+
+  // useEffect để lọc sản phẩm dựa trên danh mục đã chọn
+  useEffect(() => {
+    let filtered = allCakes;
+
+    // Lọc theo danh mục đã chọn
+    if (selectedCategories.length > 0) {
+      filtered = filtered.filter(cake =>
+        selectedCategories.includes(cake.category)
+      );
+    }
+
     // Lọc theo từ khóa tìm kiếm
     if (searchQuery.trim() !== '') {
-      updatedCakes = updatedCakes.filter((cake) =>
+      filtered = filtered.filter(cake =>
         cake.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
-  
-    // Lọc theo danh mục đã chọn
-    if (selectedCategories.length > 0) {
-      updatedCakes = updatedCakes.filter((cake) =>
-        selectedCategories.includes(cake.category.name)
-      );
-    }
-  
-    setFilteredCakes(updatedCakes);
-  };
-  const handlePrevious = () => {
-    if (currentPage > 0) {
-      fetchProducts(currentPage - 1, pageSize);
+
+    setFilteredCakes(filtered);
+    setTotalPages(Math.ceil(filtered.length / pageSize));
+    setCurrentPage(0);
+  }, [selectedCategories, allCakes, searchQuery, pageSize]);
+
+  // useEffect để xác định các sản phẩm hiển thị dựa trên trang hiện tại
+  useEffect(() => {
+    const start = currentPage * pageSize;
+    const end = start + pageSize;
+    setDisplayedCakes(filteredCakes.slice(start, end));
+  }, [currentPage, filteredCakes, pageSize]);
+
+  // Hàm xử lý thay đổi trang
+  const handlePageChange = (newPage) => {
+    if (newPage >= 0 && newPage < totalPages) {
+      setCurrentPage(newPage);
+      console.log(`Changing to page: ${newPage + 1}`);
+    } else {
+      console.warn('Attempted to navigate to invalid page:', newPage);
     }
   };
 
-  const handleNext = () => {
-    if (currentPage + 1 < totalPages) {
-      fetchProducts(currentPage + 1, pageSize);
-    }
-  };
-
+  // Hàm cuộn lên đầu trang khi chuyển trang
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    console.log('Scrolled to top of the page.');
   };
+
+  // Log khi selectedCategories thay đổi
+  useEffect(() => {
+    console.log('Selected Categories Updated:', selectedCategories);
+  }, [selectedCategories]);
 
   return (
     <div ref={cakeRef} className={styles.cakesContainer}>
@@ -133,25 +137,35 @@ const Cakes = () => {
         </div>
       </div>
       <div className={styles.listProducts}>
-        {filteredCakes.map((item) => (
-          <div key={item.id} className={styles.card}>
-            <Link to={`/cake-details/${item.id}`} onClick={scrollToTop}>
-              <div>
-                <img className={styles.cakeImage} src={item.images} alt={item.name} />
-                <p className={styles.namePriceProducts}>{item.name}</p>
-                <p className={styles.namePriceProducts}>{item.price} vnđ</p>
-              </div>
-            </Link>
+        {loading ? (
+          <div className={styles.loading}>
+            <CircularProgress />
           </div>
-        ))}
+        ) : error ? (
+          <p className={styles.error}>{error}</p>
+        ) : displayedCakes.length > 0 ? (
+          displayedCakes.map((item) => (
+            <div key={item.id} className={styles.card}>
+              <Link to={`/cake-details/${item.id}`} onClick={scrollToTop}>
+                <div>
+                  <img className={styles.cakeImage} src={item.images[0]} alt={item.name} />
+                  <p className={styles.namePriceProducts}>{item.name}</p>
+                  <p className={styles.namePriceProducts}>{item.price} VND</p>
+                </div>
+              </Link>
+            </div>
+          ))
+        ) : (
+          <p>Không có sản phẩm nào được tìm thấy.</p>
+        )}
       </div>
 
-      {/* Phần điều hướng phân trang */}
-      {searchQuery.trim() === '' && selectedCategories.length === 0 && (
+      {/* Phân trang nếu không hiển thị tất cả sản phẩm */}
+      {!loading && !error && displayedCakes.length > 0 && (
         <div className={styles.pagination}>
           <button
             type="button"
-            onClick={handlePrevious}
+            onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 0}
             className={styles.paginationButton}
           >
@@ -162,8 +176,8 @@ const Cakes = () => {
           </span>
           <button
             type="button"
-            onClick={handleNext}
-            disabled={currentPage >= totalPages - 1}
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage + 1 >= totalPages}
             className={styles.paginationButton}
           >
             Sau
