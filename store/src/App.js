@@ -69,7 +69,7 @@ function App() {
         <Route path='/UserAccountPage' element={<UserAccountPage />} />
         <Route path='/Login' element={<Login />} />
         <Route path='/PaymentPage' element={<PaymentPage />} />
-
+        <Route path='/userDetail' element={<UserDetail />} />
         <Route
           path='/admin'
           element={
