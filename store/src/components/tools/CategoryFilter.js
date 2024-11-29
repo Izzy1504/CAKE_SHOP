@@ -32,23 +32,43 @@ const CategoryFilter = ({
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState(""); // New state for search query
-
+  const [error, setError] = useState('');
+  const [loadingCategories, setLoadingCategories] = useState(false);
   const backendURL = "http://26.214.87.26:8080";
 
+ 
   useEffect(() => {
     const fetchCategories = async () => {
+      setLoadingCategories(true);
+      setError('');
       try {
-        const response = await axios.get(`${backendURL}/api/products/categories`);
-        if (response.status === 200) {
-          setCategories(response.data);
+        const response = await axios.get(`${backendURL}/api/products/categories`, {
+          headers: {
+            // Bao gồm các header cần thiết nếu có, ví dụ: Authorization
+            // Authorization: `Bearer YOUR_AUTH_TOKEN`,
+          },
+        });
+        
+        // Kiểm tra xem response.data.categories có phải là mảng hay không
+        if (response.data && Array.isArray(response.data.categories)) {
+          setCategories(response.data.categories);
+        } else {
+          // Nếu không phải mảng, đặt categories thành mảng rỗng
+          setCategories([]);
+          console.error("Dữ liệu trả về không phải là mảng chuỗi:", response.data);
+          setError('Dữ liệu trả về không đúng định dạng.');
         }
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        console.error("Error fetching categories:", error.response?.data || error.message);
+        setError('Lỗi khi lấy danh mục.');
+      } finally {
+        setLoadingCategories(false);
       }
     };
 
     fetchCategories();
   }, [backendURL]);
+
 
   const handleChange = (event) => {
     const {
@@ -73,28 +93,15 @@ const CategoryFilter = ({
     setOpen(false);
   };
 
-  const handleFilter = async () => {
-    setLoading(true);
-    const filterPayload = {
-      categories: selectedCategories,
-      sortOrder,
-      searchQuery, // Include search query in the filter payload
+  
+  
+    // Hàm xử lý thay đổi danh mục
+    const handleCategoryChange = (event) => {
+      const { value } = event.target;
+      setSelectedCategories(
+        typeof value === 'string' ? value.split(',') : value,
+      );
     };
-    console.log("Filter Payload:", filterPayload);
-    try {
-      const response = await axios.post(`${backendURL}/api/products/filter`, filterPayload);
-      if (response.status === 200) {
-        updateProducts(response.data);
-        console.log("Filtered products:", response.data);
-      }
-    } catch (error) {
-      console.error("Error filtering products:", error);
-    } finally {
-      setLoading(false);
-      handleClose();
-    }
-  };
-
   return (
     <>
       <TuneIcon onClick={handleOpen} className={styles.filterIcon} />
@@ -107,23 +114,29 @@ const CategoryFilter = ({
             className={styles.formControl}
             margin="normal"
           >
-            <InputLabel>Loại bánh</InputLabel>
-            <Select
-              multiple
-              value={selectedCategories}
-              onChange={handleChange}
-              input={<OutlinedInput label="Loại bánh" />}
-              renderValue={(selected) => selected.join(", ")}
-            >
-              {categories.map((category) => (
-                <MenuItem key={category.id} value={category.name}>
-                  <Checkbox
-                    checked={selectedCategories.indexOf(category.name) > -1}
-                  />
-                  <ListItemText primary={category.name} />
-                </MenuItem>
-              ))}
-            </Select>
+       <InputLabel>Loại Bánh</InputLabel>
+        <Select
+          multiple
+          value={selectedCategories}
+          onChange={handleCategoryChange}
+          label="Danh mục"
+          renderValue={(selected) => selected.join(', ')}
+        >
+          {loadingCategories ? (
+            <MenuItem>
+              <CircularProgress size={24} />
+            </MenuItem>
+          ) : (
+            Array.isArray(categories) && categories.map((category, index) => (
+              <MenuItem key={index} value={category}>
+                <Checkbox
+                  checked={selectedCategories.indexOf(category) > -1}
+                />
+                <ListItemText primary={category} />
+              </MenuItem>
+            ))
+          )}
+        </Select>
           </FormControl>
 
           <FormControl
@@ -149,9 +162,6 @@ const CategoryFilter = ({
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Đóng
-          </Button>
-          <Button onClick={handleFilter} color="primary" variant="contained">
-            Lọc
           </Button>
         </DialogActions>
       </Dialog>

@@ -24,7 +24,7 @@ const Cakes = () => {
     try {
       let url = '';
       let sortParam = '';
-  
+      const params = {};
       // Thiết lập tham số sắp xếp
       if (sortOrder === 'priceAsc') {
         sortParam = '&sort=price,asc';
@@ -37,7 +37,10 @@ const Cakes = () => {
       } else {
         url = `${backendURL}/api/products?page=${page}&size=${size}${sortParam}`;
       }
-  
+         // Thêm danh mục đã chọn
+         if (selectedCategories.length > 0) {
+          params.categories = selectedCategories.join(',');
+        }
       const response = await axios.get(url);
       if (response.status === 200) {
         setCakes(response.data.content);
@@ -53,7 +56,7 @@ const Cakes = () => {
       console.error('Error fetching products:', error);
     }
   };
-
+  
   useEffect(() => {
     if (searchQuery.trim() !== '' || selectedCategories.length > 0) {
       // Khi có tìm kiếm hoặc lọc, lấy tất cả sản phẩm
@@ -76,7 +79,11 @@ const Cakes = () => {
   useEffect(() => {
     applyFilters(cakes);
   }, [cakes]);
-
+  useEffect(() => {
+    setCurrentPage(0);
+    fetchProducts(0, pageSize);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery, selectedCategories, sortOrder]);
   const applyFilters = (cakesList) => {
     let updatedCakes = [...cakesList];
   
