@@ -1,28 +1,36 @@
 // ProtectedRoute.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const ProtectedRoute = ({ children, requiredRole }) => {
   const token = localStorage.getItem('token');
   const rolesString = localStorage.getItem('roles');
 
-  if (!token || !rolesString) {
-    return <Navigate to="/" />;
-  }
-
   let roles;
   try {
-    roles = JSON.parse(rolesString);
+    roles = rolesString ? JSON.parse(rolesString) : null;
   } catch (error) {
     console.error('Invalid roles in localStorage:', error);
-    return <Navigate to="/" />;
+    roles = null;
   }
 
-  if (!Array.isArray(roles)) {
-    return <Navigate to="/" />;
-  }
+  useEffect(() => {
+    if (
+      (!token || !roles) ||
+      !Array.isArray(roles) ||
+      !roles.includes(requiredRole)
+    ) {
+      toast.warn("Bạn muốn vượt rào à? Trở lại mua sắm đi", { autoClose: 3000 });
+    }
+  }, [token, roles, requiredRole]);
 
-  if (!roles.includes(requiredRole)) {
+  if (
+    !token ||
+    !roles ||
+    !Array.isArray(roles) ||
+    !roles.includes(requiredRole)
+  ) {
     return <Navigate to="/" />;
   }
 
