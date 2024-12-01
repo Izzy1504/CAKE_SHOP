@@ -1,7 +1,6 @@
 // src/components/tools/CategoryFilter.js
 import React, { useEffect, useState } from "react";
 import {
-  IconButton,
   Dialog,
   DialogTitle,
   DialogContent,

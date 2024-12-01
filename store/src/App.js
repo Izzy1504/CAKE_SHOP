@@ -25,6 +25,7 @@ import OrderDetail from './components/Orders/OrderDetail';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ProtectedRoute from './ProtectRoute';
+import Orderdetail from './components/Orders/OrderDetail';
 function App() {
   const { showCart } = useStateContext();
   const location = useLocation();
@@ -70,6 +71,7 @@ function App() {
         <Route path='/Login' element={<Login />} />
         <Route path='/PaymentPage' element={<PaymentPage />} />
         <Route path='/userDetail' element={<UserDetail />} />
+        <Route path='/order/:id' element={<OrderDetail />} />
         <Route
           path='/admin'
           element={
