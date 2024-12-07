@@ -151,7 +151,7 @@ const CategoryFilter = ({
               label="Sắp xếp"
             >
               <MenuItem value="">
-                <em>GAY</em>
+                <em>Mặc định</em>
               </MenuItem>
               <MenuItem value="priceAsc">Giá: Thấp đến Cao</MenuItem>
               <MenuItem value="priceDesc">Giá: Cao đến Thấp</MenuItem>

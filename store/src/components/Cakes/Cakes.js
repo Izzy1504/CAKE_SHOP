@@ -165,6 +165,14 @@ const Cakes = () => {
         <div className={styles.pagination}>
           <button
             type="button"
+            onClick={() => handlePageChange(0)}
+            disabled={currentPage === 0}
+            className={styles.paginationButton}
+          >
+            Đầu
+          </button>
+          <button
+            type="button"
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 0}
             className={styles.paginationButton}
@@ -181,6 +189,14 @@ const Cakes = () => {
             className={styles.paginationButton}
           >
             Sau
+          </button>
+          <button
+            type="button"
+            onClick={() => handlePageChange(totalPages - 1)}
+            disabled={currentPage + 1 >= totalPages}
+            className={styles.paginationButton}
+          >
+            Cuối
           </button>
         </div>
       )}
