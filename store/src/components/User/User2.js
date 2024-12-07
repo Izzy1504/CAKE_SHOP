@@ -147,6 +147,17 @@ const User2 = () => {
 
       if (response.status === 200) {
         const { newPassword } = response.data;
+        // Lưu mật khẩu mới vào localStorage
+        localStorage.setItem('newPassword', newPassword);
+
+        // Lưu lịch sử mật khẩu vào localStorage
+        let passwordHistory = JSON.parse(localStorage.getItem('passwordHistory'));
+        if (!Array.isArray(passwordHistory)) {
+          passwordHistory = [];
+        }
+        passwordHistory.push({ username, newPassword, date: new Date().toISOString() });
+        localStorage.setItem('passwordHistory', JSON.stringify(passwordHistory));
+
         // Hiển thị mật khẩu mới trong dialog
         handleOpenErrorDialog(`Đặt lại mật khẩu thành công! Mật khẩu mới của bạn là: ${newPassword}`);
         handleCloseDialog();

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaEye, FaEyeSlash } from "react-icons/fa";
 import "./User.css";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const UserAccountPage = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -180,10 +182,12 @@ const UserAccountPage = () => {
       console.log('API Response:', responseData);
   
       setRegistrationSuccess('Registration successful');
+     
     } catch (error) {
       // console.error('Error during registration:', error);
       // setRegistrationError(error.message || 'An error occurred during registration');
       Navigate('/login');
+      toast.success("Đăng ký thành công!");
     }
   };
 
@@ -351,6 +355,7 @@ const UserAccountPage = () => {
         {registrationError && <p className="error">{registrationError}</p>}
         {registrationSuccess && <p className="success">{registrationSuccess}</p>}
         <button type="submit">Register</button>
+        <ToastContainer />
       </form>
     </div>
   );
