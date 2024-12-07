@@ -199,6 +199,10 @@ const UserAccountPage = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
+  const handleBackToHome = () => {
+    Navigate('/');
+  };
+
   return (
     <div className="user-account-page">
       <form onSubmit={handleRegister}>
@@ -354,7 +358,10 @@ const UserAccountPage = () => {
         </div>
         {registrationError && <p className="error">{registrationError}</p>}
         {registrationSuccess && <p className="success">{registrationSuccess}</p>}
-        <button type="submit">Register</button>
+        <div className="button-group">
+          <button type="button" onClick={handleBackToHome}>Back to Home</button>
+          <button type="submit">Register</button>
+        </div>
         <ToastContainer />
       </form>
     </div>

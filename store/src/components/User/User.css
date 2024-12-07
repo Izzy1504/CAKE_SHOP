@@ -70,6 +70,15 @@
   margin-top: 0.25rem;
 }
 
+.user-account-page .button-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+.user-account-page .button-group button {
+  width: 48%;
+}
+
 .user-account-page button {
   width: 100%;
   padding: 0.75rem;
