@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaEye, FaEyeSlash } from "react-icons/fa";
 import "./User.css";
-
+import { useNavigate } from "react-router-dom";
 const UserAccountPage = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -27,11 +27,11 @@ const UserAccountPage = () => {
   const [wardName, setWardName] = useState("");
   const [registrationError, setRegistrationError] = useState("");
   const [registrationSuccess, setRegistrationSuccess] = useState("");
-
+  const Navigate = useNavigate();
   
   useEffect(() => {
     // Fetch cities from new API with depth=2
-    fetch("https://provinces.open-api.vn/api/?depth=2")
+    fetch("https://provinces.open-api.vn/api/?depth=3")
       .then((response) => response.json())
       .then((data) => {
         setCities(data);
@@ -41,7 +41,7 @@ const UserAccountPage = () => {
 
   const handleCityChange = (e) => {
     const { name, value } = e.target;
-    const selectedCity = cities.find(city => String(city.code) === value);
+    const selectedCity = cities.find(city => String(city.name) === value);
     setFormData(prevData => ({
       ...prevData,
       [name]: value,
@@ -55,20 +55,24 @@ const UserAccountPage = () => {
 
   const handleDistrictChange = (e) => {
     const { name, value } = e.target;
-    const selectedDistrict = districts.find(district => String(district.code) === value);
+    const selectedDistrict = districts.find(district => String(district.name) === value);
     setFormData(prevData => ({
       ...prevData,
       [name]: value,
       ward: "",
     }));
     validateField(name, value);
-
+  
     if (selectedDistrict) {
       // Fetch wards for selected district
-      fetch(`https://provinces.open-api.vn/api/d/${value}?depth=2`)
+      fetch(`https://provinces.open-api.vn/api/d/${selectedDistrict.code}?depth=2`)
         .then((response) => response.json())
         .then((data) => {
-          setWards(data.wards);
+          if (data.wards && data.wards.length > 0) {
+            setWards(data.wards);
+          } else {
+            setWards([]);
+          }
         })
         .catch((error) => console.error("Error fetching wards:", error));
     } else {
@@ -154,50 +158,32 @@ const UserAccountPage = () => {
       return;
     }
 
+    const fullAddress = `${formData.address}, ${formData.ward}, ${formData.district}, ${formData.city}`;
+    console.log('Full Address:', fullAddress);
+  
     try {
-      // Combine address fields
-      const fullAddress = `${address}, ${wardName}, ${districtName}, ${cityName}`;
-
-      // Send registration request to server
-      const response = await fetch("http://26.214.87.26:8080/api/auth/register", {
-        method: "POST",
+      const response = await fetch('http://26.214.87.26:8080/api/auth/register', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ name, username, email, phoneNumber: phone, address: fullAddress, password }),
+        body: JSON.stringify({ ...formData, phoneNumber: formData.phone, address: fullAddress })
       });
-
+  
+      // Check if the response is OK before parsing JSON
       if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Registration Error:", errorData);
-        if (errorData.status === 400) {
-          setRegistrationError("Validation error: " + errorData.description);
-        } else if (errorData.status === 500) {
-          setRegistrationError("Server error: " + errorData.description);
-        } else {
-          setRegistrationError(errorData.message || "Registration failed");
-        }
-        return;
+        const errorText = await response.text();
+        throw new Error(errorText || 'Registration failed');
       }
-
-      const data = await response.json();
-      console.log("Registration successful:", data);
-      setRegistrationSuccess("Registration successful! Please log in.");
-      setFormData({
-        name: "",
-        username: "",
-        email: "",
-        phone: "",
-        city: "",
-        district: "",
-        ward: "",
-        address: "",
-        password: "",
-        confirmPassword: "",
-      });
+  
+      const responseData = await response.json();
+      console.log('API Response:', responseData);
+  
+      setRegistrationSuccess('Registration successful');
     } catch (error) {
-      console.error("Error:", error);
-      setRegistrationError("An unknown error occurred");
+      // console.error('Error during registration:', error);
+      // setRegistrationError(error.message || 'An error occurred during registration');
+      Navigate('/login');
     }
   };
 
@@ -270,7 +256,7 @@ const UserAccountPage = () => {
             >
               <option value="">Select City</option>
               {cities.map((city) => (
-                <option key={city.code} value={city.code}>
+                <option key={city.code} value={city.name}>
                   {city.name}
                 </option>
               ))}
@@ -289,7 +275,7 @@ const UserAccountPage = () => {
             >
               <option value="">Select District</option>
               {districts.map((district) => (
-                <option key={district.code} value={district.code}>
+                <option key={district.code} value={district.name}>
                   {district.name}
                 </option>
               ))}
@@ -308,7 +294,7 @@ const UserAccountPage = () => {
             >
               <option value="">Select Ward</option>
               {wards.map((ward) => (
-                <option key={ward.code} value={ward.code}>
+                <option key={ward.code} value={ward.name}>
                   {ward.name}
                 </option>
               ))}
