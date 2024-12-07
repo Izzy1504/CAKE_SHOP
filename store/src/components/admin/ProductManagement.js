@@ -82,7 +82,7 @@ const ProductManagement = () => {
             <TableRow>
               <TableCell>Image</TableCell>
               <TableCell>Tên sản phẩm</TableCell>
-              {/* <TableCell>Số lượng</TableCell> */}
+              <TableCell>Số lượng</TableCell>
               <TableCell>Giá</TableCell>
               <TableCell>Action</TableCell>
             </TableRow>
@@ -94,7 +94,7 @@ const ProductManagement = () => {
                   <img src={cake.images} alt={cake.name} className={styles.productImage} />
                 </TableCell>
                 <TableCell>{cake.name}</TableCell>
-                {/* <TableCell>{cake.quantity}</TableCell> */}
+                <TableCell>{cake.quantity}</TableCell>
                 <TableCell>{formatPrice(cake.price)}</TableCell>
                 <TableCell>
                   <Button variant="contained" color="secondary" className={styles.actionButton} onClick={() => deleteProduct(cake.id)}>

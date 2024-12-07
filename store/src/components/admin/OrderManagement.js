@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Select, MenuItem } from "@mui/material";
 import axios from "axios";
 import styles from "./OrderManagement.module.scss";
 
 const OrderManagement = () => {
   const [orders, setOrders] = useState([]);
-  // const [customers, setCustomers] = useState([]);
+  const [statuses, setStatuses] = useState([]);
   const backendURL = 'http://26.214.87.26:8080';
 
   const fetchOrders = async () => {
@@ -24,7 +24,21 @@ const OrderManagement = () => {
     }
   };
 
-  
+  const fetchStatuses = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${backendURL}/api/orders/status`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200) {
+        setStatuses(response.data.status); // Truy cập vào mảng `status` bên trong đối tượng trả về
+      }
+    } catch (error) {
+      console.error('Error fetching statuses:', error);
+    }
+  };
 
   const deleteOrder = async (id) => {
     try {
@@ -43,9 +57,9 @@ const OrderManagement = () => {
   const updateOrderStatus = async (orderId, newStatus) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.put(
-        `${backendURL}/api/orders/${orderId}/status`,
-        { status: newStatus },
+      await axios.post(
+        `${backendURL}/api/orders/status`,
+        { orderId: orderId, status: newStatus }, 
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -60,7 +74,16 @@ const OrderManagement = () => {
 
   useEffect(() => {
     fetchOrders();
+    fetchStatuses();
   }, []);
+
+  const handleStatusChange = (orderId, newStatus) => {
+    setOrders(prevOrders =>
+      prevOrders.map(order =>
+        order.orderId === orderId ? { ...order, status: newStatus } : order
+      )
+    );
+  };
 
   return (
     <div className={styles.orderManagement}>
@@ -84,6 +107,7 @@ const OrderManagement = () => {
             <TableBody>
               {orders.map((order) => {
                 const customerName = order ? order.username : 'Unknown';
+                const currentStatus = Array.isArray(statuses) && statuses.includes(order.status) ? order.status : '';
 
                 return (
                   <TableRow key={order.orderId}>
@@ -94,10 +118,25 @@ const OrderManagement = () => {
                     .reduce((sum, detail) => sum + detail.price * detail.quantity, 0)
                     .toLocaleString()} VND</TableCell>
                     <TableCell align="center" className={styles.tableBodyCell}>{order.orderDetails.reduce((sum, detail) => sum + detail.quantity, 0)}</TableCell>
-                    <TableCell align="center" className={styles.tableBodyCell}>{order.status}</TableCell>
+                    <TableCell align="center" className={styles.tableBodyCell}>
+                      <Select
+                        value={currentStatus}
+                        onChange={(e) => handleStatusChange(order.orderId, e.target.value)}
+                      >
+                        {Array.isArray(statuses) && statuses.map((status) => (
+                          <MenuItem key={status} value={status}>{status}</MenuItem>
+                        ))}
+                      </Select>
+                    </TableCell>
                     <TableCell align="center" className={styles.tableBodyCell}>
                       <div className={styles.actionButtons}>
-                      
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => updateOrderStatus(order.orderId, order.status)}
+                        >
+                          Cập nhật
+                        </Button>
                         <Button
                           variant="contained"
                           color="secondary"
