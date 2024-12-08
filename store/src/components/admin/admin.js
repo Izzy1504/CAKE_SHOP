@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaSignOutAlt, FaCog } from 'react-icons/fa';
+import { FaSignOutAlt, FaCog, FaHome, FaBox, FaUser, FaClipboardList } from 'react-icons/fa'; // Import additional icons
 import styles from './admin.module.scss';
 import ProductManagement from './ProductManagement';
 import OrderManagement from './OrderManagement';
@@ -45,16 +45,16 @@ export default function Admin() {
 
   return (
     <div className={styles.adminPage}>
-      <nav className={styles.adminNav}>
+      <nav className={styles.adminNav} style={{ backgroundColor: 'inherit', color: 'black' }}> {/* Match background and set text color */}
         <div className={styles.adminProfile}>
           <img src="https://th.bing.com/th/id/OIP.PKSjC6wcZ9pR_-nQ6WGJ4QHaHe?w=197&h=199&c=7&r=0&o=5&pid=1.7" alt="Admin Avatar" />
           <div className={styles.adminName}>{adminName}</div>
         </div>
-        <ul className={styles.navLinks}>
-          <li><Link to="/admin" onClick={() => setSelectedSection('home')}>Trang chủ</Link></li>
-          <li><Link to="#" onClick={() => setSelectedSection('products')}>Quản lý sản phẩm</Link></li>
-          <li><Link to="#" onClick={() => setSelectedSection('accounts')}>Quản lý tài khoản</Link></li>
-          <li><Link to="#" onClick={() => setSelectedSection('orders')}>Quản lý đơn hàng</Link></li>
+        <ul className={styles.navLinks} style={{ color: 'black' }}> {/* Set text color */}
+          <li><Link to="/admin" onClick={() => setSelectedSection('home')}><FaHome /> Trang chủ</Link></li>
+          <li><Link to="#" onClick={() => setSelectedSection('products')}><FaBox /> Quản lý sản phẩm</Link></li>
+          <li><Link to="#" onClick={() => setSelectedSection('accounts')}><FaUser /> Quản lý tài khoản</Link></li>
+          <li><Link to="#" onClick={() => setSelectedSection('orders')}><FaClipboardList /> Quản lý đơn hàng</Link></li>
         </ul>
         {isLoggedIn && (
           <div className={styles.authIcons}>
