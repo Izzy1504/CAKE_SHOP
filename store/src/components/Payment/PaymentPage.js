@@ -63,57 +63,77 @@ const PaymentPage = () => {
       [name]: value,
     }));
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedPaymentMethod) {
-      console.error("Payment method is required");
-      toast.error('Vui lòng chọn phương thức thanh toán!');
-      return;
+        console.error("Payment method is required");
+        toast.error('Vui lòng chọn phương thức thanh toán!');
+        return;
     }
     try {
-      const data = {
-        "shippingAddress": customerInfo.address,
-        "paymentMethod": selectedPaymentMethod,
-        "orderDetails": cartItems.map(item => ({
-          "productId": item.id,
-          "quantity": item.quantity || 1,
-          "price": item.price
-        }))
-      };
-      console.log(data);
-      const token = localStorage.getItem('token');
-      const response = await axios.post(
-        `${backendURL}/api/orders`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
-      console.log(response);
-      // Handle success
-      toast.success('Đơn hàng đã được gửi thành công!');
-      // Clear cart items
-      localStorage.removeItem('buyNowItem');
-      localStorage.removeItem('cartItems');
-      // setCartItems([]); // Ensure setCartItems is called correctly
-      // setTotalPrice(0);
-      // setTotalQty(0);
-      // Navigate to orders page and reload
-      setTimeout(() => {
-        navigate('/userDetail', { replace: true });
-        window.location.reload();
-      }, 2000);
+        const data = {
+            "shippingAddress": customerInfo.address,
+            "paymentMethod": selectedPaymentMethod,
+            "orderDetails": cartItems.map(item => ({
+                "productId": item.id,
+                "name": item.name,
+                "quantity": item.quantity || 1,
+                "price": item.price
+            }))
+        };
+        console.log(data);
+        const token = localStorage.getItem('token');
+        const response = await axios.post(
+            `${backendURL}/api/orders`,
+            data,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+        console.log(response);
+        // Handle success
+        toast.success('Đơn hàng đã được gửi thành công!');
+
+        // Convert order details to HTML string
+        const orderDetailsHtml = data.orderDetails.map(item => `
+            <li>
+                <span>${item.name} ............. (x${item.quantity})</span>
+                <span>giá ${item.price} VND</span>
+            </li>
+        `).join('');
+
+        // Send email with order details using EmailJS API
+        const emailData = {
+            service_id: 'service_yc6ndub',
+            template_id: 'template_p55de3l',
+            user_id: 'YH2nuc_XO7iReiaJi',
+            template_params: {
+                customer_email: customerInfo.email,
+                order_details: orderDetailsHtml,
+                total_price: formatPrice(totalPrice),
+                customer_name: customerInfo.name,
+                customer_phone: customerInfo.phone,
+                customer_address: customerInfo.address
+            }
+        };
+        await axios.post('https://api.emailjs.com/api/v1.0/email/send', emailData);
+
+        localStorage.removeItem('buyNowItem');
+        localStorage.removeItem('cartItems');
+        setTimeout(() => {
+            navigate('/userDetail', { replace: true });
+            window.location.reload();
+        }, 2000);
     } catch (error) {
-      console.error("Error submitting order:", error);
-      if (error.response) {
-        console.error("Response data:", error.response.data);
-      }
-      toast.error('Gửi đơn hàng thất bại!');
+        console.error("Error submitting order:", error);
+        if (error.response) {
+            console.error("Response data:", error.response.data);
+        }
+        toast.error('Gửi đơn hàng thất bại!');
     }
-  };
+};
 
   const handlePaymentMethodChange = (e) => {
     setSelectedPaymentMethod(e.target.value);
