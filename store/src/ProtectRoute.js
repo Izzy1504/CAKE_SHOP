@@ -21,7 +21,7 @@ const ProtectedRoute = ({ children, requiredRole }) => {
       !Array.isArray(roles) ||
       !roles.includes(requiredRole)
     ) {
-      toast.warn("Bạn muốn vượt rào à? Trở lại mua sắm đi", { autoClose: 3000 });
+      toast.warn("Bạn muốn vượt rào à? Xem lại bạn có quyền không và mua hàng tiếp đi", { autoClose: 3000 });
     }
   }, [token, roles, requiredRole]);
 
@@ -31,7 +31,7 @@ const ProtectedRoute = ({ children, requiredRole }) => {
     !Array.isArray(roles) ||
     !roles.includes(requiredRole)
   ) {
-    return <Navigate to="/" />;
+    return <Navigate to="/userDetail" />;
   }
 
   return children;
