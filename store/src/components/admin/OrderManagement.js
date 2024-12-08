@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Select, MenuItem } from "@mui/material";
 import axios from "axios";
 import styles from "./OrderManagement.module.scss";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const OrderManagement = () => {
   const [orders, setOrders] = useState([]);
@@ -68,8 +70,10 @@ const OrderManagement = () => {
         }
       );
       fetchOrders();
+      toast.success('Trạng thái đơn hàng đã được cập nhật!');
     } catch (error) {
       console.error('Error updating order status:', error);
+      toast.error('Có lỗi xảy ra khi cập nhật trạng thái đơn hàng.');
     }
   };
 
@@ -88,6 +92,7 @@ const OrderManagement = () => {
 
   return (
     <div className={styles.orderManagement}>
+      <ToastContainer />
       <h2>Quản lý đơn hàng</h2>
       {orders.length === 0 ? (
         <p className={styles.noOrders}>Tài khoản chưa có đơn hàng nào</p>

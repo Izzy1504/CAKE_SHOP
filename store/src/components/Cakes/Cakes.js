@@ -7,6 +7,8 @@ import { StateContext } from '../../context/StateContextProvider';
 import SearchBar from '../tools/SearchBar';
 import CategoryFilter from '../tools/CategoryFilter';
 import CircularProgress from '@mui/material/CircularProgress';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Cakes = () => {
   const [allCakes, setAllCakes] = useState([]);
@@ -123,8 +125,15 @@ const Cakes = () => {
     console.log('Selected Categories Updated:', selectedCategories);
   }, [selectedCategories]);
 
+  const handleOutOfStockClick = (event) => {
+    event.preventDefault();
+    toast.error('Out of stock');
+  };
+
   return (
     <div ref={cakeRef} className={styles.cakesContainer}>
+      {/* Add ToastContainer for displaying toasts */}
+      <ToastContainer />
       <div className={styles.controls}>
         <div className={styles.searchFilterContainer}>
           <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
@@ -146,9 +155,16 @@ const Cakes = () => {
         ) : displayedCakes.length > 0 ? (
           displayedCakes.map((item) => (
             <div key={item.id} className={styles.card}>
-              <Link to={`/cake-details/${item.id}`} onClick={scrollToTop}>
+              <Link
+                to={item.quantity > 0 ? `/cake-details/${item.id}` : '#'}
+                onClick={item.quantity > 0 ? scrollToTop : handleOutOfStockClick}
+              >
                 <div>
-                  <img className={styles.cakeImage} src={item.images[0]} alt={item.name} />
+                  <img
+                    className={`${styles.cakeImage} ${item.quantity === 0 ? styles.outOfStock : ''}`}
+                    src={item.images[0]}
+                    alt={item.name}
+                  />
                   <p className={styles.namePriceProducts}>{item.name}</p>
                   <p className={styles.namePriceProducts}>{item.price} VND</p>
                 </div>

@@ -253,10 +253,27 @@ span.activeCategory {
         padding: 10px 30px;
     }
     @media screen and (min-width: $laptop) {
-        width: 140px;
+        width: 120px;
         height: 48px;
     }
 }
+
+.quantity {
+  display: flex;
+  align-items: center;
+}
+
+.quantityBtn {
+  padding: 5px 5px;
+  margin: 0 3px;
+  cursor: pointer;
+}
+
+.quantityInput {
+  width: 50px;
+  text-align: center;
+}
+
 .addToCart {
     width: 130px;
     margin-right: 15px;
@@ -364,4 +381,13 @@ span.activeCategory {
   justify-content: center;
   align-items: center;
   gap: 3px; // Adjust the gap to 3px
+}
+
+.outOfStock {
+  filter: blur(5px);
+  pointer-events: none;
+}
+
+.card .outOfStock {
+  filter: blur(5px);
 }

@@ -15,7 +15,7 @@
   padding: 20px;
   border-radius: 30px;
   margin-right: 20px;
-  height: 70vh; /* Chiếm toàn bộ chiều cao */
+  height: 100vh; /* Chiếm toàn bộ chiều cao */
   position: fixed; /* Cố định thanh navbar */
   top: 0;
   left: 0;
@@ -38,7 +38,9 @@
 }
 
 .adminNav .adminProfile .adminName {
-  color: #131212;
+  color: #111011;
+  // color: #ee9bee;
+  // color: #ac940c;
   font-size: 1.2rem;
 }
 
@@ -57,7 +59,9 @@
 }
 
 .adminNav .navLinks a {
-  color: #0a0a0a;
+  color: #111011;
+  // color: #ee9bee;
+  // color: #ac940c;
   text-decoration: none;
   font-size: 1.2rem;
   display: block;

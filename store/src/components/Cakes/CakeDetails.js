@@ -4,6 +4,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import CakesSlide from './CakesSlide';
 import { useStateContext } from '../../context/StateContextProvider';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const CakeDetails = () => {
   const { quantity, increaseQty, decreaseQty, formatPrice, AddToCart, handleCartClick,totalPrice, setTotalPrice,cartItems } = useStateContext();
@@ -52,6 +55,10 @@ const CakeDetails = () => {
       console.log("Cake details:", cakeDetails);
 
       if (cakeDetails) {
+        if (quantity > cakeDetails.quantity) {
+          toast.error("Product is out of stock");
+          return;
+        }
         const buyNowItem = {
           id: cakeDetails.id,
           name: cakeDetails.name,
@@ -75,6 +82,10 @@ const CakeDetails = () => {
     if (!token) {
       navigate("/login");
     } else {
+      if (quantity > cakeDetails.quantity) {
+        toast.error("Product is out of stock");
+        return;
+      }
       AddToCart(cakeDetails, e.target.innerText);
       handleCartClick();
     }
@@ -83,6 +94,30 @@ const CakeDetails = () => {
     setQuantity(1); // Reset quantity to 1
     navigate('/');
   };
+
+  const handleQuantityChange = (e) => {
+    const value = e.target.value;
+    if (value === '' || (parseInt(value, 10) > 0 && parseInt(value, 10) <= cakeDetails.quantity)) {
+      setQuantity(value === '' ? '' : parseInt(value, 10));
+    } else if (parseInt(value, 10) > cakeDetails.quantity) {
+      toast.error("Quantity exceeds available stock");
+    }
+  };
+
+  const handleIncreaseQty = () => {
+    if (quantity < cakeDetails.quantity) {
+      setQuantity(quantity + 1);
+    } else {
+      toast.error("Quantity exceeds available stock");
+    }
+  };
+
+  const handleDecreaseQty = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+
   return (
     <>
       <div className={styles.cakeDetailsPage}>
@@ -111,9 +146,16 @@ const CakeDetails = () => {
               <div className={styles.quantityCount}>
                 <span>Qty: </span>
                 <div className={styles.quantity}>
-                  <i className="fa-solid fa-minus fa-xs" onClick={decreaseQty}></i>
-                  <span>{quantity}</span>
-                  <i className="fa-solid fa-plus fa-xs" onClick={increaseQty}></i>
+                  <button onClick={handleDecreaseQty} className={styles.quantityBtn}>-</button>
+                  <input
+                    type="number"
+                    value={quantity}
+                    onChange={handleQuantityChange}
+                    min="1"
+                    max={cakeDetails.quantity}
+                    className={styles.quantityInput}
+                  />
+                  <button onClick={handleIncreaseQty} className={styles.quantityBtn}>+</button>
                 </div>
               </div>
               <button className={styles.addToCart} onClick={handleAddToCart}>Add to Cart</button>
