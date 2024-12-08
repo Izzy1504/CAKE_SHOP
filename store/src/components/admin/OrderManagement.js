@@ -17,7 +17,8 @@ const OrderManagement = () => {
         },
       });
       if (response.status === 200) {
-        setOrders(response.data.content); // Điều chỉnh theo cấu trúc dữ liệu trả về của API
+        const sortedOrders = response.data.content.sort((a, b) => a.orderId - b.orderId); // Sắp xếp theo orderId từ nhỏ đến lớn
+        setOrders(sortedOrders); // Điều chỉnh theo cấu trúc dữ liệu trả về của API
       }
     } catch (error) {
       console.error('Error fetching orders:', error);

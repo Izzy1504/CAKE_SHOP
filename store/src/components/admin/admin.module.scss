@@ -63,10 +63,11 @@
   display: block;
   padding: 10px;
   border-radius: 50px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 
   &:hover {
-    background-color: #2de8f5;
+    // background-color: #2de8f5;
+    transform: scale(1.05);
   }
 }
 

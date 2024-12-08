@@ -47,7 +47,7 @@ export default function Admin() {
     <div className={styles.adminPage}>
       <nav className={styles.adminNav} style={{ backgroundColor: 'inherit', color: 'black' }}> {/* Match background and set text color */}
         <div className={styles.adminProfile}>
-          <img src="https://th.bing.com/th/id/OIP.PKSjC6wcZ9pR_-nQ6WGJ4QHaHe?w=197&h=199&c=7&r=0&o=5&pid=1.7" alt="Admin Avatar" />
+          <img src="https://th.bing.com/th/id/OIP.YwBkVu5AEcpjBoyZvb7owgHaHa?rs=1&pid=ImgDetMain" alt="Admin Avatar" />
           <div className={styles.adminName}>{adminName}</div>
         </div>
         <ul className={styles.navLinks} style={{ color: 'black' }}> {/* Set text color */}
