@@ -106,7 +106,7 @@ const PaymentPage = () => {
 
         // Send email with order details using EmailJS API
         const emailData = {
-            service_id: 'service_yc6ndub',
+            service_id: 'service_id5bx4r',
             template_id: 'template_p55de3l',
             user_id: 'YH2nuc_XO7iReiaJi',
             template_params: {
