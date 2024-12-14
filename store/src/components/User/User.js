@@ -174,20 +174,31 @@ const UserAccountPage = () => {
   
       // Check if the response is OK before parsing JSON
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText || 'Registration failed');
+        const errorData = await response.json();
+        const errorMessage = errorData.description || 'Registration failed';
+        throw new Error(errorMessage);
       }
   
       const responseData = await response.json();
       console.log('API Response:', responseData);
   
       setRegistrationSuccess('Registration successful');
-     
-    } catch (error) {
-      // console.error('Error during registration:', error);
-      // setRegistrationError(error.message || 'An error occurred during registration');
-      Navigate('/login');
       toast.success("Đăng ký thành công!");
+      setTimeout(() => {
+        Navigate('/login');
+      }, 1000);
+    } catch (error) {
+      console.error('Error during registration:', error);
+      if (error.message.includes("Failed to execute 'json' on 'Response': Unexpected end of JSON input")) {
+        setRegistrationSuccess('Registration successful');
+        toast.success("Đăng ký thành công!");
+        setTimeout(() => {
+          Navigate('/login');
+        }, 1000);
+      } else {
+        setRegistrationError(error.message || 'An error occurred during registration');
+        toast.error(`Đăng ký thất bại: ${error.message}`);
+      }
     }
   };
 

@@ -12,7 +12,7 @@ import {
 import "./User2.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const User2 = () => {
@@ -58,7 +58,7 @@ const User2 = () => {
       if (loginResponse.status === 200) {
         const { token } = loginResponse.data;
         localStorage.setItem("token", token);
-        toast.success("Đăng nhập thành công!", { autoClose: 3000 });
+        toast.success("Đăng nhập thành công!", { autoClose: 3000, toastId: 'login-success', limit: 3, newestOnTop: true, preventDuplicates: true });
 
         // Lấy thông tin người dùng để xác định vai trò
         const userInfoResponse = await axios.get('http://26.214.87.26:8080/api/users/info', {
@@ -76,7 +76,7 @@ const User2 = () => {
           localStorage.setItem('roles', JSON.stringify(roles));
           if (roles.includes('ADMIN')) {
             // Thêm thông báo trước khi điều hướng
-            toast.info("Bạn đang đăng nhập với tư cách quản trị.", { autoClose: 3000 });
+            toast.info("Bạn đang đăng nhập với tư cách quản trị.", { autoClose: 3000, toastId: 'admin-login', limit: 3, newestOnTop: true, preventDuplicates: true });
             // Điều hướng sau 3 giây
             setTimeout(() => {
               navigate('/admin');
@@ -87,7 +87,7 @@ const User2 = () => {
               navigate('/');
             }, 1000);
           } else {
-            toast.error('Bạn không có quyền truy cập hệ thống.', { autoClose: 3000 });
+            toast.error('Bạn không có quyền truy cập hệ thống.', { autoClose: 3000, toastId: 'no-access', limit: 3, newestOnTop: true, preventDuplicates: true });
             setTimeout(() => {
               navigate('/');
             }, 3000);
@@ -99,14 +99,14 @@ const User2 = () => {
           }, 3000);
         }
       } else {
-        toast.error('Đăng nhập không thành công.', { autoClose: 3000 });
+        toast.error('Đăng nhập không thành công.', { autoClose: 3000, toastId: 'login-fail', limit: 3, newestOnTop: true, preventDuplicates: true });
       }
     } catch (error) {
       console.error('Lỗi khi đăng nhập:', error);
       if (error.response && error.response.data && error.response.data.message) {
-        toast.error(error.response.data.message, { autoClose: 3000 });
+        toast.error(error.response.data.message, { autoClose: 3000, toastId: 'login-error', limit: 3, newestOnTop: true, preventDuplicates: true });
       } else {
-        toast.error('Đã xảy ra lỗi khi đăng nhập.', { autoClose: 3000 });
+        toast.error('Đã xảy ra lỗi khi đăng nhập.', { autoClose: 3000, toastId: 'login-error', limit: 3, newestOnTop: true, preventDuplicates: true });
       }
     }
   };
@@ -245,6 +245,7 @@ const User2 = () => {
           </DialogActions>
         </Dialog>
       </div>
+      <ToastContainer limit={3} newestOnTop={true} preventDuplicates={true} />
     </div>
   );
 };
