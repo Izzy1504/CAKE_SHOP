@@ -45,9 +45,14 @@ const ProductManagement = () => {
           'Authorization': `Bearer ${token}` // Include the token in the request headers
         }
       });
-      setCakes(cakes.filter(cake => cake.id !== id));
+      setCakes(prevCakes => {
+        const updatedCakes = prevCakes.map(cake => 
+          cake.id === id ? { ...cake, quantity: 0 } : cake
+        );
+        return updatedCakes.sort((a, b) => a.quantity === 0 ? 1 : -1);
+      });
     } catch (error) {
-      console.error("Error deleting product:", error);
+      console.error("Error updating product quantity:", error);
     }
   };
 
@@ -89,7 +94,7 @@ const ProductManagement = () => {
           </TableHead>
           <TableBody>
             {cakes.map(cake => (
-              <TableRow key={cake.id}>
+              <TableRow key={cake.id} className={cake.quantity === 0 ? styles.hiddenRow : ''}>
                 <TableCell>
                   <img src={cake.images} alt={cake.name} className={styles.productImage} />
                 </TableCell>

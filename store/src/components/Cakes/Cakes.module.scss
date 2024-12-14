@@ -384,10 +384,14 @@ span.activeCategory {
 }
 
 .outOfStock {
-  filter: blur(5px);
+  filter: none;
   pointer-events: none;
 }
 
 .card .outOfStock {
-  filter: blur(5px);
+  filter: none;
+}
+
+.card.outOfStock {
+  filter: none;
 }

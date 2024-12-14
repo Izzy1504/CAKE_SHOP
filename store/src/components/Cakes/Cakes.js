@@ -154,19 +154,21 @@ const Cakes = () => {
           <p className={styles.error}>{error}</p>
         ) : displayedCakes.length > 0 ? (
           displayedCakes.map((item) => (
-            <div key={item.id} className={styles.card}>
+            <div key={item.id} className={`${styles.card} ${item.quantity === 0 ? styles.outOfStock : ''}`}>
               <Link
                 to={item.quantity > 0 ? `/cake-details/${item.id}` : '#'}
                 onClick={item.quantity > 0 ? scrollToTop : handleOutOfStockClick}
               >
                 <div>
                   <img
-                    className={`${styles.cakeImage} ${item.quantity === 0 ? styles.outOfStock : ''}`}
+                    className={styles.cakeImage}
                     src={item.images[0]}
                     alt={item.name}
                   />
                   <p className={styles.namePriceProducts}>{item.name}</p>
-                  <p className={styles.namePriceProducts}>{item.price} VND</p>
+                  <p className={styles.namePriceProducts}>
+                    {item.quantity > 0 ? `${item.price} VND` : 'Hết hàng'}
+                  </p>
                 </div>
               </Link>
             </div>

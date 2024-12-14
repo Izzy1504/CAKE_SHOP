@@ -81,16 +81,16 @@ const path = require('path');
         await driver.wait(until.elementIsVisible(driver.findElement(By.name('district'))), 20000);
         await driver.findElement(By.name('district')).click();
         await driver.wait(until.elementLocated(By.css('option[value="Quận Hoàn Kiếm"]')), 20000);
-        await driver.executeScript("arguments[0].scrollIntoView();", driver.findElement(By.css('option[value="Hoàn Kiếm"]')));
+        await driver.executeScript("arguments[0].scrollIntoView();", driver.findElement(By.css('option[value="Quận Hoàn Kiếm"]')));
         await driver.findElement(By.css('option[value="Quận Hoàn Kiếm"]')).click();
 
         // đợi ward
         console.log("Selecting ward...");
         await driver.wait(until.elementIsVisible(driver.findElement(By.name('ward'))), 20000);
         await driver.findElement(By.name('ward')).click();
-        await driver.wait(until.elementLocated(By.css('option[value="Lý Thái Tổ"]')), 20000);
-        await driver.executeScript("arguments[0].scrollIntoView();", driver.findElement(By.css('option[value="Lý Thái Tổ"]')));
-        await driver.findElement(By.css('option[value="Lý Thái Tổ"]')).click();
+        await driver.wait(until.elementLocated(By.css('option[value="Phường Lý Thái Tổ"]')), 20000);
+        await driver.executeScript("arguments[0].scrollIntoView();", driver.findElement(By.css('option[value="Phường Lý Thái Tổ"]')));
+        await driver.findElement(By.css('option[value="Phường Lý Thái Tổ"]')).click();
 
         await driver.findElement(By.name('address')).sendKeys('123 Test Street');
         await driver.findElement(By.name('password')).sendKeys('password123');
