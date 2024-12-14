@@ -13,6 +13,7 @@ const EditProduct = () => {
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [initialProduct, setInitialProduct] = useState({});
+  const [categories, setCategories] = useState([]);
   const backendURL = 'http://26.214.87.26:8080';
   const navigate = useNavigate();
 
@@ -41,6 +42,21 @@ const EditProduct = () => {
 
     fetchProduct();
   }, [id, backendURL]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(`${backendURL}/api/products/categories`);
+        if (response.status === 200) {
+          setCategories(response.data.categories);
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, [backendURL]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -115,12 +131,18 @@ const EditProduct = () => {
         </div>
         <div>
           <label>Category</label>
-          <input
-            type="text"
+          <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             required
-          />
+          >
+            <option value="">Select Category</option>
+            {categories.map((cat, index) => (
+              <option key={index} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           <label>Image</label>

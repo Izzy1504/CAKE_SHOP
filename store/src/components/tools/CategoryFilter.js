@@ -52,7 +52,7 @@ const CategoryFilter = ({
         if (response.data && Array.isArray(response.data.categories)) {
           setCategories(response.data.categories);
         } else {
-          // Nếu không phải mảng, đặt categories thành mảng rỗng
+          // Nếu không phải mảng, đ���t categories thành mảng rỗng
           setCategories([]);
           console.error("Dữ liệu trả về không phải là mảng chuỗi:", response.data);
           setError('Dữ liệu trả về không đúng định dạng.');
@@ -107,37 +107,44 @@ const CategoryFilter = ({
       <Dialog open={open} onClose={handleClose} className={styles.dialog}>
         <DialogTitle>Lọc Sản Phẩm</DialogTitle>
         <DialogContent>
+          <TextField
+            label="Tìm kiếm danh mục"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={searchQuery}
+            onChange={handleSearchChange}
+          />
           <FormControl
             fullWidth
             variant="outlined"
             className={styles.formControl}
             margin="normal"
           >
-       <InputLabel>Loại Bánh</InputLabel>
-        <Select
-          multiple
-          value={selectedCategories}
-          onChange={handleCategoryChange}
-          label="Danh mục"
-          renderValue={(selected) => selected.join(', ')}
-        >
-          {loadingCategories ? (
-            <MenuItem>
-              <CircularProgress size={24} />
-            </MenuItem>
-          ) : (
-            Array.isArray(categories) && categories.map((category, index) => (
-              <MenuItem key={index} value={category}>
-                <Checkbox
-                  checked={selectedCategories.indexOf(category) > -1}
-                />
-                <ListItemText primary={category} />
-              </MenuItem>
-            ))
-          )}
-        </Select>
+            <InputLabel>Loại Bánh</InputLabel>
+            <Select
+              multiple
+              value={selectedCategories}
+              onChange={handleCategoryChange}
+              label="Danh mục"
+              renderValue={(selected) => selected.join(', ')}
+            >
+              {loadingCategories ? (
+                <MenuItem>
+                  <CircularProgress size={24} />
+                </MenuItem>
+              ) : (
+                Array.isArray(categories) && categories
+                  .filter(category => category.toLowerCase().includes(searchQuery.toLowerCase()))
+                  .map((category, index) => (
+                    <MenuItem key={index} value={category}>
+                      <Checkbox checked={selectedCategories.indexOf(category) > -1} />
+                      <ListItemText primary={category} />
+                    </MenuItem>
+                  ))
+              )}
+            </Select>
           </FormControl>
-
           <FormControl
             fullWidth
             variant="outlined"
