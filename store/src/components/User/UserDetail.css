@@ -7,7 +7,8 @@
       font-family: 'Inter', sans-serif;
       display: grid;
       grid-template-columns: 0.75fr 1fr;
-  }
+      grid-template-rows: 0.1fr 1fr;
+    }
 
   .user-detail-wrapper {
     max-width: 700px;
@@ -240,4 +241,26 @@
     text-align: left;
     margin: 5px 0;
   }
+}
+
+.buttonWrapper {
+  grid-column: span 2/span 2;
+  padding-left: 20px;
+
+}
+
+.goBackButton {
+  margin-top: 50px;
+  padding: 10px 20px;
+  background-color: #f02472;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.goBackButton:hover {
+  background-color: #21dbfc;
 }
