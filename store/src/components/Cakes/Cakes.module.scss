@@ -383,6 +383,11 @@ span.activeCategory {
   gap: 3px; // Adjust the gap to 3px
 }
 
+.searchField {
+  // Ensure this class is defined for the search input field
+  // Add any necessary styles here
+}
+
 .outOfStock {
   filter: none;
   pointer-events: none;
