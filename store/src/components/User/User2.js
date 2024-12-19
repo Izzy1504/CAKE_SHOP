@@ -36,10 +36,10 @@ const User2 = () => {
     const { username, password } = formData;
     let tempErrors = {};
     if (username.trim() === "") {
-      tempErrors.username = "Username là bắt buộc";
+      tempErrors.username = "Username đang bị trống vui lòng điền vào!.";
     }
     if (password.trim() === "") {
-      tempErrors.password = "Mật khẩu là bắt buộc";
+      tempErrors.password = "Mật khẩu đang bị trống vui lòng điền vào!.";
     }
 
     setErrors(tempErrors);
@@ -106,7 +106,7 @@ const User2 = () => {
       if (error.response && error.response.data && error.response.data.message) {
         toast.error(error.response.data.message, { autoClose: 3000, toastId: 'login-error', limit: 3, newestOnTop: true, preventDuplicates: true });
       } else {
-        toast.error('Đã xảy ra lỗi khi đăng nhập.', { autoClose: 3000, toastId: 'login-error', limit: 3, newestOnTop: true, preventDuplicates: true });
+        toast.error('username hoặc password không đúng.', { autoClose: 3000, toastId: 'login-error', limit: 3, newestOnTop: true, preventDuplicates: true });
       }
     }
   };
@@ -138,7 +138,7 @@ const User2 = () => {
     const { username } = formData;
     if (username.trim() === "") {
       // Thay thế toast.error bằng dialog lỗi
-      handleOpenErrorDialog("Username là bắt buộc.");
+      handleOpenErrorDialog("Username đang bị trống vui lòng điền vào!.");
       return;
     }
 
