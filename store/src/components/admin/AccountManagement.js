@@ -169,13 +169,13 @@ const AccountManagement = () => {
                   </TableCell>
                   <TableCell align="center" className={styles.tableBodyCell}>
                     <Box sx={{ display: 'flex', gap: 1 }}>
-                      <Button
+                      {/* <Button
                         variant="contained"
                         color="primary"
                         onClick={() => resetPassword(account.username)}
                       >
                         Reset Pass
-                      </Button>
+                      </Button> */}
                       <Button
                         variant="contained"
                         color="secondary"
@@ -183,12 +183,12 @@ const AccountManagement = () => {
                       >
                         Delete
                       </Button>
-                      <Button
+                      {/* <Button
                         variant="contained"
                         onClick={() => fetchPasswordHistory(account.username)}
                       >
                         View History
-                      </Button>
+                      </Button> */}
                     </Box>
                   </TableCell>
                 </TableRow>
