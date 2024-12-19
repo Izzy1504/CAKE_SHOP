@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import "./UserDetail.css"
+import { toast } from 'react-toastify';
 // import axios from 'axios';
 
 const UserDetail = () => {
@@ -13,49 +14,12 @@ const UserDetail = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+
   useEffect(() => {
     const fetchUser = async () => {
       const url = "http://26.214.87.26:8080/api/users/info";
       const token = localStorage.getItem('token'); // Thay token của bạn
 
-  //     try {
-  //       const response = await axios.get(url, {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       });
-
-  //       setUser(response.data);
-  //       setEditedUser(response.data); // Ban đầu dữ liệu chỉnh sửa giống dữ liệu gốc
-  //     } catch (err) {
-  //       setError("Không thể tải thông tin người dùng.");
-  //     }
-  //   };
-
-  //   const fetchOrderHistory = async () => {
-  //     const url = "http://26.214.87.26:8080/api/orders";
-  //     const token = localStorage.getItem("token"); // Lấy token từ localStorage
-
-  //     try {
-  //       const response = await axios.get(url, {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       });
-  //       console.log("Dữ liệu API trả về:", response.data);
-  //       setOrders(response.data.content); // Lưu lịch sử đơn hàng vào state
-  //     } catch (err) {
-  //       setError("Không thể tải lịch sử đơn hàng."); // Xử lý lỗi nếu API thất bại
-  //     }
-  //   };
-  //   fetchUser();
-  //   fetchOrderHistory();
-  //   console.log(localStorage.getItem('token'));
-  //   // console.log("url: ", url);
-  //   console.log("âcsc: ", orders);
-  // }, []);
-  //.................................................................................................................
-  // code này t chỉnh lại để show thông tin vì API thay đổi
   try {
     const response = await axios.get(url, {
       headers: {
@@ -111,6 +75,16 @@ fetchUser();
 fetchOrderHistory();
 }, []);
 
+  const validDataChange = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^\d{10}$/;
+    if (emailRegex.test(editedUser.email) === false || phoneRegex.test(editedUser.phoneNumber) === false) {
+      toast.error("Email hoặc số điện thoại không hợp lệ.");
+      return;
+    } else {
+    setShowConfirm(true)
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -152,9 +126,17 @@ fetchOrderHistory();
     navigate(`/order/${orderId}`); // Chuyển đến trang chi tiết đơn hàng
   };
 
+  const handleGoBack = () => {
+    navigate('/');
+  };
+
   return (
     // console.log("orders: ", orders),
+    <>
     <div className="wrapper">
+    <div className='buttonWrapper'>
+      <button className="goBackButton" onClick={handleGoBack}>Go Back</button>
+    </div>
       {/* Thông tin người dùng */}
       <div className="user-detail-wrapper">
         <h1>Thông tin người dùng</h1>
@@ -211,7 +193,7 @@ fetchOrderHistory();
         <div className="buttons">
           {isEditing ? (
             <>
-              <button className="btn save" onClick={() => setShowConfirm(true)}>
+              <button className="btn save" onClick={() => validDataChange()}>
                 Lưu
               </button>
               <button className="btn cancel" onClick={() => setIsEditing(false)}>
@@ -219,7 +201,7 @@ fetchOrderHistory();
               </button>
             </>
           ) : (
-            <button className="btn edit" onClick={() => setIsEditing(true)}>
+            <button className="btn edit" onClick={() => {setEditedUser(user); setIsEditing(true)}}>
               Chỉnh sửa
             </button>
           )}
@@ -285,6 +267,7 @@ fetchOrderHistory();
         </div>
       </div>
     </div>
+  </>
   );
 };
 

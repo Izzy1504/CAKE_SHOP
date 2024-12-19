@@ -37,6 +37,7 @@ const Orderdetail = () => {
   const [orderdetail, setOrderdetail] = useState([]);
   const [error, setError] = useState(null);
   const [images, setImages] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchOrderDetail = async () => {
@@ -103,12 +104,15 @@ const Orderdetail = () => {
     return <div>Đang tải dữ liệu...</div>;
   }
 
-
+  const handleGoBack = () => {
+    navigate('/userDetail');
+  };
 
   return (
     console.log(images),
     <div className='odDetail-wrapper'>
       <div className="order-detail-container">
+      <button className="goBackButton" onClick={handleGoBack}>Go Back</button>
         {/* Tiêu đề */}
         <h1 className="order-detail-title">Chi tiết đơn hàng #{orderdetail.orderId}</h1>
 
