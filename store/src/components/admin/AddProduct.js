@@ -85,6 +85,10 @@ const AddProduct = () => {
     }
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <div className={styles.addProduct}>
       <ToastContainer />
@@ -152,7 +156,16 @@ const AddProduct = () => {
             ))}
           </div>
         </div>
-        <button type="submit">Thêm sản phẩm</button>
+        <div className={styles.buttonContainer}>
+          <button
+            type="button"
+            className={styles.backButton}
+            onClick={handleBack}
+          >
+            Back
+          </button>
+          <button type="submit">Thêm sản phẩm</button>
+        </div>
       </form>
     </div>
   );

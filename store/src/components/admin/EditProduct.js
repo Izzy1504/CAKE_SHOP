@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./EditProduct.module.scss";
 
@@ -10,8 +10,6 @@ const EditProduct = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
-  const [image, setImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
   const [initialProduct, setInitialProduct] = useState({});
   const [categories, setCategories] = useState([]);
   const backendURL = 'http://26.214.87.26:8080';
@@ -31,7 +29,6 @@ const EditProduct = () => {
           setName(product.name);
           setPrice(product.price);
           setCategory(product.category);
-          setImagePreview(product.images[0]); // Assuming the product has an images array
           setInitialProduct(product);
         }
       } catch (error) {
@@ -58,28 +55,12 @@ const EditProduct = () => {
     fetchCategories();
   }, [backendURL]);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file && (file.type === 'image/png' || file.type === 'image/jpeg')) {
-      setImage(file);
-      setImagePreview(URL.createObjectURL(file));
-    } else {
-      toast.error('Only PNG and JPG files are allowed.');
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append('name', name);
     formData.append('price', parseFloat(price));
     formData.append('category', category);
-
-    if (image) {
-      formData.append('images', image);
-    } else {
-      formData.append('images', initialProduct.images[0]); // Use the existing image URL if the image is not changed
-    }
 
     const token = localStorage.getItem('token'); // Retrieve the token from localStorage
 
@@ -108,7 +89,6 @@ const EditProduct = () => {
 
   return (
     <div className={styles.editProduct}>
-      <ToastContainer />
       <h2>Edit Product</h2>
       <form onSubmit={handleSubmit}>
         <div>
@@ -129,7 +109,7 @@ const EditProduct = () => {
             required
           />
         </div>
-        <div>
+        <div className={styles.category}>
           <label>Category</label>
           <select
             value={category}
@@ -144,16 +124,10 @@ const EditProduct = () => {
             ))}
           </select>
         </div>
-        <div>
-          <label>Image</label>
-          <input
-            type="file"
-            accept="image/png, image/jpeg"
-            onChange={handleImageChange}
-          />
-          {imagePreview && <img src={imagePreview} alt="Preview" className={styles.imagePreview} />}
+        <div className={styles.buttonGroup}>
+          <button type="button" onClick={() => navigate('/admin/products')}>Back</button>
+          <button type="submit">Update Product</button>
         </div>
-        <button type="submit">Update Product</button>
       </form>
     </div>
   );

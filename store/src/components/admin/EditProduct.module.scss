@@ -1,33 +1,74 @@
 .editProduct {
   h2 {
     margin-bottom: 20px;
+    padding: 10px;
+    margin-left: 50px;
   }
 
   form {
     display: flex;
     flex-direction: column;
     margin: 100px;
-    padding: 5px;
+    padding: 10px;
+    
 
     div {
       margin-bottom: 10px;
 
       label {
         display: block;
-        margin-bottom: 5px;
+        margin-bottom: 10px;
+        
       }
 
       input {
-        width: 100%;
+        width: 50%;
         padding: 8px;
         border-radius: 4px;
         border: 1px solid #ccc;
       }
     }
 
+    .category {
+      select {
+        padding: 12px 16px;
+        border: 1px solid #24c3f3;
+        border-radius: 10px;
+        background-color: #ffffff;
+        // font-size: 1.1rem;
+        color: #333;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+        &:focus {
+          border-color: #0056b3;
+          box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+          outline: none;
+        }
+
+        option {
+          padding: 12px;
+          font-size: 1.1rem;
+        }
+      }
+
+      label {
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+        color: #555;
+      }
+    }
+
+    .buttonGroup {
+      display: flex;
+      justify-content: flex-start; // Changed from space-between to flex-start
+      gap: 10px; // Added gap to reduce space between buttons
+      margin-top: 20px;
+    }
+
     button {
       padding: 10px 20px;
-      background-color: #007bff;
+      background-color: #49d7f0;
       color: #fff;
       border: none;
       border-radius: 4px;
@@ -36,7 +77,7 @@
       transition: background-color 0.3s ease;
 
       &:hover {
-        background-color: #0056b3;
+        background-color: #ce2eff;
       }
     }
   }
