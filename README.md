@@ -1,6 +1,7 @@
 # Cake It (Cake Shop E-Commerce)
 An e-commerce shop for cakes and desserts
-
+Yeh actualyy UI based on - Github - [@sn-tin](https://github.com/sn-tin/) 
+But me and my team develope the function and database, back end ...
 ## TO FIX: Stripe payment integration
 
 ![Design preview for Cake Shop #1](./store/src/assets/cakeit-landing.jpg)
