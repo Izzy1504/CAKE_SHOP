@@ -29,7 +29,7 @@ Users should be able to:
 
 ### Screenshot 📸
 
-![Design preview for Cake Shop #2](./store/src/assets/Cake_shop_remake.png)
+![Design preview for Cake Shop #2](./store/src/assets/Cake_shop_remakes.png)
 ![Design preview for Cake Shop #3](./store/src/assets/Cake_shop_remake_1.png)
 
 ### Built with 🔨
