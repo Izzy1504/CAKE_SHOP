@@ -4,7 +4,7 @@ Yeh actualyy UI based on - Github - [@sn-tin](https://github.com/sn-tin/)
 But me and my team develope the function and database, back end ...
 ## TO FIX: Stripe payment integration
 
-![Design preview for Cake Shop #1](./store/src/assets/cakeit-landing.jpg)
+!Back-end for this web is https://github.com/aprilboiz/cakeshop.git
 
 ## 📖 Table of contents
   - [Overview](#overview)
